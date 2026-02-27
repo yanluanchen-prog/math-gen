@@ -492,8 +492,7 @@ transform:scale(1.12) rotate(5deg);}
 <body>
 <div id="sf"></div>
 <div id="voice-btn" onclick="toggleVoice()" title="朗读开关">🗣️</div>
-<div id="bgm-btn" onclick="toggleBgm()" title="背景音乐" style="position:fixed;top:14px;left:62px;z-index:50;background:rgba(255,255,255,.1);border:1.5px solid var(--border);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;transition:all .2s">🎵</div>
-<div id="sfx-btn" onclick="toggleSfx()" title="音效开关" style="position:fixed;top:14px;left:110px;z-index:50;background:rgba(255,255,255,.1);border:1.5px solid var(--border);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.0rem;transition:all .2s">🔊</div>
+<div id="bgm-btn" onclick="toggleBgm()" title="音乐/音效开关" style="position:fixed;top:14px;left:62px;z-index:50;background:rgba(255,255,255,.1);border:1.5px solid var(--border);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;transition:all .2s">🎵</div>
 <div id="streak">🔥 连击 <span id="sk-n">2</span>！</div>
 
 <div id="app">
@@ -509,7 +508,7 @@ transform:scale(1.12) rotate(5deg);}
       🔵 学会凑十法 &nbsp; 🟠 掌握破十法 &nbsp; 🏆 成为数学宇航员！
     </div>
   </div>
-  <button class="btn btn-p" onclick="P.mapFocusIdx=0; save(); showScreen('map')">🚀 开始冒险！</button>
+  <button class="btn btn-p" onclick="showScreen('map')">🚀 开始冒险！</button>
   <div style="display:flex;gap:8px;width:100%">
     <button class="btn btn-ghost" onclick="showScreen('errorbook')">📒 错题本</button>
     <button class="btn btn-ghost" onclick="openParentGate()">👨‍👩‍👧 家长</button>
@@ -568,7 +567,7 @@ transform:scale(1.12) rotate(5deg);}
     <div id="ad"><span id="at"></span><span class="blink"></span></div>
   </div>
   <div class="game-tools">
-    <div class="tctr">
+    <div class="tctr" title="点击可进入家长设置" style="cursor:pointer" onclick="openParentGate('timer')">
       <svg id="tsv" width="68" height="68" viewBox="0 0 68 68">
         <circle cx="34" cy="34" r="20" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="5"/>
         <circle id="tc" cx="34" cy="34" r="20" fill="none" stroke-width="5" stroke-linecap="round"/>
@@ -608,7 +607,7 @@ transform:scale(1.12) rotate(5deg);}
   <div id="res-msg" class="T2" style="font-size:.9rem"></div>
   <button class="btn btn-p" id="res-next" onclick="nextLevel()">下一关 →</button>
   <button class="btn btn-s" onclick="retryLevel()">🔁 再挑战一次</button>
-  <button class="btn btn-ghost btn-sm" onclick="P.mapFocusIdx=0; save(); showScreen('map')">🗺 返回地图</button>
+  <button class="btn btn-ghost btn-sm" onclick="showScreen('map')">🗺 返回地图</button>
 </div>
 
 <!-- ERROR BOOK -->
@@ -636,7 +635,7 @@ transform:scale(1.12) rotate(5deg);}
 <div class="card">
   <div style="font-size:.95rem;color:var(--gold);margin-bottom:10px;font-weight:900">⏱️ 闯关倒计时（家长设置）</div>
   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-    <select id="timer-select" class="sel" style="min-width:220px" onchange="setTimerFromUI()">
+    <select id="timer-select" class="sel" style="min-width:180px">
       <option value="15">15 秒（默认）</option>
       <option value="20">20 秒</option>
       <option value="30">30 秒</option>
@@ -644,8 +643,10 @@ transform:scale(1.12) rotate(5deg);}
       <option value="60">60 秒</option>
       <option value="0">不限时</option>
     </select>
-    <div style="font-size:.85rem;color:rgba(255,255,255,.6)">只在【家长面板】可设置，孩子无法调整。</div>
+    <button class="btn btn-p btn-sm" onclick="saveTimerFromUI()" style="padding:9px 18px;font-size:.9rem;width:auto">💾 保存</button>
   </div>
+  <div id="timer-save-msg" style="min-height:20px;font-size:.82rem;color:#00d46a;margin-top:6px"></div>
+  <div style="font-size:.82rem;color:rgba(255,255,255,.45);margin-top:4px">游戏中点击倒计时圆圈，可直接来这里修改。</div>
 </div>
 
 
@@ -880,7 +881,6 @@ function loadData(){
   if(d){
     const p = JSON.parse(d);
     if(!p.tutsDone) p.tutsDone = [];
-    if(p.mapFocusIdx===undefined) p.mapFocusIdx = 0;
     if(p.timerSec===undefined) p.timerSec = 15;
     if(p.sfxOn===undefined) p.sfxOn = true;
     if(!p.voiceNamePref) p.voiceNamePref = "";
@@ -889,13 +889,13 @@ function loadData(){
     if(p.unlocked.includes(3) && !p.tutsDone.includes('po'))  p.tutsDone.push('po');
     return p;
   }
-  return {unlocked:[0], stars:{}, errors:[], sessions:[], tutsDone:[], mapFocusIdx:0, timerSec:15, sfxOn:true, voiceNamePref:""};
+  return {unlocked:[0], stars:{}, errors:[], sessions:[], tutsDone:[], timerSec:15, sfxOn:true, voiceNamePref:""};
 }
 function save(){
   try{localStorage.setItem('mathAdv2', JSON.stringify(P));}catch(e){}
 }
 function resetAll(){
-  P = {unlocked:[0], stars:{}, errors:[], sessions:[], tutsDone:[], mapFocusIdx:0, timerSec:15, sfxOn:true};
+  P = {unlocked:[0], stars:{}, errors:[], sessions:[], tutsDone:[], timerSec:15, sfxOn:true};
   save();
   location.reload();
 }
@@ -1078,6 +1078,7 @@ function playNextNote(){
 function toggleBgm(){
   if(!bgmCtx){ initBgm(); return; }
   bgmPlaying = !bgmPlaying;
+  sfxOn = bgmPlaying;  // sound effects follow BGM toggle
   if(bgmTimer){ clearTimeout(bgmTimer); bgmTimer=null; }
   if(bgmPlaying){
     bgmGain.gain.setValueAtTime(0.055, bgmCtx.currentTime);
@@ -1164,7 +1165,17 @@ const PG_POOLS = [
   ()=>{ const b=r(3,9),ans=r(3,9); return {q:`${b*ans} ÷ ${b} = ？`, ans}; },
 ];
 
-function openParentGate(){
+let _pgTarget = 'parent'; // where to go after passing gate
+let _prevScreen = 'home'; // screen to return to after parent panel
+
+function openParentGate(target){
+  _pgTarget = target || 'parent';
+  // Remember where we came from
+  const screens = ['home','map','game','errorbook'];
+  for(const s of screens){
+    const el = document.getElementById('screen-'+s);
+    if(el && el.classList.contains('active')){ _prevScreen = s; break; }
+  }
   const gen = PG_POOLS[Math.floor(Math.random()*PG_POOLS.length)]();
   _pgAnswer = gen.ans;
   _pgInput  = '';
@@ -1186,6 +1197,14 @@ function pgKey(k){
     if(parseInt(_pgInput) === _pgAnswer){
       closeParentGate();
       showScreen('parent');
+      // If coming from timer click, scroll to timer section
+      if(_pgTarget === 'timer'){
+        setTimeout(()=>{
+          const el = document.getElementById('timer-select');
+          if(el) el.closest('.card') && el.closest('.card').scrollIntoView({behavior:'smooth', block:'center'});
+          switchTab('overview');
+        }, 200);
+      }
     } else {
       msgEl.textContent = '答案不对哦，再想想～';
       _pgInput = '';
@@ -1214,7 +1233,16 @@ function showScreen(id){
   document.getElementById('hint-btn').className = ''; // hide hint btn
   if(id==='map') renderMap();
   if(id==='errorbook') renderErrorBook();
-  if(id==='parent') renderParent();
+  if(id==='parent'){
+    renderParent();
+    // Update all "back" buttons to return to wherever we came from
+    const label = _prevScreen==='game' ? '← 返回做题' : '← 返回首页';
+    const dest  = _prevScreen==='game' ? 'game' : 'home';
+    document.querySelectorAll('#parent-back-bottom').forEach(btn=>{
+      btn.textContent = label;
+      btn.onclick = ()=>showScreen(dest);
+    });
+  }
 }
 
 // MAP_PATH defines the full journey sequence
@@ -1340,11 +1368,8 @@ function renderMap(){
   });
 
   // ── Planet / Tutorial nodes (appended to canvas)
-  // Focus rule:
-  // - Entering “闯关/地图”时先看到火星在屏幕中间
-  // - 随着闯关成功/解锁推进：始终把“最新可进入(解锁)的关卡/星球”保持在屏幕中间
-  let latestAccessibleIdx = 0;
-  let focusIdx = (P.mapFocusIdx===undefined?0:P.mapFocusIdx);
+  let lastAccessibleY = CANVAS_H * 0.88; // default: 火星 (bottom)
+  let lastDoneY       = -1;
 
   MAP_PATH.forEach((node, idx)=>{
     const pos        = POSITIONS[idx];
@@ -1352,8 +1377,13 @@ function renderMap(){
     const done       = isNodeDone(node);
     const fdur       = FLOAT_DUR[idx];
 
-    // Compute latest accessible node
-    if(accessible) latestAccessibleIdx = idx;
+    // Always update when accessible — last one in MAP_PATH order = most recently unlocked
+    if(accessible){
+      lastAccessibleY = pos.y / 100 * CANVAS_H;
+    }
+    if(done){
+      lastDoneY = pos.y / 100 * CANVAS_H;
+    }
 
     if(node.type==='level'){
       const lv  = LVS[node.id];
@@ -1407,7 +1437,7 @@ function renderMap(){
           --glow-base:${cfg.glowBase};--glow-color:${cfg.glowColor};
           box-shadow:${glowBase};border-color:${cfg.glowColor}">
           <span class="planet-em" style="display:none">${em}</span>
-          <div class="planet-surface" style="background-image:url('${isCou?ICON_COU_SVG:ICON_PO_SVG}')"></div>
+          <div class="planet-surface"></div>
           <div class="planet-ring"></div>
           ${!accessible ? '<div class="planet-lock-icon">🔒</div>' : ''}
         </div>
@@ -1419,38 +1449,16 @@ function renderMap(){
     }
   });
 
-    // Update focus when progress unlocks a new node
-  const latest = latestAccessibleIdx;
-  const hasProgress = (P.unlocked && P.unlocked.length>1) || (P.tutsDone && P.tutsDone.length>0) || Object.keys(P.stars||{}).length>0;
-
-  // Rule: first time entering map (no progress) => always center Mars
-  if(!hasProgress){
-    P.mapFocusIdx = 0;
-  } else {
-    // Always follow the latest accessible node
-    P.mapFocusIdx = latest;
-  }
-  try{ save(); }catch(e){}
-  focusIdx = P.mapFocusIdx;
-
-  // ── Auto-scroll: center the focused node
-  const doScroll = ()=>{
-    const pos = POSITIONS[focusIdx] || POSITIONS[0];
-    const targetPx = (pos.y/100) * CANVAS_H;
-    let scrollTo = targetPx - wrap.clientHeight * 0.5;
-
-    // Clamp to valid range
-    const maxScroll = Math.max(0, canvas.offsetHeight - wrap.clientHeight);
-    scrollTo = Math.max(0, Math.min(maxScroll, scrollTo));
-
-    // First-time focus on Mars: bias towards bottom so Mars is definitely visible
-    if(focusIdx===0) scrollTo = maxScroll;
-
-    wrap.scrollTop = scrollTo;
-  };
-  requestAnimationFrame(()=>requestAnimationFrame(doScroll));
-  setTimeout(doScroll, 120);
-  setTimeout(doScroll, 300);
+  // ── Auto-scroll: center the most recently unlocked node
+  // MAP_PATH is iterated in order, so lastAccessibleY = last accessible = newest unlock
+  // First visit (only 火星 accessible) → 火星 centered; after each clear → next node centered
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      const viewH = wrap.clientHeight || window.innerHeight * 0.6;
+      const scrollTo = lastAccessibleY - viewH * 0.5;
+      wrap.scrollTop = Math.max(0, scrollTo);
+    });
+  });
 
   }catch(e){ console.error('renderMap error:',e); }
 }
@@ -1782,9 +1790,11 @@ function couNpSubmit(){
   if(ans === t.a + t.b){
     if(msg){ msg.textContent = '🎉 答对啦！'; msg.style.color = '#00d46a'; }
     playChime();
-    speak('答对了！'+t.a+'加'+t.b+'等于'+(t.a+t.b)+'！太棒了！');
     spawnParticles();
-    setTimeout(()=>{ completeTutorial('cou'); startLevel(2); }, 1600);
+    // Speak first, then wait ~2.5s for the voice to finish before transitioning
+    const txt = '答对了！'+t.a+'加'+t.b+'等于'+(t.a+t.b)+'！太棒了！';
+    speak(txt);
+    setTimeout(()=>{ completeTutorial('cou'); startLevel(2); }, 2500);
   } else {
     if(msg){ msg.textContent = '再想想～重新输！'; msg.style.color = '#ff8c96'; }
     couInputAns = '';
@@ -1941,15 +1951,24 @@ function fill(n, cls, ...args){
 
 // ═══════════════════════════════════════
 
-function setTimerFromUI(){
+function saveTimerFromUI(){
   const sel=document.getElementById('timer-select');
   if(!sel) return;
   const v=parseInt(sel.value,10);
   P.timerSec = isNaN(v)?15:v;
-  TIME_LIMIT = P.timerSec;
+  TIME_LIMIT  = P.timerSec;
   save();
-  speak('已设置倒计时');
+  // Show confirmation
+  const msg = document.getElementById('timer-save-msg');
+  if(msg){
+    msg.textContent = P.timerSec===0 ? '✅ 已保存！不限时模式已生效' : `✅ 已保存！下一题起倒计时 ${P.timerSec} 秒`;
+    clearTimeout(msg._t);
+    msg._t = setTimeout(()=>{ msg.textContent=''; }, 3000);
+  }
+  speak('保存成功');
 }
+
+function setTimerFromUI(){ saveTimerFromUI(); } // keep compat
 
 function syncTimerUI(){
   const sel=document.getElementById('timer-select');
@@ -2029,15 +2048,28 @@ function loadQ(){
 //  TIMER
 // ═══════════════════════════════════════
 function startTimer(){
-  timerV=15; updateTimer();
+  const limit = (P.timerSec===0||P.timerSec===undefined) ? 0 : (P.timerSec||15);
+  if(limit===0){
+    // unlimited — hide circle, show ∞
+    timerV=0;
+    const t=document.getElementById('tt');
+    const tc=document.getElementById('tc');
+    if(t) t.textContent='∞';
+    if(tc) tc.style.strokeDashoffset=0;
+    return; // no interval
+  }
+  timerV=limit; updateTimer();
+  clearInterval(timerInt);
   timerInt=setInterval(()=>{
     timerV--; updateTimer();
     if(timerV<=0){ clearInterval(timerInt); timeUp(); }
   },1000);
 }
 function updateTimer(){
+  const limit = (P.timerSec===0||P.timerSec===undefined) ? 0 : (P.timerSec||15);
+  if(limit===0) return;
   const c=document.getElementById('tc'), t=document.getElementById('tt');
-  const pct=timerV/15, circ=125.6;
+  const pct=timerV/limit, circ=125.6;
   c.style.strokeDashoffset=circ*(1-pct);
   c.style.stroke=pct>.5?'#00d46a':pct>.25?'#ffd700':'#ff4757';
   t.textContent=timerV; t.style.color=pct>.25?'#fff':'#ff8c96';
@@ -2069,7 +2101,7 @@ function submit(){
   const ans=parseInt(curAns), correct=curQObj.a;
 
   if(ans===correct){
-    const stars=timerV>=10?3:timerV>=5?2:1;
+    const limit=P.timerSec||15; const stars=limit===0?3:timerV>=limit*0.67?3:timerV>=limit*0.33?2:1;
     sStars+=stars; sCorrect++; curStreak++;
     if(curStreak>maxStreak) maxStreak=curStreak;
     document.getElementById('h-st').textContent=sStars;
@@ -2597,6 +2629,14 @@ document.addEventListener('keydown',e=>{
     if(e.key>='0'&&e.key<='9') ni(e.key);
     if(e.key==='Backspace') nd();
     if(e.key==='Enter') submit();
+  }
+  // Support keyboard during tutorial cou input step
+  if(document.getElementById('screen-tutorial') &&
+     document.getElementById('screen-tutorial').classList.contains('active') &&
+     document.getElementById('cou-mini-np')){
+    if(e.key>='0'&&e.key<='9'){ couNpKey(e.key); e.preventDefault(); }
+    if(e.key==='Backspace'){ couNpKey('⌫'); e.preventDefault(); }
+    if(e.key==='Enter'){ couNpKey('✓'); e.preventDefault(); }
   }
 });
 
