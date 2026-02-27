@@ -1604,33 +1604,32 @@ function renderCouVisual(step, a, b){
     return;
   }
 
-  // ---------- STEP: drag (interactive) ----------
+  // ---------- STEP: drag (interactive) — pointer events only, works on iPad ----------
   if(step==='drag'){
     couDropped = 0;
     let frameHtml = `<div id="cou-frame" style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:10px;background:rgba(255,255,255,.06);border-radius:16px;border:2px solid rgba(255,255,255,.12)">`;
     for(let i=0;i<10;i++){
       if(i<a){
-        frameHtml += `<div style="width:38px;height:38px;border-radius:50%;background:${BLUE};box-shadow:0 2px 8px rgba(0,0,0,.4)"></div>`;
+        frameHtml += `<div style="width:42px;height:42px;border-radius:50%;background:${BLUE};box-shadow:0 2px 8px rgba(0,0,0,.4)"></div>`;
       } else {
+        // No HTML5 drag attrs — handled entirely by pointer events
         frameHtml += `<div class="drop-slot" data-idx="${i-a}"
-          style="width:38px;height:38px;border-radius:50%;border:3px dashed rgba(255,215,0,.5);
-          transition:all .25s;display:flex;align-items:center;justify-content:center;cursor:pointer"
-          ondragover="event.preventDefault();this.style.borderColor='#fff';this.style.background='rgba(255,215,0,.2)'"
-          ondragleave="this.style.borderColor='rgba(255,215,0,.5)';this.style.background=''"
-          ondrop="couDrop(this)"></div>`;
+          style="width:42px;height:42px;border-radius:50%;border:3px dashed rgba(255,215,0,.5);
+          transition:border-color .15s,background .15s;
+          display:flex;align-items:center;justify-content:center"></div>`;
       }
     }
     frameHtml += '</div>';
 
     let ballsHtml = `<div id="cou-balls" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:6px">`;
     for(let i=0;i<b;i++){
-      ballsHtml += `<div class="drag-ball" data-bi="${i}" draggable="true"
-        style="width:44px;height:44px;border-radius:50%;background:${GOLD};
+      // touch-action:none is critical — stops browser scroll from stealing pointer events
+      ballsHtml += `<div class="drag-ball" data-bi="${i}"
+        style="width:48px;height:48px;border-radius:50%;background:${GOLD};
         box-shadow:0 3px 12px rgba(255,215,0,.5);cursor:grab;
-        display:flex;align-items:center;justify-content:center;font-size:.7rem;
-        color:rgba(0,0,0,.5);font-weight:900;user-select:none;
-        transition:transform .15s,opacity .3s;touch-action:none"
-        ondragstart="couDragStart(this)">★</div>`;
+        display:flex;align-items:center;justify-content:center;font-size:.8rem;
+        color:rgba(0,0,0,.55);font-weight:900;user-select:none;
+        touch-action:none;-webkit-user-select:none">★</div>`;
     }
     ballsHtml += '</div>';
 
@@ -1639,12 +1638,12 @@ function renderCouVisual(step, a, b){
         <span style="font-size:1.1rem;color:${GOLD};font-weight:900">把金球拖进空格子里！还差 <span id="cou-need-label">${need}</span> 个</span>
       </div>
       ${frameHtml}
-      <div style="font-size:.85rem;color:rgba(255,255,255,.5);text-align:center">👇 金球们在下面，拖上去！</div>
+      <div style="font-size:.85rem;color:rgba(255,255,255,.5);text-align:center">👆 把金球拖进上面的空格子！</div>
       ${ballsHtml}
     </div>`;
 
-    // Set up touch drag after DOM is injected
-    setTimeout(couInitTouch, 50);
+    // Init pointer-event drag AFTER DOM paint (two rAF frames for iOS)
+    requestAnimationFrame(()=>requestAnimationFrame(()=>couInitPointer()));
     return;
   }
 
@@ -1696,30 +1695,150 @@ function renderCouVisual(step, a, b){
 // ─── Drag helpers ───────────────────────────────
 let _dragBall = null;
 
-function couDragStart(el){
-  _dragBall = el;
-  el.style.opacity = '0.4';
+// ─── Drag system: Pointer Events only (works on iPad, desktop, Android) ───────
+// State
+let _pdId   = null;  // active pointerId
+let _pdBall = null;  // the ball element being dragged
+let _pdGhost = null; // floating ghost div
+let _pdOffX = 0, _pdOffY = 0; // finger offset within ball
+
+function couInitPointer(){
+  document.querySelectorAll('.drag-ball').forEach(ball=>{
+    ball.addEventListener('pointerdown', pdStart, {passive:false});
+  });
 }
 
-function couDrop(slot){
-  if(!_dragBall || slot.childElementCount > 0) return;
-  const ball = _dragBall;
-  _dragBall = null;
+function pdStart(e){
+  if(_pdId !== null) return; // already dragging another finger
+  e.preventDefault();
+  e.stopPropagation();
 
+  _pdId   = e.pointerId;
+  _pdBall = e.currentTarget;
+  _pdBall.setPointerCapture(e.pointerId); // keep events on this element even when finger moves off
+
+  // Offset so ghost centers under the finger where user touched
+  const r = _pdBall.getBoundingClientRect();
+  _pdOffX = e.clientX - r.left - r.width/2;
+  _pdOffY = e.clientY - r.top  - r.height/2;
+
+  // Ghost: floating copy that follows the finger
+  _pdGhost = document.createElement('div');
+  _pdGhost.style.cssText = [
+    'position:fixed','z-index:9999','pointer-events:none','border-radius:50%',
+    'width:52px','height:52px',
+    'background:#ffd700',
+    'box-shadow:0 4px 20px rgba(255,215,0,.7)',
+    'display:flex','align-items:center','justify-content:center',
+    'font-size:.9rem','color:rgba(0,0,0,.55)','font-weight:900',
+    'opacity:.9','transform:scale(1.15)',
+    'transition:transform .1s',
+    `left:${e.clientX - 26}px`,
+    `top:${e.clientY - 26}px`,
+  ].join(';');
+  _pdGhost.textContent = '★';
+  document.body.appendChild(_pdGhost);
+
+  _pdBall.style.opacity = '0.3';
+
+  // Listen on the ball (pointer is captured)
+  _pdBall.addEventListener('pointermove', pdMove, {passive:false});
+  _pdBall.addEventListener('pointerup',   pdEnd,  {passive:false});
+  _pdBall.addEventListener('pointercancel', pdCancel, {passive:false});
+}
+
+function pdMove(e){
+  if(e.pointerId !== _pdId) return;
+  e.preventDefault();
+
+  // Move ghost
+  _pdGhost.style.left = (e.clientX - 26) + 'px';
+  _pdGhost.style.top  = (e.clientY - 26) + 'px';
+
+  // Highlight slots under ghost
+  document.querySelectorAll('.drop-slot').forEach(s=>{
+    const r = s.getBoundingClientRect();
+    const hit = e.clientX >= r.left-6 && e.clientX <= r.right+6 &&
+                e.clientY >= r.top-6  && e.clientY <= r.bottom+6;
+    s.style.borderColor = hit ? '#ffffff' : 'rgba(255,215,0,.5)';
+    s.style.background  = hit ? 'rgba(255,255,255,.25)' : '';
+    s.style.transform   = hit ? 'scale(1.15)' : '';
+  });
+}
+
+function pdEnd(e){
+  if(e.pointerId !== _pdId) return;
+  e.preventDefault();
+
+  // Find slot under finger
+  let target = null;
+  document.querySelectorAll('.drop-slot').forEach(s=>{
+    const r = s.getBoundingClientRect();
+    if(e.clientX >= r.left-10 && e.clientX <= r.right+10 &&
+       e.clientY >= r.top-10  && e.clientY <= r.bottom+10)
+      target = s;
+    // Reset highlight
+    s.style.borderColor = 'rgba(255,215,0,.5)';
+    s.style.background  = '';
+    s.style.transform   = '';
+  });
+
+  pdCleanup();
+
+  if(target && target.childElementCount === 0 && _pdBall){
+    pdDropInto(target, _pdBall);
+  } else if(_pdBall){
+    _pdBall.style.opacity = '1'; // bounce back
+  }
+
+  _pdBall = null;
+  _pdId   = null;
+}
+
+function pdCancel(e){
+  if(e.pointerId !== _pdId) return;
+  document.querySelectorAll('.drop-slot').forEach(s=>{
+    s.style.borderColor = 'rgba(255,215,0,.5)';
+    s.style.background  = '';
+    s.style.transform   = '';
+  });
+  if(_pdBall) _pdBall.style.opacity = '1';
+  _pdBall = null;
+  _pdId   = null;
+  pdCleanup();
+}
+
+function pdCleanup(){
+  if(_pdGhost){ _pdGhost.remove(); _pdGhost = null; }
+  if(_pdBall){
+    _pdBall.removeEventListener('pointermove', pdMove);
+    _pdBall.removeEventListener('pointerup',   pdEnd);
+    _pdBall.removeEventListener('pointercancel', pdCancel);
+  }
+}
+
+function pdDropInto(slot, ball){
+  // Fill slot with green dot
   const dot = document.createElement('div');
-  dot.style.cssText = 'width:38px;height:38px;border-radius:50%;background:#00d46a;box-shadow:0 0 14px rgba(0,212,106,.6)';
+  dot.style.cssText = 'width:38px;height:38px;border-radius:50%;background:#00d46a;box-shadow:0 0 16px rgba(0,212,106,.7)';
   slot.style.borderColor = '#00d46a';
   slot.style.background  = 'rgba(0,212,106,.15)';
-  slot.innerHTML='';
+  slot.innerHTML = '';
   slot.appendChild(dot);
 
-  try{ ball.style.opacity='0'; ball.style.pointerEvents='none'; }catch(e){}
+  // Hide the source ball
+  ball.style.opacity       = '0';
+  ball.style.pointerEvents = 'none';
+  ball.style.width         = '0';
+  ball.style.height        = '0';
+  ball.style.margin        = '0';
+  ball.style.padding       = '0';
 
   couDropped++;
-  const t = TUT.cou;
-  const need = 10 - t.a;
-  const lbl = document.getElementById('cou-need-label');
-  if(lbl) lbl.textContent = Math.max(0, need - couDropped);
+  const tut   = TUT.cou;
+  const need  = 10 - tut.a;
+  const label = document.getElementById('cou-need-label');
+  if(label) label.textContent = Math.max(0, need - couDropped);
 
   if(couDropped >= need){
     setTimeout(()=>{
@@ -1730,67 +1849,11 @@ function couDrop(slot){
   }
 }
 
-// Touch drag for mobile
+// Keep couDrop as a no-op stub so HTML5 ondrop attrs (if any remain) don't crash
+function couDragStart(el){}
+function couDrop(slot){}
 let _touchBall = null, _touchClone = null;
-
-function couInitTouch(){
-  document.querySelectorAll('.drag-ball').forEach(ball=>{
-    ball.addEventListener('touchstart', e=>{
-      e.preventDefault();
-      _touchBall = ball;
-      const t = e.touches[0];
-      _touchClone = ball.cloneNode(true);
-      _touchClone.style.cssText += `;position:fixed;z-index:999;pointer-events:none;
-        width:44px;height:44px;opacity:.85;transform:scale(1.2);
-        left:${t.clientX-22}px;top:${t.clientY-22}px;transition:none`;
-      document.body.appendChild(_touchClone);
-      ball.style.opacity = '.3';
-    }, {passive:false});
-
-    ball.addEventListener('touchmove', e=>{
-      e.preventDefault();
-      if(!_touchClone) return;
-      const t = e.touches[0];
-      _touchClone.style.left = (t.clientX-22)+'px';
-      _touchClone.style.top  = (t.clientY-22)+'px';
-      // Highlight slot under finger
-      document.querySelectorAll('.drop-slot').forEach(s=>{
-        const r = s.getBoundingClientRect();
-        const over = t.clientX>=r.left && t.clientX<=r.right && t.clientY>=r.top && t.clientY<=r.bottom;
-        s.style.borderColor = over ? '#fff' : 'rgba(255,215,0,.5)';
-        s.style.background  = over ? 'rgba(255,215,0,.2)' : '';
-      });
-    }, {passive:false});
-
-    ball.addEventListener('touchend', e=>{
-      if(!_touchClone) return;
-      const t = e.changedTouches[0];
-      if(_touchClone) _touchClone.remove();
-      _touchClone = null;
-      // Reset slot highlights
-      document.querySelectorAll('.drop-slot').forEach(s=>{
-        s.style.borderColor = 'rgba(255,215,0,.5)';
-        s.style.background  = '';
-      });
-      // Find slot under finger
-      let found = null;
-      const HIT = 8; // px tolerance for fat fingers
-      document.querySelectorAll('.drop-slot').forEach(s=>{
-        const r = s.getBoundingClientRect();
-        if(t.clientX>=r.left-HIT && t.clientX<=r.right+HIT &&
-           t.clientY>=r.top-HIT  && t.clientY<=r.bottom+HIT)
-          found = s;
-      });
-      if(found && found.childElementCount===0){
-        _dragBall = _touchBall;   // ← couDrop needs _dragBall to be set
-        couDrop(found);
-      } else if(_touchBall){
-        _touchBall.style.opacity = '1';
-      }
-      _touchBall = null;
-    });
-  });
-}
+function couInitTouch(){}
 
 // Mini numpad for input step
 function couNpKey(k){
