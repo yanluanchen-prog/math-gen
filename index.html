@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -6,6 +7,10 @@
 <title>我是数学小天才 🚀</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Nunito:wght@700;900&display=swap');
+/* GLOBAL SCROLL FIX */
+html,body{height:auto;min-height:100%;overflow-y:auto;}
+body{overscroll-behavior:auto;}
+
 :root{
   --bg:#0a0e2a; --deep:#111740; --card:rgba(255,255,255,0.06);
   --border:rgba(255,255,255,0.12); --gold:#ffd700; --glow:rgba(255,215,0,0.3);
@@ -14,8 +19,10 @@
   --cou-color:#1e90ff; --po-color:#ff7b00;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
-  min-height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center}
+body{
+  -webkit-tap-highlight-color: transparent;
+font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
+  min-height:100vh;overflow:hidden; /* keep */display:flex;align-items:center;justify-content:center}
 #sf{position:fixed;inset:0;pointer-events:none;z-index:0}
 .star{position:absolute;background:#fff;border-radius:50%;opacity:0;
   animation:twinkle var(--d) ease-in-out infinite}
@@ -24,6 +31,8 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:14px;gap:10px}
 .screen{display:none;width:100%}
+.screen{overflow-y:auto;-webkit-overflow-scrolling:touch;align-items:flex-start;}
+
 .screen.active{display:flex;flex-direction:column;align-items:center;gap:12px}
 .card{background:var(--card);border:1.5px solid var(--border);border-radius:22px;
   padding:18px 22px;width:100%;backdrop-filter:blur(12px);
@@ -32,7 +41,9 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
   text-shadow:0 0 20px var(--glow),0 0 40px var(--glow);line-height:1.2}
 .T2{font-size:clamp(.95rem,3.5vw,1.2rem);color:var(--white);text-align:center;opacity:.85}
 .EB{font-size:clamp(2.5rem,10vw,4rem);text-align:center}
-.btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:15px 28px;
+.btn{
+  touch-action:manipulation;
+display:flex;align-items:center;justify-content:center;gap:8px;padding:15px 28px;
   border:none;border-radius:50px;cursor:pointer;font-family:inherit;font-size:1.2rem;
   font-weight:900;transition:transform .12s,box-shadow .12s;user-select:none;width:100%}
 .btn:active{transform:scale(.95)!important}
@@ -60,10 +71,16 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
 .hint-inline.show{display:inline-flex}
 
 /* ── Screen scrolling ── */
+#screen-parent.active{overflow-y:auto;-webkit-overflow-scrolling:touch;justify-content:flex-start;}
 #screen-map.active,#screen-errorbook.active,#screen-parent.active,#screen-tutorial.active,#screen-game.active,#screen-result.active{
   overflow-y:auto;
   -webkit-overflow-scrolling:touch;
 }
+
+.sel{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:12px;padding:10px 12px}
+.sel option{color:#000}
+
+.xbtn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:10px;padding:6px 10px;cursor:pointer}
 
 /* ── HUD ── */
 #hud{display:flex;align-items:center;justify-content:space-between;width:100%;
@@ -93,7 +110,9 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
 @keyframes blink{50%{opacity:0}}
 /* ── Numpad ── */
 #np{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;width:100%}
-.nb{padding:16px;font-family:inherit;font-size:1.7rem;font-weight:900;color:#fff;
+.nb{
+  touch-action:manipulation;
+padding:16px;font-family:inherit;font-size:1.7rem;font-weight:900;color:#fff;
   background:rgba(255,255,255,.08);border:1.5px solid var(--border);border-radius:16px;
   cursor:pointer;transition:all .1s}
 .nb:active,.nb.pr{background:rgba(255,215,0,.2);transform:scale(.92)}
@@ -128,7 +147,9 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
 .hint-step{display:flex;align-items:center;gap:12px}
 .hint-step-num{width:28px;height:28px;border-radius:50%;display:flex;
   align-items:center;justify-content:center;font-size:.85rem;font-weight:900;flex-shrink:0}
-.hint-step-body{}
+.hint-step-body{
+  -webkit-tap-highlight-color: transparent;
+}
 .hint-formula{font-size:1.4rem;color:var(--gold);font-weight:900;line-height:1.2}
 .hint-explain{font-size:.82rem;color:var(--dim);margin-top:2px}
 /* Ten-frame */
@@ -213,12 +234,24 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
   width:100%;
   flex:1;
   height:calc(100vh - 230px);
-  min-height:520px;
-  overflow:hidden;
+  min-height:400px;
+  overflow-x:hidden;
+  overflow-y:auto;
+  overflow:auto;
   border-radius:0;
   background:transparent;
   border:none;
   box-shadow:none;
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+}
+.space-map-wrap::-webkit-scrollbar{width:3px}
+.space-map-wrap::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:2px}
+/* inner tall canvas that holds all planets */
+.space-map-canvas{
+  position:relative;
+  width:100%;
+  height:900px;
 }
 /* mini stars inside map */
 .map-star{position:absolute;background:#fff;border-radius:50%;pointer-events:none;
@@ -227,6 +260,8 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
 .map-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 /* Planet node */
 .planet-node{
+  touch-action:manipulation;
+
   position:absolute;
   display:flex;flex-direction:column;align-items:center;
   transform:translate(-50%,-50%);
@@ -235,11 +270,17 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
   z-index:2;
 }
 .planet-node.locked{opacity:.35;cursor:not-allowed;filter:grayscale(.7)}
-.planet-node.accessible:hover .planet-body{transform:scale(1.12);}
-.planet-node.accessible:active .planet-body{transform:scale(.94);}
+.planet-node.accessible:hover .planet-body{
+  -webkit-tap-highlight-color: transparent;
+transform:scale(1.12);}
+.planet-node.accessible:active .planet-body{
+  -webkit-tap-highlight-color: transparent;
+transform:scale(.94);}
 .planet-body{
+  -webkit-tap-highlight-color: transparent;
+
   border-radius:50%;
-  overflow:hidden;
+  overflow:hidden; /* keep */
   display:flex;align-items:center;justify-content:center;
   border:3px solid rgba(255,255,255,.15);
   position:relative;
@@ -323,8 +364,12 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
   transition:filter .2s;
 }
 .tut-node.locked{opacity:.3;cursor:not-allowed;filter:grayscale(.8)}
-.tut-node.accessible:hover .tut-body{transform:scale(1.12) rotate(5deg);}
+.tut-node.accessible:hover .tut-body{
+  -webkit-tap-highlight-color: transparent;
+transform:scale(1.12) rotate(5deg);}
 .tut-body{
+  -webkit-tap-highlight-color: transparent;
+
   width:52px;height:52px;border-radius:14px;
   display:flex;align-items:center;justify-content:center;
   font-size:1.5rem;border:2.5px solid transparent;
@@ -407,7 +452,34 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
   border-radius:50%;width:40px;height:40px;display:flex;align-items:center;
   justify-content:center;cursor:pointer;font-size:1.1rem;transition:all .2s}
 #voice-btn.off{opacity:.4}
-/* ── Shakes ── */
+/* ── Parent Gate Modal ── */
+#parent-gate{position:fixed;inset:0;z-index:500;display:none;
+  align-items:center;justify-content:center;padding:20px;
+  background:rgba(0,0,0,.75);backdrop-filter:blur(6px)}
+#parent-gate.show{display:flex}
+#parent-gate-box{background:#111740;border:2px solid rgba(255,215,0,.3);
+  border-radius:24px;padding:24px 22px;width:100%;max-width:360px;
+  box-shadow:0 12px 40px rgba(0,0,0,.6);display:flex;flex-direction:column;gap:14px}
+.pg-title{font-size:1.3rem;font-weight:900;color:var(--gold);text-align:center}
+.pg-sub{font-size:.88rem;color:rgba(255,255,255,.55);text-align:center;line-height:1.5}
+.pg-q{font-size:2rem;font-weight:900;color:#fff;text-align:center;
+  letter-spacing:4px;padding:12px;background:rgba(255,255,255,.05);
+  border-radius:14px;border:1.5px solid rgba(255,255,255,.1)}
+.pg-ans{font-size:1.8rem;font-weight:900;color:var(--gold);text-align:center;
+  min-height:52px;display:flex;align-items:center;justify-content:center;
+  letter-spacing:6px}
+#pg-np{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pg-nb{padding:14px;font-family:inherit;font-size:1.5rem;font-weight:900;color:#fff;
+  background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.1);
+  border-radius:14px;cursor:pointer;transition:all .1s;text-align:center}
+.pg-nb:active{background:rgba(255,215,0,.2);transform:scale(.92)}
+.pg-nb-del{background:rgba(255,71,87,.18);color:#ff8c96}
+.pg-nb-ok{background:linear-gradient(135deg,#00d46a,#00b359);
+  box-shadow:0 4px 14px rgba(0,212,106,.35);font-size:1.3rem}
+.pg-msg{min-height:22px;font-size:.88rem;text-align:center;color:#ff8c96}
+.pg-skip{font-size:.8rem;color:rgba(255,255,255,.3);text-align:center;
+  cursor:pointer;padding:4px}
+.pg-skip:hover{color:rgba(255,255,255,.5)}
 .shake{animation:shake .4s cubic-bezier(.36,.07,.19,.97)}
 @keyframes shake{10%,90%{transform:translateX(-4px)}20%,80%{transform:translateX(6px)}
   30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
@@ -421,6 +493,7 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
 <div id="sf"></div>
 <div id="voice-btn" onclick="toggleVoice()" title="朗读开关">🗣️</div>
 <div id="bgm-btn" onclick="toggleBgm()" title="背景音乐" style="position:fixed;top:14px;left:62px;z-index:50;background:rgba(255,255,255,.1);border:1.5px solid var(--border);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;transition:all .2s">🎵</div>
+<div id="sfx-btn" onclick="toggleSfx()" title="音效开关" style="position:fixed;top:14px;left:110px;z-index:50;background:rgba(255,255,255,.1);border:1.5px solid var(--border);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.0rem;transition:all .2s">🔊</div>
 <div id="streak">🔥 连击 <span id="sk-n">2</span>！</div>
 
 <div id="app">
@@ -436,10 +509,10 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
       🔵 学会凑十法 &nbsp; 🟠 掌握破十法 &nbsp; 🏆 成为数学宇航员！
     </div>
   </div>
-  <button class="btn btn-p" onclick="showScreen('map')">🚀 开始冒险！</button>
+  <button class="btn btn-p" onclick="P.mapFocusIdx=0; save(); showScreen('map')">🚀 开始冒险！</button>
   <div style="display:flex;gap:8px;width:100%">
     <button class="btn btn-ghost" onclick="showScreen('errorbook')">📒 错题本</button>
-    <button class="btn btn-ghost" onclick="showScreen('parent')">👨‍👩‍👧 家长</button>
+    <button class="btn btn-ghost" onclick="openParentGate()">👨‍👩‍👧 家长</button>
   </div>
   <button class="btn btn-ghost" style="opacity:.5;font-size:.85rem" onclick="if(confirm('确定重新开始吗？所有星星和记录都会清空'))resetAll()">🔄 重置数据</button>
 </div>
@@ -453,7 +526,7 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
   <div class="T2" style="font-size:.82rem;opacity:.55;align-self:flex-start"></div>
   <div class="space-map-wrap" id="space-map-wrap"></div>
   <div class="divider"></div>
-  <button class="btn btn-ghost btn-sm" onclick="showScreen('home')">← 返回首页</button>
+  <button id="parent-back-bottom" class="btn btn-ghost btn-sm" onclick="showScreen('home')">← 返回首页</button>
 </div>
 
 <!-- TUTORIAL (凑十法 & 破十法 共用) -->
@@ -535,7 +608,7 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
   <div id="res-msg" class="T2" style="font-size:.9rem"></div>
   <button class="btn btn-p" id="res-next" onclick="nextLevel()">下一关 →</button>
   <button class="btn btn-s" onclick="retryLevel()">🔁 再挑战一次</button>
-  <button class="btn btn-ghost btn-sm" onclick="showScreen('map')">🗺 返回地图</button>
+  <button class="btn btn-ghost btn-sm" onclick="P.mapFocusIdx=0; save(); showScreen('map')">🗺 返回地图</button>
 </div>
 
 <!-- ERROR BOOK -->
@@ -546,11 +619,12 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
   <div class="divider"></div>
   <button class="btn btn-p" id="err-practice-btn" onclick="startErrorPractice()">🎯 练习所有错题</button>
   <button class="btn btn-ghost btn-sm" onclick="if(confirm('清空所有错题？'))clearErrors();renderErrorBook()">🗑 清空错题</button>
-  <button class="btn btn-ghost btn-sm" onclick="showScreen('home')">← 返回首页</button>
+  <button id="parent-back-bottom" class="btn btn-ghost btn-sm" onclick="showScreen('home')">← 返回首页</button>
 </div>
 
 <!-- PARENT PANEL -->
-<div id="screen-parent" class="screen">
+<div id="screen-parent" class="screen" tabindex="0">
+  
   <div class="T1" style="font-size:1.7rem">👨‍👩‍👧 家长面板</div>
   <div class="tab-row">
     <button class="tab on" id="tab-overview" onclick="switchTab('overview')">总览</button>
@@ -559,6 +633,22 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
   </div>
 
   <div class="p-section on" id="ps-overview">
+<div class="card">
+  <div style="font-size:.95rem;color:var(--gold);margin-bottom:10px;font-weight:900">⏱️ 闯关倒计时（家长设置）</div>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <select id="timer-select" class="sel" style="min-width:220px" onchange="setTimerFromUI()">
+      <option value="15">15 秒（默认）</option>
+      <option value="20">20 秒</option>
+      <option value="30">30 秒</option>
+      <option value="45">45 秒</option>
+      <option value="60">60 秒</option>
+      <option value="0">不限时</option>
+    </select>
+    <div style="font-size:.85rem;color:rgba(255,255,255,.6)">只在【家长面板】可设置，孩子无法调整。</div>
+  </div>
+</div>
+
+
     <div class="p-stat-grid" id="p-stat-grid"></div>
     <div class="card">
       <div style="font-size:.9rem;color:var(--gold);margin-bottom:10px;font-weight:900">📊 各关卡正确率</div>
@@ -575,11 +665,56 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
     <div id="p-history-list" style="max-height:55vh;overflow-y:auto;width:100%"></div>
   </div>
 
-  <button class="btn btn-ghost btn-sm" onclick="showScreen('home')">← 返回首页</button>
+  <button id="parent-back-bottom" class="btn btn-ghost btn-sm" onclick="showScreen('home')">← 返回首页</button>
 </div>
 
 </div><!-- /app -->
 
+<!-- Parent Gate Modal -->
+<div id="parent-gate">
+  <div id="parent-gate-box">
+    <div class="pg-title">👨‍👩‍👧 家长验证</div>
+    <div class="pg-sub">请回答下面这道题<br>验证是大人才可以进入哦～</div>
+    <div class="pg-q" id="pg-question">? × ? = ?</div>
+    <div class="pg-ans"><span id="pg-ans-text"></span><span class="blink"></span></div>
+    <div id="pg-np">
+      <div class="pg-nb" onclick="pgKey('1')">1</div>
+      <div class="pg-nb" onclick="pgKey('2')">2</div>
+      <div class="pg-nb" onclick="pgKey('3')">3</div>
+      <div class="pg-nb" onclick="pgKey('4')">4</div>
+      <div class="pg-nb" onclick="pgKey('5')">5</div>
+      <div class="pg-nb" onclick="pgKey('6')">6</div>
+      <div class="pg-nb" onclick="pgKey('7')">7</div>
+      <div class="pg-nb" onclick="pgKey('8')">8</div>
+      <div class="pg-nb" onclick="pgKey('9')">9</div>
+      <div class="pg-nb pg-nb-del" onclick="pgKey('⌫')">⌫</div>
+      <div class="pg-nb" onclick="pgKey('0')">0</div>
+      <div class="pg-nb pg-nb-ok" onclick="pgKey('✓')">✓</div>
+    </div>
+    <div class="pg-msg" id="pg-msg"></div>
+    <div class="pg-skip" onclick="closeParentGate()">取消</div>
+  </div>
+</div>
+
+
+<!-- Parent Gate -->
+<div id="parent-gate" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:450;background:rgba(0,0,0,.55);backdrop-filter:blur(6px)">
+  <div style="width:min(520px,92vw);background:rgba(17,23,64,.92);border:2px solid rgba(255,255,255,.14);border-radius:22px;padding:14px 14px 16px;box-shadow:0 18px 60px rgba(0,0,0,.65)">
+    <div style="display:flex;justify-content:space-between;align-items:center;color:#fff;margin-bottom:8px">
+      <div style="font-weight:900">🛡️ 家长验证</div>
+      <button class="xbtn" onclick="closeParentGate()">✕</button>
+    </div>
+    <div style="font-size:.9rem;color:rgba(255,255,255,.65);margin-bottom:10px">为防止孩子修改设置，请完成一道小题。</div>
+
+    <div id="pg-q" style="font-size:1.7rem;font-weight:900;color:#fff;text-align:center;letter-spacing:2px;margin:8px 0 12px">3 × 4 = ?</div>
+
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <input id="pg-a" type="number" inputmode="numeric" style="flex:1;min-width:160px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:12px;padding:10px 12px;font-size:1.05rem" placeholder="请输入答案"/>
+      <button class="btn btn-p" onclick="submitParentGate()">进入家长面板</button>
+    </div>
+    <div id="pg-tip" style="margin-top:10px;font-size:.85rem;color:rgba(255,255,255,.6)"></div>
+  </div>
+</div>
 
 <!-- Feedback -->
 <div id="fb">
@@ -612,6 +747,28 @@ body{font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
 </div>
 
 <script>
+// ═══════════════════════════════════════
+//  BOOT DIAGNOSTICS (shows script errors)
+// ═══════════════════════════════════════
+(function(){
+  try{
+    const b=document.createElement('div');
+    b.id='js-badge';
+    b.style.cssText='position:fixed;bottom:12px;left:12px;z-index:9999;padding:6px 10px;border-radius:12px;background:rgba(0,212,106,.18);border:1.5px solid rgba(0,212,106,.45);color:#a9ffd1;font:700 12px/1.2 system-ui,Segoe UI,Arial;backdrop-filter:blur(8px)';
+    b.textContent='JS 已启动';
+    document.addEventListener('DOMContentLoaded', ()=>document.body.appendChild(b));
+    window.addEventListener('error', (e)=>{
+      try{
+        const msg=(e?.message||'脚本错误') + (e?.filename?(' @ '+e.filename.split('/').slice(-1)[0]+':'+e.lineno):'');
+        b.textContent='JS 报错：'+msg;
+        b.style.background='rgba(255,71,87,.18)';
+        b.style.borderColor='rgba(255,71,87,.45)';
+        b.style.color='#ffd0d5';
+      }catch(_){ }
+    });
+  }catch(_){ }
+})();
+
 // ═══════════════════════════════════════
 //  LEVELS CONFIG
 // ═══════════════════════════════════════
@@ -678,8 +835,35 @@ let curAns = '', timerV = 15, timerInt = null;
 let sCorrect = 0, sStars = 0, sStreak = 0, maxStreak = 0;
 let curStreak = 0, gStartTime = 0;
 let submitting = false;   // ← 防止重复提交
-let wrongTryCount = 0; // per-question wrong attempts
+let wrongTryCount = 0;
+let sawHintThisQ = false; // per-question saw hint flag
 let voiceOn = true;
+let parentUnlockedUntil = 0;
+let sfxOn = true;
+P.sfxOn = true;
+function toggleSfx(){
+  sfxOn = !sfxOn;
+  P.sfxOn = sfxOn;
+  save();
+  const b=document.getElementById('sfx-btn');
+  if(b) b.textContent = sfxOn ? '🔊' : '🔇';
+}
+function ensureSfxCtx(){
+  try{
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!window._sfxCtx) window._sfxCtx = new AC();
+    if(window._sfxCtx.state==='suspended') window._sfxCtx.resume().catch(()=>{});
+  }catch(e){}
+}
+
+function resumeSfxOnFirstTouch(){
+  ensureSfxCtx();
+  try{
+    if(window._sfxCtx && window._sfxCtx.state==='suspended') window._sfxCtx.resume().catch(()=>{});
+  }catch(e){}
+}
+document.addEventListener('pointerdown', resumeSfxOnFirstTouch, {passive:true});
+
 let voiceNamePref = (P.voiceNamePref||"" );
 // Force preferred voice (user confirmed): 婷婷 (zh-CN)
 voiceNamePref = '婷婷 (zh-CN)';
@@ -696,19 +880,22 @@ function loadData(){
   if(d){
     const p = JSON.parse(d);
     if(!p.tutsDone) p.tutsDone = [];
+    if(p.mapFocusIdx===undefined) p.mapFocusIdx = 0;
+    if(p.timerSec===undefined) p.timerSec = 15;
+    if(p.sfxOn===undefined) p.sfxOn = true;
     if(!p.voiceNamePref) p.voiceNamePref = "";
     // migrate: if level 2 already unlocked, treat cou as done
     if(p.unlocked.includes(2) && !p.tutsDone.includes('cou')) p.tutsDone.push('cou');
     if(p.unlocked.includes(3) && !p.tutsDone.includes('po'))  p.tutsDone.push('po');
     return p;
   }
-  return {unlocked:[0], stars:{}, errors:[], sessions:[], tutsDone:[], voiceNamePref:""};
+  return {unlocked:[0], stars:{}, errors:[], sessions:[], tutsDone:[], mapFocusIdx:0, timerSec:15, sfxOn:true, voiceNamePref:""};
 }
 function save(){
   try{localStorage.setItem('mathAdv2', JSON.stringify(P));}catch(e){}
 }
 function resetAll(){
-  P = {unlocked:[0], stars:{}, errors:[], sessions:[], tutsDone:[]};
+  P = {unlocked:[0], stars:{}, errors:[], sessions:[], tutsDone:[], mapFocusIdx:0, timerSec:15, sfxOn:true};
   save();
   location.reload();
 }
@@ -808,6 +995,39 @@ const BGM_NOTES = [
   [392.00,0.25],[523.25,0.25],[659.25,0.25],[783.99,0.25],
   [659.25,0.5], [523.25,0.25],[440.00,0.25],[392.00,0.5],
 ];
+
+function sfxTone(freq, dur=0.12, type='sine', gain=0.07){
+  try{
+    if(!sfxOn) return;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!window._sfxCtx) window._sfxCtx = new AC();
+    const ctx = window._sfxCtx;
+    if(ctx.state==='suspended') ctx.resume().catch(()=>{});
+
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = type;
+    o.frequency.value = freq;
+    g.gain.value = gain;
+    o.connect(g);
+    g.connect(ctx.destination);
+    o.start();
+    o.stop(ctx.currentTime + dur);
+  }catch(e){}
+}
+function sfxCorrect(){
+  sfxTone(880,0.09,'triangle',0.04);
+  setTimeout(()=>sfxTone(1320,0.09,'triangle',0.04),90);
+}
+function sfxVictory(){
+  // a short celebratory arpeggio
+  const seq=[784,988,1175,1568];
+  seq.forEach((f,i)=>setTimeout(()=>sfxTone(f,0.10,'triangle',0.05), i*90));
+}
+function sfxWrong(){
+  sfxTone(220,0.12,'sawtooth',0.03);
+}
+
 function initBgm(){
   if(bgmCtx) return;
   try{
@@ -879,6 +1099,112 @@ function ensureBgmAlive(){
   }catch(e){}
 }
 
+
+
+function parentArrowScroll(e){
+  const sp=document.getElementById('screen-parent');
+  if(!sp || !sp.classList.contains('active')) return;
+  if(e.key==='ArrowDown'){ sp.scrollTop += 60; e.preventDefault(); }
+  if(e.key==='ArrowUp'){ sp.scrollTop -= 60; e.preventDefault(); }
+}
+document.addEventListener('keydown', parentArrowScroll);
+
+let _pgAns = null;
+function askParentGate(){
+  // random multiply or divide with integer result
+  const useDiv = Math.random()<0.5;
+  let a,b,q,ans;
+  if(useDiv){
+    b = 2 + Math.floor(Math.random()*8);
+    ans = 2 + Math.floor(Math.random()*9);
+    a = b*ans;
+    q = `${a} ÷ ${b} = ?`;
+  } else {
+    a = 2 + Math.floor(Math.random()*9);
+    b = 2 + Math.floor(Math.random()*9);
+    ans = a*b;
+    q = `${a} × ${b} = ?`;
+  }
+  _pgAns = ans;
+  const box=document.getElementById('parent-gate');
+  const qe=document.getElementById('pg-q');
+  const ae=document.getElementById('pg-a');
+  const tip=document.getElementById('pg-tip');
+  if(qe) qe.textContent = q;
+  if(ae) ae.value = '';
+  if(tip) tip.textContent = '';
+  if(box) box.style.display='flex';
+  setTimeout(()=>{ try{ ae && ae.focus(); }catch(e){} }, 50);
+}
+function closeParentGate(){
+  const box=document.getElementById('parent-gate');
+  if(box) box.style.display='none';
+}
+function submitParentGate(){
+  const ae=document.getElementById('pg-a');
+  const tip=document.getElementById('pg-tip');
+  const v = ae ? parseInt(ae.value,10) : NaN;
+  if(v===_pgAns){
+    if(tip) tip.textContent='验证通过';
+    closeParentGate();
+    openParent();
+  } else {
+    if(tip) tip.textContent='答案不对，再试一次～';
+    sfxWrong && sfxWrong();
+  }
+}
+// ═══════════════════════════════════════
+//  PARENT GATE
+// ═══════════════════════════════════════
+let _pgAnswer = 0, _pgInput = '';
+
+// Multiplication & division pools — hard enough for adults, impossible for 6-year-olds
+const PG_POOLS = [
+  ()=>{ const a=r(3,9),b=r(3,9); return {q:`${a} × ${b} = ？`, ans:a*b}; },
+  ()=>{ const b=r(3,9),ans=r(3,9); return {q:`${b*ans} ÷ ${b} = ？`, ans}; },
+];
+
+function openParentGate(){
+  const gen = PG_POOLS[Math.floor(Math.random()*PG_POOLS.length)]();
+  _pgAnswer = gen.ans;
+  _pgInput  = '';
+  document.getElementById('pg-question').textContent = gen.q;
+  document.getElementById('pg-ans-text').textContent = '';
+  document.getElementById('pg-msg').textContent = '';
+  document.getElementById('parent-gate').classList.add('show');
+}
+
+function closeParentGate(){
+  document.getElementById('parent-gate').classList.remove('show');
+}
+
+function pgKey(k){
+  const msgEl = document.getElementById('pg-msg');
+  if(k === '⌫'){
+    _pgInput = _pgInput.slice(0,-1);
+  } else if(k === '✓'){
+    if(parseInt(_pgInput) === _pgAnswer){
+      closeParentGate();
+      showScreen('parent');
+    } else {
+      msgEl.textContent = '答案不对哦，再想想～';
+      _pgInput = '';
+      // regenerate question after wrong attempt
+      setTimeout(()=>{
+        const gen = PG_POOLS[Math.floor(Math.random()*PG_POOLS.length)]();
+        _pgAnswer = gen.ans;
+        document.getElementById('pg-question').textContent = gen.q;
+        msgEl.textContent = '';
+      }, 1200);
+    }
+  } else {
+    if(_pgInput.length >= 3) return;
+    _pgInput += k;
+    msgEl.textContent = '';
+  }
+  document.getElementById('pg-ans-text').textContent = _pgInput;
+}
+
 // ═══════════════════════════════════════
 //  SCREEN
 // ═══════════════════════════════════════
@@ -927,79 +1253,77 @@ function renderMap(){
   const wrap = document.getElementById('space-map-wrap');
   wrap.innerHTML = '';
 
-  // ── Layout positions (% of wrap's 100% wide × 500px tall)
-  // zigzag across the space, bottom-start → top-finish
+  // ── Inner tall canvas (positions are % of 900px height)
+  const CANVAS_H = 900;
+  const canvas = document.createElement('div');
+  canvas.className = 'space-map-canvas';
+  wrap.appendChild(canvas);
+
+  // Positions: x=% of width, y=% of CANVAS_H — spread evenly bottom→top
+  // Bottom of canvas = start, top = finish. Leave 12% padding each end.
   const POSITIONS = [
-    {x:22, y:87},   // 0: 火星
-    {x:68, y:74},   // 1: 木星
-    {x:82, y:56},   // 2: 凑十法 (tut)
-    {x:35, y:42},   // 3: 土星
-    {x:18, y:26},   // 4: 破十法 (tut)
-    {x:64, y:14},   // 5: 天王星
-    {x:40, y:3 },   // 6: 宇宙核心
+    {x:28, y:88},   // 0: 火星
+    {x:68, y:76},   // 1: 木星
+    {x:80, y:62},   // 2: 凑十法 (tut)
+    {x:32, y:48},   // 3: 土星
+    {x:20, y:34},   // 4: 破十法 (tut)
+    {x:68, y:20},   // 5: 天王星
+    {x:40, y:8 },   // 6: 宇宙核心
   ];
 
-  // Planet visual configs
   const LV_CFG = [
-    {size:74, bg:'radial-gradient(circle at 30% 28%,rgba(255,255,255,.22),transparent 40%),radial-gradient(circle at 65% 65%,rgba(0,0,0,.25),transparent 52%),radial-gradient(135deg,#ff6b7a,#c0392b)', glowColor:'rgba(255,107,122,.5)', glowBase:'0 6px 20px rgba(255,50,50,.4)'},
-    {size:78, bg:'radial-gradient(circle at 28% 30%,rgba(255,255,255,.18),transparent 42%),radial-gradient(circle at 70% 70%,rgba(0,0,0,.22),transparent 55%),radial-gradient(135deg,#ffa040,#e67e22)', glowColor:'rgba(255,160,64,.5)',  glowBase:'0 6px 20px rgba(255,120,0,.4)'},
-    {size:82, bg:'radial-gradient(circle at 30% 28%,rgba(255,255,255,.22),transparent 45%),radial-gradient(circle at 72% 72%,rgba(0,0,0,.24),transparent 56%),radial-gradient(135deg,#f7d060,#c9a227)', glowColor:'rgba(247,208,96,.5)',  glowBase:'0 6px 20px rgba(200,160,0,.4)'},
-    {size:78, bg:'radial-gradient(circle at 28% 30%,rgba(255,255,255,.20),transparent 45%),radial-gradient(circle at 70% 70%,rgba(0,0,0,.22),transparent 56%),radial-gradient(135deg,#4fa3e3,#1a6fb0)', glowColor:'rgba(79,163,227,.5)',  glowBase:'0 6px 20px rgba(30,100,200,.4)'},
-    {size:86, bg:'radial-gradient(circle at 30% 28%,rgba(255,255,255,.20),transparent 45%),radial-gradient(circle at 70% 70%,rgba(0,0,0,.25),transparent 56%),radial-gradient(135deg,#d4a8ff,#8a2be2)', glowColor:'rgba(180,130,255,.5)', glowBase:'0 6px 24px rgba(140,50,220,.5)'},
+    {size:72, bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.22),transparent 48%),radial-gradient(135deg,#ff6b7a,#c0392b)', glowColor:'rgba(255,107,122,.55)', glowBase:'0 6px 22px rgba(255,50,50,.4)'},
+    {size:78, bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#ffa040,#e67e22)', glowColor:'rgba(255,160,64,.55)',  glowBase:'0 6px 22px rgba(255,120,0,.4)'},
+    {size:80, bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#f7d060,#c9a227)', glowColor:'rgba(247,208,96,.55)',  glowBase:'0 6px 22px rgba(200,160,0,.4)'},
+    {size:76, bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#4fa3e3,#1a6fb0)', glowColor:'rgba(79,163,227,.55)',  glowBase:'0 6px 22px rgba(30,100,200,.4)'},
+    {size:85, bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#d4a8ff,#8a2be2)', glowColor:'rgba(180,130,255,.55)', glowBase:'0 6px 26px rgba(140,50,220,.5)'},
   ];
   const FLOAT_DUR = ['3.8s','4.4s','3.2s','4.9s','3.6s','4.2s','5s'];
 
-  // ── Background mini stars
-  for(let i=0;i<55;i++){
+  // ── Background mini stars (attached to canvas so they scroll with map)
+  for(let i=0;i<70;i++){
     const s = document.createElement('div');
     s.className = 'map-star';
     const sz = Math.random()*2+.5;
     s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${1.5+Math.random()*3}s;animation-delay:${Math.random()*3}s;opacity:${.3+Math.random()*.7}`;
-    wrap.appendChild(s);
+    canvas.appendChild(s);
   }
 
-  // ── SVG flight-path layer
+  // ── SVG flight-path layer (inside canvas, same coordinate space)
   const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
   svg.setAttribute('class','map-svg');
   svg.setAttribute('viewBox','0 0 100 100');
   svg.setAttribute('preserveAspectRatio','none');
+  canvas.appendChild(svg);  // append first so mpath refs work
 
-  const W = wrap.offsetWidth || 440;
-  const H = 500;
-
-  // Build paths first, collect done-path data for rockets
-  const rocketPaths = [];
+  const rocketDefs = [];
   MAP_PATH.forEach((node, idx)=>{
     if(idx===0) return;
     const prev = POSITIONS[idx-1];
     const cur  = POSITIONS[idx];
     const prevDone = isNodeDone(MAP_PATH[idx-1]);
-    const x1 = prev.x, y1 = prev.y, x2 = cur.x, y2 = cur.y;
-    const mx = (x1+x2)/2 + (idx%2===0?6:-6);
-    const my = (y1+y2)/2;
+    const mx = (prev.x+cur.x)/2 + (idx%2===0?8:-8);
+    const my = (prev.y+cur.y)/2;
     const pathId = `mp-${idx}`;
 
     const path = document.createElementNS('http://www.w3.org/2000/svg','path');
     path.setAttribute('id', pathId);
-    path.setAttribute('d',`M${x1},${y1} Q${mx},${my} ${x2},${y2}`);
+    path.setAttribute('d',`M${prev.x},${prev.y} Q${mx},${my} ${cur.x},${cur.y}`);
     path.setAttribute('fill','none');
-    path.setAttribute('stroke', prevDone ? 'rgba(255,215,0,.5)' : 'rgba(255,255,255,.15)');
-    path.setAttribute('stroke-width', prevDone ? '.8' : '.6');
-    path.setAttribute('stroke-dasharray', node.type==='tut' ? '1.5,1.5' : '2,2');
+    path.setAttribute('stroke', prevDone ? 'rgba(255,215,0,.55)' : 'rgba(255,255,255,.14)');
+    path.setAttribute('stroke-width', prevDone ? '.9' : '.6');
+    path.setAttribute('stroke-dasharray', node.type==='tut' ? '1.5,1.5' : '2.5,2');
     path.setAttribute('stroke-linecap','round');
     svg.appendChild(path);
-
-    if(prevDone) rocketPaths.push({pathId, dur: 3+idx*.4});
+    if(prevDone) rocketDefs.push({pathId, dur: 3+idx*.4});
   });
 
-  // Append SVG to DOM first, THEN add mpath rockets (mpath needs live DOM)
-  wrap.appendChild(svg);
-
-  rocketPaths.forEach(({pathId, dur})=>{
+  // Add rockets after SVG is in DOM
+  rocketDefs.forEach(({pathId, dur})=>{
     try{
       const rocket = document.createElementNS('http://www.w3.org/2000/svg','text');
       rocket.textContent = '🚀';
-      rocket.setAttribute('font-size','3.5');
+      rocket.setAttribute('font-size','3.8');
       rocket.setAttribute('text-anchor','middle');
       rocket.setAttribute('dominant-baseline','middle');
       const anim = document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
@@ -1012,94 +1336,123 @@ function renderMap(){
       anim.appendChild(mp);
       rocket.appendChild(anim);
       svg.appendChild(rocket);
-    }catch(e){ /* animateMotion not supported, skip rocket */ }
+    }catch(e){}
   });
 
-  // ── Planet / Tutorial nodes
+  // ── Planet / Tutorial nodes (appended to canvas)
+  // Focus rule:
+  // - Entering “闯关/地图”时先看到火星在屏幕中间
+  // - 随着闯关成功/解锁推进：始终把“最新可进入(解锁)的关卡/星球”保持在屏幕中间
+  let latestAccessibleIdx = 0;
+  let focusIdx = (P.mapFocusIdx===undefined?0:P.mapFocusIdx);
+
   MAP_PATH.forEach((node, idx)=>{
     const pos        = POSITIONS[idx];
     const accessible = isNodeAccessible(node);
     const done       = isNodeDone(node);
     const fdur       = FLOAT_DUR[idx];
 
+    // Compute latest accessible node
+    if(accessible) latestAccessibleIdx = idx;
+
     if(node.type==='level'){
       const lv  = LVS[node.id];
       const cfg = LV_CFG[node.id];
       const st  = P.stars[node.id]||0;
+      const glowBase  = done ? '0 0 28px '+cfg.glowColor+','+cfg.glowBase : cfg.glowBase;
+      const animClass = accessible && !done ? 'pulse-glow' : 'float-only';
 
       const el = document.createElement('div');
       el.className = 'planet-node ' + (accessible ? 'accessible' : 'locked');
       el.style.cssText = `left:${pos.x}%;top:${pos.y}%`;
-
-      const glowBase  = done ? '0 0 24px '+cfg.glowColor+','+cfg.glowBase : cfg.glowBase;
-      const animClass = accessible && !done ? 'pulse-glow' : 'float-only';
-
       el.innerHTML = `
         <div class="planet-body ${animClass}"
           style="width:${cfg.size}px;height:${cfg.size}px;
-          background:${cfg.bg};
-          --fd:${fdur};
-          --glow-base:${cfg.glowBase};
-          --glow-color:${cfg.glowColor};
+          background:${cfg.bg};--fd:${fdur};
+          --glow-base:${cfg.glowBase};--glow-color:${cfg.glowColor};
           box-shadow:${glowBase};
           border-color:${done?cfg.glowColor:'rgba(255,255,255,.18)'}">
-          <span class="planet-em" style="display:none">${lv.em}</span><div class="planet-surface planet-skin-${lv.id}"></div><div class="planet-ring"></div>
+          <span class="planet-em" style="display:none">${lv.em}</span>
+          <div class="planet-surface planet-skin-${lv.id}"></div>
+          <div class="planet-ring"></div>
           ${!accessible ? '<div class="planet-lock-icon">🔒</div>' : ''}
-          
+          ${done ? '<div class="planet-lock-icon" style="background:rgba(255,215,0,.15);border-color:rgba(255,215,0,.5)">✅</div>' : ''}
         </div>
         <div class="planet-name">${lv.name}</div>
         ${done ? `<div class="planet-stars">${'⭐'.repeat(st)}${'☆'.repeat(3-st)}</div>` : ''}
       `;
       if(accessible) el.onclick = ()=>startLevel(node.id);
-      wrap.appendChild(el);
+      canvas.appendChild(el);
 
     } else if(node.type==='tut'){
-      // Render tutorial nodes as real planets (same style system as levels)
       const isCou = node.id==='cou';
       const cfg = isCou
-        ? {size:78, bg:'radial-gradient(circle at 28% 30%,rgba(255,255,255,.20),transparent 45%),radial-gradient(circle at 70% 70%,rgba(0,0,0,.22),transparent 56%),radial-gradient(135deg,#4fa3e3,#1a6fb0)', glowColor:'rgba(30,144,255,.55)', glowBase:'0 6px 22px rgba(30,100,200,.35)'}
-        : {size:78, bg:'radial-gradient(circle at 28% 30%,rgba(255,255,255,.18),transparent 42%),radial-gradient(circle at 70% 70%,rgba(0,0,0,.22),transparent 55%),radial-gradient(135deg,#ffa040,#e67e22)', glowColor:'rgba(255,123,0,.55)', glowBase:'0 6px 22px rgba(255,120,0,.35)'};
+        ? {size:74, bg:'radial-gradient(circle at 28% 30%,rgba(255,255,255,.20),transparent 45%),radial-gradient(135deg,#4fa3e3,#1a6fb0)', glowColor:'rgba(30,144,255,.55)', glowBase:'0 6px 22px rgba(30,100,200,.35)'}
+        : {size:74, bg:'radial-gradient(circle at 28% 30%,rgba(255,255,255,.18),transparent 42%),radial-gradient(135deg,#ffa040,#e67e22)', glowColor:'rgba(255,123,0,.55)',  glowBase:'0 6px 22px rgba(255,120,0,.35)'};
+
+      const tutDone   = done;
+      const animClass = accessible ? 'pulse-glow' : 'float-only';
+      const glowBase  = cfg.glowBase + (accessible ? ', 0 0 28px '+cfg.glowColor : '');
+      const em        = isCou ? '🔵' : '🟠';
+      const labelTxt  = tutDone ? '✅ 已学会' : accessible ? '⚡ 先学我！' : '🔒 未解锁';
+      const labelCls  = tutDone ? 'done' : accessible ? 'req' : 'lk';
 
       const el = document.createElement('div');
       el.className = 'planet-node ' + (accessible ? 'accessible' : 'locked');
       el.style.cssText = `left:${pos.x}%;top:${pos.y}%`;
-
-      const glowBase = cfg.glowBase + ', 0 0 26px ' + cfg.glowColor;
-      const animClass = accessible ? 'pulse-glow' : 'float-only';
-      const em = isCou ? '🔵' : '🟠';
-
       el.innerHTML = `
         <div class="planet-body ${animClass}"
           style="width:${cfg.size}px;height:${cfg.size}px;
-          background:${cfg.bg};
-          --fd:${fdur};
-          --glow-base:${cfg.glowBase};
-          --glow-color:${cfg.glowColor};
-          box-shadow:${glowBase};
-          border-color:${cfg.glowColor}">
+          background:${cfg.bg};--fd:${fdur};
+          --glow-base:${cfg.glowBase};--glow-color:${cfg.glowColor};
+          box-shadow:${glowBase};border-color:${cfg.glowColor}">
           <span class="planet-em" style="display:none">${em}</span>
-          <div class="planet-surface"></div>
+          <div class="planet-surface" style="background-image:url('${isCou?ICON_COU_SVG:ICON_PO_SVG}')"></div>
           <div class="planet-ring"></div>
           ${!accessible ? '<div class="planet-lock-icon">🔒</div>' : ''}
         </div>
         <div class="planet-name">${node.name}</div>
+        <div class="tut-label ${labelCls}">${labelTxt}</div>
       `;
-
-      // Force-set the icon for 凑十星/破十星
-      try{
-        const surf = el.querySelector('.planet-surface');
-        if(surf){
-          surf.style.backgroundImage = `url('${isCou?ICON_COU_SVG:ICON_PO_SVG}')`;
-          surf.style.backgroundSize = 'cover';
-          surf.style.backgroundPosition = 'center';
-        }
-      }catch(e){}
-
       if(accessible) el.onclick = ()=>startTutorial(node.id);
-      wrap.appendChild(el);
+      canvas.appendChild(el);
     }
   });
-} catch(e){ console.error('renderMap error:',e); }
+
+    // Update focus when progress unlocks a new node
+  const latest = latestAccessibleIdx;
+  const hasProgress = (P.unlocked && P.unlocked.length>1) || (P.tutsDone && P.tutsDone.length>0) || Object.keys(P.stars||{}).length>0;
+
+  // Rule: first time entering map (no progress) => always center Mars
+  if(!hasProgress){
+    P.mapFocusIdx = 0;
+  } else {
+    // Always follow the latest accessible node
+    P.mapFocusIdx = latest;
+  }
+  try{ save(); }catch(e){}
+  focusIdx = P.mapFocusIdx;
+
+  // ── Auto-scroll: center the focused node
+  const doScroll = ()=>{
+    const pos = POSITIONS[focusIdx] || POSITIONS[0];
+    const targetPx = (pos.y/100) * CANVAS_H;
+    let scrollTo = targetPx - wrap.clientHeight * 0.5;
+
+    // Clamp to valid range
+    const maxScroll = Math.max(0, canvas.offsetHeight - wrap.clientHeight);
+    scrollTo = Math.max(0, Math.min(maxScroll, scrollTo));
+
+    // First-time focus on Mars: bias towards bottom so Mars is definitely visible
+    if(focusIdx===0) scrollTo = maxScroll;
+
+    wrap.scrollTop = scrollTo;
+  };
+  requestAnimationFrame(()=>requestAnimationFrame(doScroll));
+  setTimeout(doScroll, 120);
+  setTimeout(doScroll, 300);
+
+  }catch(e){ console.error('renderMap error:',e); }
 }
 // ═══════════════════════════════════════
 //  TUTORIAL
@@ -1457,6 +1810,38 @@ function playChime(){
   });
 }
 
+// 答对音效：明亮上升三音
+function playCorrect(){
+  if(!bgmCtx) return;
+  [[523.25,0],[659.25,100],[783.99,200]].forEach(([f,d])=>{
+    setTimeout(()=>{
+      const o=bgmCtx.createOscillator(), e=bgmCtx.createGain();
+      o.type='sine'; o.frequency.value=f;
+      e.gain.setValueAtTime(0,bgmCtx.currentTime);
+      e.gain.linearRampToValueAtTime(0.28,bgmCtx.currentTime+0.01);
+      e.gain.exponentialRampToValueAtTime(0.001,bgmCtx.currentTime+0.35);
+      o.connect(e); e.connect(bgmCtx.destination);
+      o.start(); o.stop(bgmCtx.currentTime+0.35);
+    }, d);
+  });
+}
+
+// 答错音效：低沉下降两音
+function playWrong(){
+  if(!bgmCtx) return;
+  [[311.13,0],[233.08,180]].forEach(([f,d])=>{
+    setTimeout(()=>{
+      const o=bgmCtx.createOscillator(), e=bgmCtx.createGain();
+      o.type='triangle'; o.frequency.value=f;
+      e.gain.setValueAtTime(0,bgmCtx.currentTime);
+      e.gain.linearRampToValueAtTime(0.22,bgmCtx.currentTime+0.015);
+      e.gain.exponentialRampToValueAtTime(0.001,bgmCtx.currentTime+0.38);
+      o.connect(e); e.connect(bgmCtx.destination);
+      o.start(); o.stop(bgmCtx.currentTime+0.38);
+    }, d);
+  });
+}
+
 
 function renderPoVisual(step, a, b){
   const units    = a % 10;      // 13-7: units=3
@@ -1555,6 +1940,24 @@ function fill(n, cls, ...args){
 }
 
 // ═══════════════════════════════════════
+
+function setTimerFromUI(){
+  const sel=document.getElementById('timer-select');
+  if(!sel) return;
+  const v=parseInt(sel.value,10);
+  P.timerSec = isNaN(v)?15:v;
+  TIME_LIMIT = P.timerSec;
+  save();
+  speak('已设置倒计时');
+}
+
+function syncTimerUI(){
+  const sel=document.getElementById('timer-select');
+  if(!sel) return;
+  const v=(P.timerSec===undefined?15:P.timerSec);
+  sel.value=String(v);
+}
+
 //  GAME
 // ═══════════════════════════════════════
 function startLevel(id, errMode){
@@ -1596,6 +1999,7 @@ function loadQ(){
   curAns=''; updateAD();
   curQObj = qs[curQ];
   wrongTryCount = 0;
+  sawHintThisQ = false;
 
   // Determine method for hint
   const lv = LVS[curLvId];
@@ -1684,6 +2088,7 @@ function submit(){
     ];
     const [em,msg,sub]=msgs[Math.floor(Math.random()*msgs.length)];
     spawnParticles();
+    playCorrect();
     showFb(true,em,msg,`+${stars}⭐ ${sub}`,'#00d46a');
     setTimeout(()=>{ dismissFb(); nextQ(true,false); },1300);
   } else {
@@ -1706,6 +2111,7 @@ function submit(){
       speak('再试一次');
     }
     const qEl=document.getElementById('qd');
+    playWrong();
     qEl.classList.add('shake'); setTimeout(()=>qEl.classList.remove('shake'),400);
     setTimeout(()=>{ 
       dismissFb(); 
@@ -1764,6 +2170,8 @@ function showHint(){
     </div>
   `).join('');
 
+  sawHintThisQ = true;
+  try{ clearInterval(timerInt); }catch(e){}
   document.getElementById('hint-modal').classList.add('show');
   speak(hint.openSpeak);
 }
