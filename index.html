@@ -2688,23 +2688,24 @@ function renderHintAnim(hint, qObj){
   };
 
   if(hint.method==='cou'){
-    const need = 10 - n1;
-    const rest = n2 - need;
+    const big=Math.max(n1,n2), small=Math.min(n1,n2);
+    const need = 10 - big;
+    const rest = small - need;
 
     box.innerHTML = `
       <div class="tf-wrap">
-        <div style="font-weight:900;color:#fff;margin-bottom:6px">先凑十！</div>
+        <div style="font-weight:900;color:#fff;margin-bottom:6px">拆小数，补大数！</div>
         <div style="display:flex;gap:10px;width:100%;align-items:flex-start">
           <div style="flex:1;background:rgba(30,144,255,.10);border:1.5px solid rgba(30,144,255,.25);border-radius:14px;padding:10px">
-            <div style="font-size:.85rem;color:rgba(255,255,255,.75);text-align:center;margin-bottom:6px">左边：先装满 10</div>
+            <div style="font-size:.85rem;color:rgba(255,255,255,.75);text-align:center;margin-bottom:6px">大数 ${big}，凑成 10</div>
             <div id="cou-left" class="ten-frame"></div>
           </div>
           <div style="flex:1;background:rgba(255,215,0,.10);border:1.5px solid rgba(255,215,0,.25);border-radius:14px;padding:10px">
-            <div style="font-size:.85rem;color:rgba(255,255,255,.75);text-align:center;margin-bottom:6px">右边：黄球</div>
+            <div style="font-size:.85rem;color:rgba(255,255,255,.75);text-align:center;margin-bottom:6px">小数 ${small}，拆 ${need} 出来</div>
             <div id="cou-right" class="extra-dots" style="justify-content:center"></div>
           </div>
         </div>
-        <div id="cou-cap" style="font-size:.9rem;color:rgba(255,255,255,.78);text-align:center;margin-top:10px">把右边的黄球挪 ${need} 个到左边空格里</div>
+        <div id="cou-cap" style="font-size:.9rem;color:rgba(255,255,255,.78);text-align:center;margin-top:10px">把右边的球挪 ${need} 个到左边空格里</div>
       </div>`;
 
     const left=document.getElementById('cou-left');
@@ -2714,14 +2715,14 @@ function renderHintAnim(hint, qObj){
       if(!left) return;
       left.innerHTML = Array(10).fill(0).map((_,i)=>{
         let cls='tf-dot';
-        if(i<n1) cls+=' a';
-        if(i>=n1 && i<n1+moved) cls+=' moved';
+        if(i<big) cls+=' a';
+        if(i>=big && i<big+moved) cls+=' moved';
         return `<div class="${cls}"></div>`;
       }).join('');
     };
     const renderRight=(moved)=>{
       if(!right) return;
-      right.innerHTML = Array(n2).fill(0).map((_,i)=> i<moved ? `<div class="ed empty"></div>` : `<div class="ed b"></div>`).join('');
+      right.innerHTML = Array(small).fill(0).map((_,i)=> i<moved ? `<div class="ed empty"></div>` : `<div class="ed b"></div>`).join('');
     };
 
     let step=0;
@@ -2734,7 +2735,7 @@ function renderHintAnim(hint, qObj){
       renderRight(moved);
       const cap=document.getElementById('cou-cap');
       if(cap){
-        cap.textContent = moved<need ? `继续挪～ 还差 ${need-moved} 个就满 10` : `凑满 10 以后还剩 ${rest} 个：10 + ${rest} = ${ans}`;
+        cap.textContent = moved<need ? `继续挪～ 还差 ${need-moved} 个就满 10` : `凑满 10 了！还剩 ${rest} 个：10 + ${rest} = ${ans}`;
       }
       if(step>=need+2){ clearInterval(_hintAnimTimer); _hintAnimTimer=null; }
     }, 520);
@@ -2744,17 +2745,18 @@ function renderHintAnim(hint, qObj){
     const fromTen = 10 - n2;
     box.innerHTML = `
       <div class="tf-wrap">
+        <div style="font-weight:900;color:#fff;margin-bottom:6px">拆大数，破出十！</div>
         <div style="display:flex;gap:10px;width:100%;align-items:flex-start">
           <div style="flex:1">
-            <div style="font-size:.85rem;color:rgba(255,255,255,.75);text-align:center;margin-bottom:6px">先把${n1}分出10个</div>
+            <div style="font-size:.85rem;color:rgba(255,255,255,.75);text-align:center;margin-bottom:6px">${n1} 里的 10，减掉 ${n2}</div>
             <div id="hb-ten" class="extra-dots" style="justify-content:center"></div>
           </div>
           <div style="flex:1">
-            <div style="font-size:.85rem;color:rgba(255,255,255,.75);text-align:center;margin-bottom:6px">还剩 ${units} 个</div>
+            <div style="font-size:.85rem;color:rgba(255,255,255,.75);text-align:center;margin-bottom:6px">${n1} 里的剩余 ${units}</div>
             <div class="extra-dots" id="hb-units"></div>
           </div>
         </div>
-        <div id="hb-cap" style="font-size:.85rem;color:rgba(255,255,255,.75);text-align:center;margin-top:8px">从 10 里拿走 ${n2} 个</div>
+        <div id="hb-cap" style="font-size:.85rem;color:rgba(255,255,255,.75);text-align:center;margin-top:8px">${n1} = 10 + ${units}，从 10 里减掉 ${n2}</div>
       </div>`;
     const ten=document.getElementById('hb-ten');
     const u=document.getElementById('hb-units');
@@ -2766,7 +2768,7 @@ function renderHintAnim(hint, qObj){
       const removed=Math.min(step, n2);
       if(ten) ten.innerHTML = Array(10).fill(0).map((_,i)=> i<removed ? `<div class="ed" style="background:rgba(255,71,87,.25);border:2px dashed rgba(255,71,87,.4);box-shadow:none"></div>` : `<div class="ed b"></div>`).join('');
       const cap=document.getElementById('hb-cap');
-      if(cap) cap.textContent = removed<n2 ? `已经拿走 ${removed} 个` : `10里剩${fromTen}个，再加剩下的${units}个`;
+      if(cap) cap.textContent = removed<n2 ? `已拿走 ${removed} 个，还需拿走 ${n2-removed} 个` : `10 - ${n2} = ${fromTen}，再加剩余的 ${units}：${fromTen} + ${units} = ${ans}`;
       if(step>=n2+2){ clearInterval(_hintAnimTimer); _hintAnimTimer=null; }
     }, 520);
   }
@@ -2775,23 +2777,25 @@ function renderHintAnim(hint, qObj){
 function computeHint(qObj){
   const {op, n1, n2, a} = qObj;
   if(op==='+'&&n1+n2>10){
-    const need=10-n1, rest=n2-need;
+    const big=Math.max(n1,n2), small=Math.min(n1,n2);
+    const need=10-big, rest=small-need;
     return { method:'cou',
-      openSpeak:`先凑十！把黄球搬过去装满 10，再加剩下的！`,
+      openSpeak:`凑十法口诀：拆小数，补大数，凑成十，加剩数！`,
       steps:[
-        {title:`先凑十！`, explain:`把右边的黄球挪 ${need} 个到左边空格里。`},
-        {title:`凑满 10 以后还剩 ${rest} 个`, explain:`所以 10 + ${rest} = ${a}。`},
+        {title:`拆小数，补大数！`, explain:`把小数 ${small} 拆成 ${need} 和 ${rest}，把 ${need} 补给大数 ${big}。`},
+        {title:`凑成十！`, explain:`${big} + ${need} = 10`},
+        {title:`加剩数，得答案！`, explain:`10 + ${rest} = ${a}`},
       ]
     };
   }
   if(op==='-'&&n1>10){
     const units=n1%10, fromTen=10-n2;
     return { method:'po',
-      openSpeak:`用破十法！把 ${n1} 分成 10 和 ${units}，先从 10 里减掉 ${n2}。`,
+      openSpeak:`破十法口诀：拆大数，破出十，减小数，加剩数！`,
       steps:[
-        {title:`先破十（把大数拆成10+？）`, explain:`${n1} - 10 = ${units}`},
-        {title:`再从10里减`,               explain:`10 - ${n2} = ${fromTen}`},
-        {title:`最后加一起`,               explain:`${fromTen} + ${units} = ${a}`},
+        {title:`拆大数，破出十！`, explain:`${n1} = 10 + ${units}`},
+        {title:`减小数！`,         explain:`10 - ${n2} = ${fromTen}`},
+        {title:`加剩数，得答案！`, explain:`${fromTen} + ${units} = ${a}`},
       ]
     };
   }
