@@ -30,7 +30,7 @@ font-family:'ZCOOL KuaiLe','Nunito',sans-serif;background:var(--bg);
 @keyframes twinkle{0%,100%{opacity:0;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
 #app{position:relative;z-index:1;width:min(480px,96vw);min-height:100vh;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:14px;gap:10px}
+  padding:66px 14px 14px;gap:10px}
 .screen{display:none;width:100%}
 .screen{overflow-y:auto;-webkit-overflow-scrolling:touch;align-items:flex-start;}
 
@@ -525,7 +525,7 @@ transform:scale(1.12) rotate(5deg);}
 
 /* ── Responsive: tablet 768px+ ── */
 @media(min-width:768px){
-  #app{width:min(640px,92vw);padding:18px 24px;}
+  #app{width:min(640px,92vw);padding:66px 24px 18px;}
   .btn{padding:16px 30px;font-size:1.2rem;}
   .card{padding:20px 26px;}
   .err-list{max-height:58vh;}
@@ -608,6 +608,9 @@ transform:scale(1.12) rotate(5deg);}
 
   /* Timer SVG slightly smaller */
   #tsv{width:58px;height:58px;}
+
+  /* Hide "点我" tap hint on mobile — finger tap is intuitive enough */
+  .map-start-hint{display:none;}
 }
 </style>
 </head>
