@@ -1266,6 +1266,7 @@ let _prevScreen = 'home'; // screen to return to after parent panel
 
 function openParentGate(target){
   _pgTarget = target || 'parent';
+  clearInterval(timerInt);  // 暂停倒计时，防止家长操作时题目自动超时
   // Remember where we came from
   const screens = ['home','map','game','errorbook'];
   for(const s of screens){
@@ -1283,6 +1284,9 @@ function openParentGate(target){
 
 function closeParentGate(){
   document.getElementById('parent-gate').classList.remove('show');
+  // 如果是取消（还在做题界面），恢复倒计时
+  const gs = document.getElementById('screen-game');
+  if(gs && gs.classList.contains('active') && curQObj && !submitting) startTimer();
 }
 
 function pgKey(k){
@@ -1330,6 +1334,7 @@ function showScreen(id){
   if(id==='map') renderMap();
   if(id==='errorbook') renderErrorBook();
   if(id==='parent'){
+    clearInterval(timerInt);  // 停止倒计时，家长设置期间不计时
     renderParent();
     // Update all "back" buttons to return to wherever we came from
     const label = _prevScreen==='game' ? '← 返回做题' : '← 返回首页';
@@ -1339,6 +1344,8 @@ function showScreen(id){
       btn.onclick = ()=>showScreen(dest);
     });
   }
+  // 返回做题界面时，用最新设置重启倒计时
+  if(id==='game' && curQObj && !submitting) startTimer();
 }
 
 // MAP_PATH defines the full journey sequence
@@ -2508,6 +2515,9 @@ function loadQ(){
 //  TIMER
 // ═══════════════════════════════════════
 function startTimer(){
+  // Only run timer when the game screen is actually visible
+  const gs = document.getElementById('screen-game');
+  if(!gs || !gs.classList.contains('active')) return;
   const limit = (P.timerSec===0||P.timerSec===undefined) ? 0 : (P.timerSec||15);
   if(limit===0){
     // unlimited — hide circle, show ∞
@@ -2595,6 +2605,7 @@ function submit(){
     ];
     const [em,msg,sub]=msgs[Math.floor(Math.random()*msgs.length)];
     wrongTryCount++;
+    curAns=''; updateAD();   // 立即清空错误答案，不让孩子看到错误残留
     if(wrongTryCount>=3){
       showFb(false,em,msg,`正确答案是 ${correct}`,'#ff4757');
       speak(`正确答案是 ${correct}`);
@@ -2605,15 +2616,14 @@ function submit(){
     const qEl=document.getElementById('qd');
     playWrong();
     qEl.classList.add('shake'); setTimeout(()=>qEl.classList.remove('shake'),400);
-    setTimeout(()=>{ 
-      dismissFb(); 
+    setTimeout(()=>{
+      dismissFb();
       if(wrongTryCount>=3) {
         nextQ(false,false);
       } else {
-        // Let the child try again: clear previous input
-        curAns='';
-        updateAD();
+        // Let the child try again: unlock and restart timer
         submitting=false;
+        startTimer();
       }
     },1900);
   }
