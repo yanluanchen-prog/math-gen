@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -208,6 +209,7 @@ padding:16px;font-family:inherit;font-size:1.7rem;font-weight:900;color:#fff;
   animation:pfly var(--d) ease-out forwards}
 @keyframes pfly{0%{transform:translateY(0) scale(1);opacity:1}
   100%{transform:translateY(-110px) scale(.3) rotate(360deg);opacity:0}}
+@keyframes poSplitPop{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
 /* ── Streak ── */
 #streak{position:fixed;top:14px;right:14px;z-index:50;
   background:linear-gradient(135deg,#ff7b00,#ff4500);color:#fff;border-radius:50px;
@@ -312,6 +314,10 @@ transform:scale(.94);}
 .planet-skin-4{background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20200%20200%27%3E%0A%3Cdefs%3E%3CradialGradient%20id%3D%27g%27%20cx%3D%2735%25%27%20cy%3D%2730%25%27%3E%0A%3Cstop%20offset%3D%270%25%27%20stop-color%3D%27%23ffffff%27/%3E%3Cstop%20offset%3D%2735%25%27%20stop-color%3D%27%23ead9ff%27/%3E%3Cstop%20offset%3D%27100%25%27%20stop-color%3D%27%23b48cff%27/%3E%3C/radialGradient%3E%3C/defs%3E%0A%3Ccircle%20cx%3D%27100%27%20cy%3D%27100%27%20r%3D%2784%27%20fill%3D%27url%28%23g%29%27/%3E%0A%3Cg%20opacity%3D%27.35%27%3E%0A%3Ccircle%20cx%3D%2770%27%20cy%3D%2785%27%20r%3D%2712%27%20fill%3D%27rgba%28255%2C255%2C255%2C.55%29%27/%3E%0A%3Ccircle%20cx%3D%27135%27%20cy%3D%27120%27%20r%3D%279%27%20fill%3D%27rgba%28255%2C255%2C255%2C.45%29%27/%3E%0A%3C/g%3E%0A%3C/svg%3E');}
 .planet-skin-cou{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyMDAgMjAwJz4KPGRlZnM+CiAgPHJhZGlhbEdyYWRpZW50IGlkPSdwZycgY3g9JzMyJScgY3k9JzI4JSc+CiAgICA8c3RvcCBvZmZzZXQ9JzAlJyBzdG9wLWNvbG9yPScjZmZmOGYyJy8+CiAgICA8c3RvcCBvZmZzZXQ9JzU1JScgc3RvcC1jb2xvcj0nI2YyZGNjZCcvPgogICAgPHN0b3Agb2Zmc2V0PScxMDAlJyBzdG9wLWNvbG9yPScjZDhiZmFlJy8+CiAgPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8Y2lyY2xlIGN4PScxMDAnIGN5PScxMDAnIHI9Jzc4JyBmaWxsPSd1cmwoI3BnKScvPgo8ZyBvcGFjaXR5PScuMzUnPgogIDxwYXRoIGQ9J001MCA3MmM0MC0xOCA2MC0xOCAxMDAgMCcgc3Ryb2tlPScjZmZmZmZmJyBzdHJva2Utd2lkdGg9JzcnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPgogIDxwYXRoIGQ9J000NSA5NWM0NS0xNiA2NS0xNiAxMTAgMCcgc3Ryb2tlPScjZmZmZmZmJyBzdHJva2Utd2lkdGg9JzYnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPgo8L2c+CjxnIG9wYWNpdHk9Jy44NSc+CiAgPGVsbGlwc2UgY3g9JzEwMCcgY3k9JzExMicgcng9JzExOCcgcnk9JzQ0JyBmaWxsPSdub25lJyBzdHJva2U9J3JnYmEoMjU1LDI1NSwyNTUsLjc1KScgc3Ryb2tlLXdpZHRoPScxNCcvPgogIDxlbGxpcHNlIGN4PScxMDAnIGN5PScxMTInIHJ4PScxMTgnIHJ5PSc0NCcgZmlsbD0nbm9uZScgc3Ryb2tlPSdyZ2JhKDAsMCwwLC4xMCknIHN0cm9rZS13aWR0aD0nNCcvPgo8L2c+Cjwvc3ZnPg==');}
 .planet-skin-po{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyMDAgMjAwJz4KPGRlZnM+CiAgPHJhZGlhbEdyYWRpZW50IGlkPSd0ZycgY3g9JzM1JScgY3k9JzMwJSc+CiAgICA8c3RvcCBvZmZzZXQ9JzAlJyBzdG9wLWNvbG9yPScjZWVmY2ZmJy8+CiAgICA8c3RvcCBvZmZzZXQ9JzU1JScgc3RvcC1jb2xvcj0nI2JkZWZmMCcvPgogICAgPHN0b3Agb2Zmc2V0PScxMDAlJyBzdG9wLWNvbG9yPScjNmZjN2M5Jy8+CiAgPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8Y2lyY2xlIGN4PScxMDAnIGN5PScxMDAnIHI9Jzg0JyBmaWxsPSd1cmwoI3RnKScvPgo8ZyBvcGFjaXR5PScuMzUnPgogIDxwYXRoIGQ9J00zNSA4NmMzOCAxOCA5Mi0xOCAxMzAgMCcgc3Ryb2tlPSdyZ2JhKDI1NSwyNTUsMjU1LC42NSknIHN0cm9rZS13aWR0aD0nOScgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJy8+CiAgPHBhdGggZD0nTTQwIDExMmMzMCAxNiA5MC0xNiAxMjAgMCcgc3Ryb2tlPSdyZ2JhKDI1NSwyNTUsMjU1LC40NSknIHN0cm9rZS13aWR0aD0nOCcgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJy8+CiAgPGNpcmNsZSBjeD0nMTMyJyBjeT0nNzInIHI9JzknIGZpbGw9J3JnYmEoMjU1LDI1NSwyNTUsLjM1KScvPgo8L2c+Cjwvc3ZnPg==');}
+/* Sun skin — fiery orange/yellow radial gradient with noise texture */
+.planet-skin-sun{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyMDAgMjAwJz4KPGRlZnM+CiAgPHJhZGlhbEdyYWRpZW50IGlkPSdzJyBjeD0nNDUlJyBjeT0nNDAlJz4KICAgIDxzdG9wIG9mZnNldD0nMCUnIHN0b3AtY29sb3I9JyNmZmY2YmYnLz4KICAgIDxzdG9wIG9mZnNldD0nMzUlJyBzdG9wLWNvbG9yPScjZmZkNzZhJy8+CiAgICA8c3RvcCBvZmZzZXQ9JzcwJScgc3RvcC1jb2xvcj0nI2ZmOWEyZicvPgogICAgPHN0b3Agb2Zmc2V0PScxMDAlJyBzdG9wLWNvbG9yPScjZTI0YjEyJy8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8ZmlsdGVyIGlkPSdub2lzZSc+CiAgICA8ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nLjknIG51bU9jdGF2ZXM9JzInIHN0aXRjaFRpbGVzPSdzdGl0Y2gnLz4KICAgIDxmZUNvbG9yTWF0cml4IHR5cGU9J21hdHJpeCcgdmFsdWVzPScxIDAgMCAwIDAgIDAgLjcgMCAwIDAgIDAgMCAuMiAwIDAgIDAgMCAwIC4yNSAwJy8+CiAgPC9maWx0ZXI+CjwvZGVmcz4KPGNpcmNsZSBjeD0nMTAwJyBjeT0nMTAwJyByPSc4NicgZmlsbD0ndXJsKCNzKScvPgo8Y2lyY2xlIGN4PScxMDAnIGN5PScxMDAnIHI9Jzg2JyBmaWx0ZXI9J3VybCgjbm9pc2UpJyBvcGFjaXR5PScuNzUnLz4KPGcgb3BhY2l0eT0nLjM1Jz4KICA8Y2lyY2xlIGN4PSc3OCcgY3k9Jzc4JyByPScxNicgZmlsbD0ncmdiYSgyNTUsMjU1LDI1NSwuMjUpJy8+CiAgPGNpcmNsZSBjeD0nMTI4JyBjeT0nMTE4JyByPScxMicgZmlsbD0ncmdiYSgwLDAsMCwuMTApJy8+CiAgPGNpcmNsZSBjeD0nMTIwJyBjeT0nNzgnIHI9JzgnIGZpbGw9J3JnYmEoMjU1LDI1NSwyNTUsLjE4KScvPgo8L2c+Cjwvc3ZnPg==');box-shadow:inset -10px -12px 22px rgba(0,0,0,.2),inset 8px 8px 16px rgba(255,220,100,.35);}
+/* Earth skin — blue ocean with green continents and cloud highlights */
+.planet-skin-earth{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyMDAgMjAwJz4KPGRlZnM+CiAgPHJhZGlhbEdyYWRpZW50IGlkPSdvJyBjeD0nNDAlJyBjeT0nMzUlJz4KICAgIDxzdG9wIG9mZnNldD0nMCUnIHN0b3AtY29sb3I9JyNjOGYxZmYnLz4KICAgIDxzdG9wIG9mZnNldD0nNTUlJyBzdG9wLWNvbG9yPScjM2FhOWZmJy8+CiAgICA8c3RvcCBvZmZzZXQ9JzEwMCUnIHN0b3AtY29sb3I9JyMwZDJmNmInLz4KICA8L3JhZGlhbEdyYWRpZW50PgogIDxyYWRpYWxHcmFkaWVudCBpZD0nZycgY3g9JzQ1JScgY3k9JzQwJSc+CiAgICA8c3RvcCBvZmZzZXQ9JzAlJyBzdG9wLWNvbG9yPScjY2ZmZjljJy8+CiAgICA8c3RvcCBvZmZzZXQ9JzEwMCUnIHN0b3AtY29sb3I9JyMyZmJmNjInLz4KICA8L3JhZGlhbEdyYWRpZW50Pgo8L2RlZnM+CjxjaXJjbGUgY3g9JzEwMCcgY3k9JzEwMCcgcj0nODYnIGZpbGw9J3VybCgjbyknLz4KPHBhdGggZD0nTTY1IDg1YzEwLTE4IDMwLTIyIDQ4LTEwIDggNSAxMiAxNCAxMCAyMi0zIDEyLTEyIDE2LTI2IDE1LTE0LTEtMzAgMi0zMi0yN3onIGZpbGw9J3VybCgjZyknIG9wYWNpdHk9Jy45NScvPgo8cGF0aCBkPSdNMTIwIDEyMGMxNC02IDI2IDIgMjggMTQgMiAxMi02IDIyLTE4IDIyLTEwIDAtMTgtMTAtMTgtMTggMC03IDQtMTMgOC0xOHonIGZpbGw9J3VybCgjZyknIG9wYWNpdHk9Jy45Jy8+CjxwYXRoIGQ9J003OCAxMzJjNi00IDE0LTMgMTggMyA0IDYgMiAxNC00IDE4LTYgNC0xNCAyLTE4LTQtNC02LTEtMTIgNC0xN3onIGZpbGw9J3VybCgjZyknIG9wYWNpdHk9Jy44NScvPgo8ZyBvcGFjaXR5PScuMjUnPgogIDxwYXRoIGQ9J001OCAxMTBjMTgtMTAgNDAtMTAgNTggMCcgc3Ryb2tlPScjZmZmJyBzdHJva2Utd2lkdGg9JzEwJyBzdHJva2UtbGluZWNhcD0ncm91bmQnIGZpbGw9J25vbmUnLz4KICA8cGF0aCBkPSdNNTUgOTVjMjAtMTIgNTAtMTIgNzAgMCcgc3Ryb2tlPScjZmZmJyBzdHJva2Utd2lkdGg9JzgnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcgZmlsbD0nbm9uZScvPgo8L2c+CjxjaXJjbGUgY3g9Jzc4JyBjeT0nNzgnIHI9JzE4JyBmaWxsPSdyZ2JhKDI1NSwyNTUsMjU1LC4xOCknLz4KPC9zdmc+');}
 
 .planet-ring{position:absolute;inset:-10px;border-radius:50%;border:4px solid rgba(255,255,255,.18);
   transform:rotate(-18deg);
@@ -550,7 +556,7 @@ transform:scale(1.12) rotate(5deg);}
     <button class="btn btn-s btn-sm" id="tut-prev" onclick="tutNav(-1)">← 上一步</button>
     <button class="btn btn-p" id="tut-next" onclick="tutNav(1)">下一步 →</button>
   </div>
-  <button class="btn btn-ghost btn-sm" onclick="completeTutorial(tutType);showScreen('map')">已经会了，去闯关 →</button>
+  <button class="btn btn-ghost btn-sm" onclick="completeTutorial(tutType);startLevel(tutType==='cou'?2:3)">已经会了，去闯关 →</button>
 </div>
 
 <!-- GAME -->
@@ -810,18 +816,20 @@ const TUT = {
     badge:'🔵 凑十法', cls:'cou',
     a:8, b:5,  // 8+5=13,  need=2, rest=3
     steps:[
-      { title:'第一步，先凑十！',   speak:'我们先把格子凑满10！把金球拖进空格子里～', visual:'drag', interactive:true  },
-      { title:'凑成10啦！🎉',      speak:'太棒了！格子装满了，10个！',          visual:'reveal', interactive:false },
-      { title:'最后一步！',         speak:'10再加上剩下的，答案是多少？把答案输进去！',                     visual:'input',  interactive:true  },
+      { title:'凑十法口诀', speak:'凑十法口诀：拆小数，补大数，凑成十，加剩数！', visual:'rhyme', interactive:false },
+      { title:'拆小数，补大数！', speak:'5比8小，所以拆5！把右边的金球拖进左边的空格子里！', visual:'drag', interactive:true  },
+      { title:'凑成十啦！🎉',      speak:'凑成十啦！格子装满了10个，剩下的再加上！', visual:'reveal', interactive:false },
+      { title:'加剩数，得答案！', speak:'加剩数！10再加上剩下的几个，答案是多少？输进去！', visual:'input',  interactive:true  },
     ]
   },
   po: {
     badge:'🟠 破十法', cls:'po',
-    a:13, b:7,  // 13-7=6
+    a:13, b:7,  // 13-7=6, units=3, fromTen=3
     steps:[
-      { title:'跟着我算～',            speak:'13减7等于多少？看我来算！',                 visual:'intro'  },
-      { title:'第一步，先破十！',      speak:'第一步，先破十！把13分成10和3两堆。',       visual:'step1'  },
-      { title:'3 + 3 = 6',            speak:'从10里面拿走7个，剩下3个。再把剩下的两堆相加，就得到正确答案6！', visual:'step2'  },
+      { title:'破十法口诀', speak:'破十法口诀：拆大数，破出十，减小数，加剩数！', visual:'po-rhyme', interactive:false },
+      { title:'拆大数，破出十！', speak:'13比7大，先拆13！把3个蓝球拖到右边，分出10和3！', visual:'po-split', interactive:true },
+      { title:'破出十，减小数！', speak:'减小数！从10里点击拿走7个，看看剩几个！', visual:'po-tap',   interactive:true },
+      { title:'加剩数，得答案！',    speak:'加剩数！把剩下的3个加上旁边的3个，答案是多少？输进去！', visual:'po-input', interactive:true },
     ]
   }
 };
@@ -876,6 +884,9 @@ let curMethodForHint = null; // 'cou' or 'po' or null
 let curQObj = null; // current question object
 let couDropped = 0;    // balls dropped into ten-frame (drag step)
 let couInputAns = '';  // answer typed on input step
+let poSeparated = 0;   // balls tapped out of 13 to split into 10+3 (po step 1)
+let poTapped    = 0;   // balls tapped out of ten-frame (po step 2)
+let poInputAns  = '';  // answer typed on po input step
 
 function freshData(){
   return {unlocked:[0], stars:{}, errors:[], sessions:[], tutsDone:[], timerSec:15, sfxOn:true, voiceNamePref:""};
@@ -945,17 +956,55 @@ function pickVoice(){
   return _voices.find(v=>v.lang.startsWith('zh')) || null;
 }
 function speak(text){
-  if(!voiceOn) return;
-  if(!window.speechSynthesis) return;
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang  = 'zh-CN';
-  u.rate  = 1.12;     // lively
-  u.pitch = 1.55 + (Math.random()*0.06-0.03); // clearly cartoon, tiny variation
-  const v = pickVoice();
-  if(v) u.voice = v;
-  speechSynthesis.cancel();
-  speechSynthesis.speak(u);
+  try{
+    if(!voiceOn) return;
+    if(!text) return;
+    if(!('speechSynthesis' in window)) return;
+
+    // Avoid stuck queue
+    try{ speechSynthesis.cancel(); }catch(e){}
+
+    const u = new SpeechSynthesisUtterance(String(text));
+    u.lang = 'zh-CN';
+
+    let started = false;
+    let retried = false;
+    const trySpeak = ()=>{
+      try{
+        // (Re)pick voice each time (some browsers populate voices late)
+        try{
+          const v = (typeof pickVoice==='function') ? pickVoice() : null;
+          if(v) u.voice = v;
+        }catch(e){}
+
+        u.rate  = 1.05;
+        u.pitch = 1.25;
+        u.volume= 1.0;
+
+        speechSynthesis.speak(u);
+      }catch(e){}
+    };
+
+    u.onstart = ()=>{ started = true; };
+    u.onerror = ()=>{ /* ignore */ };
+    u.onend   = ()=>{ /* ignore */ };
+
+    trySpeak();
+
+    // Watchdog: if not started shortly, retry once (Chrome occasionally gets stuck)
+    setTimeout(()=>{
+      if(!started && !retried){
+        retried = true;
+        try{ speechSynthesis.cancel(); }catch(e){}
+        trySpeak();
+      }
+    }, 900);
+
+  }catch(e){
+    // swallow
+  }
 }
+
 function qToSpeech(q){
   // Convert math string into child-friendly Mandarin.
   // Key requirement: 15 -> 十五 (not 一五).
@@ -1042,6 +1091,37 @@ function sfxVictory(){
 }
 function sfxWrong(){
   sfxTone(220,0.12,'sawtooth',0.03);
+}
+
+function playCorrect(){
+  if(!bgmCtx) return;
+  [[523.25,0],[659.25,100],[783.99,200]].forEach(([f,d])=>{
+    setTimeout(()=>{
+      const o=bgmCtx.createOscillator(), e=bgmCtx.createGain();
+      o.type='sine'; o.frequency.value=f;
+      e.gain.setValueAtTime(0,bgmCtx.currentTime);
+      e.gain.linearRampToValueAtTime(0.25,bgmCtx.currentTime+0.01);
+      e.gain.exponentialRampToValueAtTime(0.001,bgmCtx.currentTime+0.4);
+      o.connect(e); e.connect(bgmCtx.destination);
+      o.start(); o.stop(bgmCtx.currentTime+0.4);
+    }, d);
+  });
+}
+
+function playChime(){
+  if(!bgmCtx) return;
+  const freqs = [783.99, 1046.5, 1318.5, 1567.98];
+  freqs.forEach((f,i)=>{
+    setTimeout(()=>{
+      const o=bgmCtx.createOscillator(), e=bgmCtx.createGain();
+      o.type='sine'; o.frequency.value=f;
+      e.gain.setValueAtTime(0,bgmCtx.currentTime);
+      e.gain.linearRampToValueAtTime(0.3,bgmCtx.currentTime+0.01);
+      e.gain.exponentialRampToValueAtTime(0.001,bgmCtx.currentTime+0.5);
+      o.connect(e); e.connect(bgmCtx.destination);
+      o.start(); o.stop(bgmCtx.currentTime+0.5);
+    }, i*120);
+  });
 }
 
 function initBgm(){
@@ -1432,9 +1512,10 @@ function renderMap(){
 
     } else if(node.type==='tut'){
       const isCou = node.id==='cou';
+      // cou=凑十星 → Earth style (blue/green), po=破十星 → Sun style (fiery orange/yellow)
       const cfg = isCou
-        ? {size:74, bg:'radial-gradient(circle at 28% 30%,rgba(255,255,255,.20),transparent 45%),radial-gradient(135deg,#4fa3e3,#1a6fb0)', glowColor:'rgba(30,144,255,.55)', glowBase:'0 6px 22px rgba(30,100,200,.35)'}
-        : {size:74, bg:'radial-gradient(circle at 28% 30%,rgba(255,255,255,.18),transparent 42%),radial-gradient(135deg,#ffa040,#e67e22)', glowColor:'rgba(255,123,0,.55)',  glowBase:'0 6px 22px rgba(255,120,0,.35)'};
+        ? {size:74, skinClass:'planet-skin-earth', bg:'radial-gradient(circle at 32% 28%,rgba(200,241,255,.25),transparent 48%),radial-gradient(135deg,#1a6fb0,#0d2f6b)', glowColor:'rgba(30,144,255,.55)', glowBase:'0 6px 22px rgba(30,100,200,.45)'}
+        : {size:74, skinClass:'planet-skin-sun',   bg:'radial-gradient(circle at 32% 28%,rgba(255,240,160,.30),transparent 48%),radial-gradient(135deg,#ffb830,#e24b12)', glowColor:'rgba(255,180,0,.65)',  glowBase:'0 6px 26px rgba(255,140,0,.55)'};
 
       const tutDone   = done;
       const animClass = accessible ? 'pulse-glow' : 'float-only';
@@ -1453,7 +1534,7 @@ function renderMap(){
           --glow-base:${cfg.glowBase};--glow-color:${cfg.glowColor};
           box-shadow:${glowBase};border-color:${cfg.glowColor}">
           <span class="planet-em" style="display:none">${em}</span>
-          <div class="planet-surface"></div>
+          <div class="planet-surface ${cfg.skinClass}"></div>
           <div class="planet-ring"></div>
           ${!accessible ? '<div class="planet-lock-icon">🔒</div>' : ''}
         </div>
@@ -1494,6 +1575,9 @@ function startTutorial(type){
   tutStep = 0;
   couDropped = 0;
   couInputAns = '';
+  poSeparated = 0;
+  poTapped    = 0;
+  poInputAns  = '';
   const t = TUT[type];
   const badge = document.getElementById('tut-badge-el');
   badge.textContent = t.badge;
@@ -1503,10 +1587,14 @@ function startTutorial(type){
   if(banner){
     if(type==='cou'){
       banner.textContent = `${t.a} + ${t.b} = ？`;
+      banner.style.color = '#ffffff';
+      banner.style.textShadow = '0 0 16px rgba(255,255,255,.3)';
       banner.style.display = '';
     } else {
       // 破十法：例题一直放在顶部
       banner.textContent = `${t.a} - ${t.b} = ？`;
+      banner.style.color = '#ffffff';
+      banner.style.textShadow = '0 0 16px rgba(255,255,255,.3)';
       banner.style.display = '';
     }
   }
@@ -1537,8 +1625,19 @@ function renderTutStep(){
   const prevBtn = document.getElementById('tut-prev');
   const nextBtn = document.getElementById('tut-next');
   if(s.interactive){
-    navRow.style.display = 'none';
+    // For po step 2 (po-tap), show a ← 上一步 back button so child can redo step 1
+    if(tutType==='po' && tutStep===2){
+      navRow.style.display = '';
+      prevBtn.style.display = '';
+      prevBtn.textContent = '← 上一步';
+      prevBtn.onclick = ()=>{ poTapped=0; poSeparated=0; tutNav(-1); };
+      nextBtn.style.display = 'none';
+    } else {
+      navRow.style.display = 'none';
+      nextBtn.style.display = '';
+    }
   } else {
+    nextBtn.style.display = '';
     navRow.style.display = '';
     prevBtn.style.display = tutStep===0 ? 'none' : '';
     if(tutStep===total-1){
@@ -1592,6 +1691,30 @@ function renderCouVisual(step, a, b){
   }
   function lbl(text, color){ return `<div style="font-size:.9rem;color:${color||'rgba(255,255,255,.6)'};text-align:center;margin:3px 0">${text}</div>`; }
 
+  // ---------- STEP: rhyme (口诀展示) ----------
+  if(step==='rhyme'){
+    const lines = [
+      { zh:'拆小数', en:'把小的那个数拆开' },
+      { zh:'补大数', en:'补给大的那个数' },
+      { zh:'凑成十', en:'凑满10个' },
+      { zh:'加剩数', en:'再加剩下的数' },
+    ];
+    vis.innerHTML = `<div style="display:flex;flex-direction:column;gap:12px">
+      <div style="background:rgba(255,215,0,.1);border:2px solid rgba(255,215,0,.3);border-radius:18px;padding:16px 14px;display:flex;flex-direction:column;gap:10px">
+        ${lines.map((l,i)=>`
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,215,0,.25);border:1.5px solid rgba(255,215,0,.5);
+              display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:900;color:#ffd700;flex-shrink:0">${i+1}</div>
+            <div>
+              <div style="font-size:1.3rem;font-weight:900;color:#ffd700;letter-spacing:2px">${l.zh}</div>
+              <div style="font-size:.8rem;color:rgba(255,255,255,.5);margin-top:1px">${l.en}</div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+    return;
+  }
+
   // ---------- STEP: intro ----------
   if(step==='intro'){
     vis.innerHTML = `<div style="display:flex;flex-direction:column;gap:10px">
@@ -1604,42 +1727,50 @@ function renderCouVisual(step, a, b){
     return;
   }
 
-  // ---------- STEP: drag (interactive) — pointer events only, works on iPad ----------
+  // ---------- STEP: drag (interactive) — gold balls on top, ten-frame below ----------
   if(step==='drag'){
     couDropped = 0;
-    let frameHtml = `<div id="cou-frame" style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:10px;background:rgba(255,255,255,.06);border-radius:16px;border:2px solid rgba(255,255,255,.12)">`;
+
+    // Gold balls at top — draggable
+    let ballsHtml = `<div id="cou-balls" style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:4px;max-width:110px">`;
+    for(let i=0;i<b;i++){
+      ballsHtml += `<div class="drag-ball" data-bi="${i}"
+        style="width:38px;height:38px;border-radius:50%;background:${GOLD};
+        box-shadow:0 3px 10px rgba(255,215,0,.5);cursor:grab;
+        display:flex;align-items:center;justify-content:center;font-size:.72rem;
+        color:rgba(0,0,0,.55);font-weight:900;user-select:none;
+        touch-action:none;-webkit-user-select:none">★</div>`;
+    }
+    ballsHtml += '</div>';
+
+    // Ten-frame at bottom — 8 blue filled, 2 empty drop slots
+    let frameHtml = `<div id="cou-frame" style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background:rgba(255,255,255,.06);border-radius:14px;border:2px solid rgba(255,255,255,.12)">`;
     for(let i=0;i<10;i++){
       if(i<a){
-        frameHtml += `<div style="width:42px;height:42px;border-radius:50%;background:${BLUE};box-shadow:0 2px 8px rgba(0,0,0,.4)"></div>`;
+        frameHtml += `<div style="width:36px;height:36px;border-radius:50%;background:${BLUE};box-shadow:0 2px 6px rgba(0,0,0,.4)"></div>`;
       } else {
-        // No HTML5 drag attrs — handled entirely by pointer events
         frameHtml += `<div class="drop-slot" data-idx="${i-a}"
-          style="width:42px;height:42px;border-radius:50%;border:3px dashed rgba(255,215,0,.5);
+          style="width:36px;height:36px;border-radius:50%;border:3px dashed rgba(255,215,0,.5);
           transition:border-color .15s,background .15s;
           display:flex;align-items:center;justify-content:center"></div>`;
       }
     }
     frameHtml += '</div>';
 
-    let ballsHtml = `<div id="cou-balls" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:6px">`;
-    for(let i=0;i<b;i++){
-      // touch-action:none is critical — stops browser scroll from stealing pointer events
-      ballsHtml += `<div class="drag-ball" data-bi="${i}"
-        style="width:48px;height:48px;border-radius:50%;background:${GOLD};
-        box-shadow:0 3px 12px rgba(255,215,0,.5);cursor:grab;
-        display:flex;align-items:center;justify-content:center;font-size:.8rem;
-        color:rgba(0,0,0,.55);font-weight:900;user-select:none;
-        touch-action:none;-webkit-user-select:none">★</div>`;
-    }
-    ballsHtml += '</div>';
-
     vis.innerHTML = `<div style="display:flex;flex-direction:column;gap:10px">
-      <div style="background:rgba(255,215,0,.1);border:2px dashed rgba(255,215,0,.4);border-radius:12px;padding:8px;text-align:center">
-        <span style="font-size:1.1rem;color:${GOLD};font-weight:900">把金球拖进空格子里！还差 <span id="cou-need-label">${need}</span> 个</span>
+      <div style="text-align:center;font-size:1rem;color:${GOLD};font-weight:900">${b}比${a}小，所以拆${b}</div>
+      <div style="display:flex;gap:12px;align-items:center;justify-content:center">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px">
+          <div style="font-size:.78rem;color:rgba(255,255,255,.5)">${a}个蓝球</div>
+          ${frameHtml}
+          <div style="font-size:.82rem;color:rgba(255,255,255,.7);font-weight:600">把${a}补到10，还差 <span id="cou-need-label">${need}</span> 个</div>
+        </div>
+        <div style="font-size:1.8rem;color:rgba(255,255,255,.3);font-weight:900;align-self:center">+</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px">
+          <div style="font-size:.78rem;color:${GOLD}">${b}个金球 → 拖过去</div>
+          ${ballsHtml}
+        </div>
       </div>
-      ${frameHtml}
-      <div style="font-size:.85rem;color:rgba(255,255,255,.5);text-align:center">👆 把金球拖进上面的空格子！</div>
-      ${ballsHtml}
     </div>`;
 
     // Init pointer-event drag AFTER DOM paint (two rAF frames for iOS)
@@ -1650,11 +1781,18 @@ function renderCouVisual(step, a, b){
   // ---------- STEP: reveal (auto) ----------
   if(step==='reveal'){
     vis.innerHTML = `<div style="display:flex;flex-direction:column;gap:10px">
-      ${lbl('格子装满啦！共 10 个 🎉', GREEN)}
-      ${tenFrameStatic(10, GREEN, 0, '')}
-      <div style="font-size:1.4rem;color:rgba(255,255,255,.4);text-align:center">+</div>
-      ${lbl('还剩 '+rest+' 个金球', GOLD)}
-      ${dotRow(rest, GOLD)}
+      ${lbl('凑成十啦！🎉', GREEN)}
+      <div style="display:flex;gap:12px;align-items:center;justify-content:center">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px">
+          <div style="font-size:.78rem;color:rgba(255,255,255,.5);text-align:center">凑满10个 ✅</div>
+          ${tenFrameStatic(a, BLUE, need, GREEN)}
+        </div>
+        <div style="font-size:1.8rem;color:rgba(255,255,255,.3);font-weight:900;align-self:center">+</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px">
+          <div style="font-size:.78rem;color:${GOLD};text-align:center">还剩${rest}个</div>
+          ${dotRow(rest, GOLD)}
+        </div>
+      </div>
     </div>`;
     return;
   }
@@ -1662,11 +1800,18 @@ function renderCouVisual(step, a, b){
   // ---------- STEP: input (interactive — child types 10+rest=?) ----------
   if(step==='input'){
     couInputAns = '';
-    vis.innerHTML = `<div style="display:flex;flex-direction:column;gap:10px">
-      ${tenFrameStatic(10, GREEN, 0, '')}
-      <div style="font-size:.8rem;color:rgba(255,255,255,.4);text-align:center">↑ 这是 10 个</div>
-      ${dotRow(rest, GOLD)}
-      <div style="font-size:.8rem;color:rgba(255,255,255,.4);text-align:center">↑ 这是 ${rest} 个</div>
+    vis.innerHTML = `<div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;gap:12px;align-items:center;justify-content:center">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px">
+          <div style="font-size:.78rem;color:rgba(255,255,255,.5);text-align:center">这是10个</div>
+          ${tenFrameStatic(a, BLUE, need, GREEN)}
+        </div>
+        <div style="font-size:1.8rem;color:rgba(255,255,255,.3);font-weight:900;align-self:center">+</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px">
+          <div style="font-size:.78rem;color:${GOLD};text-align:center">这是${rest}个</div>
+          ${dotRow(rest, GOLD)}
+        </div>
+      </div>
       <div style="background:rgba(255,255,255,.06);border-radius:16px;padding:14px;text-align:center">
         <div style="font-size:1.6rem;color:#fff;font-weight:900;letter-spacing:4px;margin-bottom:10px">
           10 + ${rest} = <span id="cou-ans-display" style="color:${GOLD};min-width:48px;display:inline-block;border-bottom:3px solid ${GOLD}">　</span>
@@ -1820,9 +1965,12 @@ function pdCleanup(){
 function pdDropInto(slot, ball){
   // Fill slot with green dot
   const dot = document.createElement('div');
-  dot.style.cssText = 'width:38px;height:38px;border-radius:50%;background:#00d46a;box-shadow:0 0 16px rgba(0,212,106,.7)';
+  dot.style.cssText = 'width:32px;height:32px;border-radius:50%;background:#00d46a;box-shadow:0 0 14px rgba(0,212,106,.7);flex-shrink:0';
   slot.style.borderColor = '#00d46a';
   slot.style.background  = 'rgba(0,212,106,.15)';
+  slot.style.display     = 'flex';
+  slot.style.alignItems  = 'center';
+  slot.style.justifyContent = 'center';
   slot.innerHTML = '';
   slot.appendChild(dot);
 
@@ -1842,7 +1990,7 @@ function pdDropInto(slot, ball){
 
   if(couDropped >= need){
     setTimeout(()=>{
-      speak('太棒了！格子装满了，10个！还剩下3个金球。');
+      speak('太棒啦，格子凑满10个啦，还剩下3个金球！');
       tutStep++;
       renderTutStep();
     }, 500);
@@ -1878,10 +2026,26 @@ function couNpSubmit(){
     if(msg){ msg.textContent = '🎉 答对啦！'; msg.style.color = '#00d46a'; }
     playChime();
     spawnParticles();
-    // Speak first, then wait ~2.5s for the voice to finish before transitioning
+    const banner = document.getElementById('tut-question-banner');
+    if(banner){
+      banner.textContent  = `${t.a} + ${t.b} = ${t.a + t.b}`;
+      banner.style.color  = '#ffd700';
+      banner.style.textShadow = '0 0 20px rgba(255,215,0,.7), 0 0 40px rgba(255,215,0,.4)';
+    }
     const txt = '答对了！'+t.a+'加'+t.b+'等于'+(t.a+t.b)+'！太棒了！';
     speak(txt);
-    setTimeout(()=>{ completeTutorial('cou'); startLevel(2); }, 2500);
+    completeTutorial('cou');
+    setTimeout(()=>{
+      // Show a prominent go-button, don't auto-navigate
+      if(msg){ msg.textContent = ''; }
+      const goBtn = document.createElement('button');
+      goBtn.textContent = '🚀 去闯关！';
+      goBtn.style.cssText = 'margin-top:12px;padding:14px 32px;border-radius:16px;border:none;cursor:pointer;font-size:1.2rem;font-weight:900;color:#fff;background:linear-gradient(135deg,#00d46a,#00b359);box-shadow:0 4px 20px rgba(0,212,106,.5);display:block;width:100%;touch-action:manipulation';
+      goBtn.onclick = ()=>startLevel(2);
+      const np = document.getElementById('cou-mini-np');
+      if(np){ np.style.display='none'; }
+      if(msg){ msg.after ? msg.after(goBtn) : msg.parentNode.appendChild(goBtn); }
+    }, 1200);
   } else {
     if(msg){ msg.textContent = '再想想～重新输！'; msg.style.color = '#ff8c96'; }
     couInputAns = '';
@@ -1891,142 +2055,351 @@ function couNpSubmit(){
   }
 }
 
-function playChime(){
-  if(!bgmCtx) return;
-  const freqs = [783.99, 1046.5, 1318.5, 1567.98];
-  freqs.forEach((f,i)=>{
-    setTimeout(()=>{
-      const o=bgmCtx.createOscillator(), e=bgmCtx.createGain();
-      o.type='sine'; o.frequency.value=f;
-      e.gain.setValueAtTime(0,bgmCtx.currentTime);
-      e.gain.linearRampToValueAtTime(0.3,bgmCtx.currentTime+0.01);
-      e.gain.exponentialRampToValueAtTime(0.001,bgmCtx.currentTime+0.5);
-      o.connect(e); e.connect(bgmCtx.destination);
-      o.start(); o.stop(bgmCtx.currentTime+0.5);
-    }, i*120);
+// ─── Po Step 1: drag to SPLIT 3 balls out of 13 ────────────────────
+let _poDragId=null, _poDragBall=null, _poDragGhost=null;
+
+function poInitSplitDrag(){
+  document.querySelectorAll('.po-drag-ball').forEach(ball=>{
+    ball.addEventListener('pointerdown', poSplitStart, {passive:false});
   });
 }
 
-// 答对音效：明亮上升三音
-function playCorrect(){
-  if(!bgmCtx) return;
-  [[523.25,0],[659.25,100],[783.99,200]].forEach(([f,d])=>{
-    setTimeout(()=>{
-      const o=bgmCtx.createOscillator(), e=bgmCtx.createGain();
-      o.type='sine'; o.frequency.value=f;
-      e.gain.setValueAtTime(0,bgmCtx.currentTime);
-      e.gain.linearRampToValueAtTime(0.28,bgmCtx.currentTime+0.01);
-      e.gain.exponentialRampToValueAtTime(0.001,bgmCtx.currentTime+0.35);
-      o.connect(e); e.connect(bgmCtx.destination);
-      o.start(); o.stop(bgmCtx.currentTime+0.35);
-    }, d);
-  });
+function poSplitStart(e){
+  if(_poDragId!==null) return;
+  const tut   = TUT.po;
+  const units = tut.a % 10;
+  if(poSeparated >= units) return;
+  if(e.currentTarget.dataset.split==='1') return;
+  e.preventDefault();
+  _poDragId   = e.pointerId;
+  _poDragBall = e.currentTarget;
+  _poDragBall.setPointerCapture(e.pointerId);
+  _poDragBall.style.opacity = '0.35';
+
+  _poDragGhost = document.createElement('div');
+  _poDragGhost.style.cssText = [
+    'position:fixed','z-index:9999','pointer-events:none','border-radius:50%',
+    'width:48px','height:48px',
+    'background:#1e90ff',
+    'box-shadow:0 4px 20px rgba(30,144,255,.7)',
+    'display:flex','align-items:center','justify-content:center',
+    'font-size:.9rem','color:rgba(255,255,255,.8)','font-weight:900',
+    'opacity:.9','transform:scale(1.15)',
+    `left:${e.clientX-24}px`,
+    `top:${e.clientY-24}px`,
+  ].join(';');
+  _poDragGhost.textContent = '★';
+  document.body.appendChild(_poDragGhost);
+
+  _poDragBall.addEventListener('pointermove', poSplitMove, {passive:false});
+  _poDragBall.addEventListener('pointerup',   poSplitEnd,  {passive:false});
+  _poDragBall.addEventListener('pointercancel', poSplitCancel, {passive:false});
 }
 
-// 答错音效：低沉下降两音
-function playWrong(){
-  if(!bgmCtx) return;
-  [[311.13,0],[233.08,180]].forEach(([f,d])=>{
-    setTimeout(()=>{
-      const o=bgmCtx.createOscillator(), e=bgmCtx.createGain();
-      o.type='triangle'; o.frequency.value=f;
-      e.gain.setValueAtTime(0,bgmCtx.currentTime);
-      e.gain.linearRampToValueAtTime(0.22,bgmCtx.currentTime+0.015);
-      e.gain.exponentialRampToValueAtTime(0.001,bgmCtx.currentTime+0.38);
-      o.connect(e); e.connect(bgmCtx.destination);
-      o.start(); o.stop(bgmCtx.currentTime+0.38);
-    }, d);
-  });
+function poSplitMove(e){
+  if(e.pointerId!==_poDragId) return;
+  e.preventDefault();
+  if(_poDragGhost){
+    _poDragGhost.style.left=(e.clientX-24)+'px';
+    _poDragGhost.style.top =(e.clientY-24)+'px';
+  }
+  const zone = document.getElementById('po-split-zone');
+  if(zone){
+    const r=zone.getBoundingClientRect();
+    const hit=e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom;
+    zone.style.background   = hit?'rgba(255,215,0,.2)':'rgba(255,215,0,.08)';
+    zone.style.borderColor  = hit?'#ffd700':'rgba(255,215,0,.5)';
+  }
 }
 
+function poSplitEnd(e){
+  if(e.pointerId!==_poDragId) return;
+  e.preventDefault();
+  const zone = document.getElementById('po-split-zone');
+  zone && (zone.style.background='rgba(255,215,0,.08)', zone.style.borderColor='rgba(255,215,0,.5)');
+
+  let dropped=false;
+  if(zone && _poDragBall && _poDragBall.dataset.split!=='1'){
+    const r=zone.getBoundingClientRect();
+    if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){
+      dropped=true;
+      _poDragBall.dataset.split='1';
+      _poDragBall.style.opacity='0';
+      _poDragBall.style.pointerEvents='none';
+      _poDragBall.style.width='0';
+      _poDragBall.style.height='0';
+      _poDragBall.style.margin='0';
+      _poDragBall.style.padding='0';
+
+      const dot=document.createElement('div');
+      dot.style.cssText='width:36px;height:36px;border-radius:50%;background:#1e90ff;box-shadow:0 0 10px rgba(30,144,255,.6);animation:poSplitPop .3s cubic-bezier(.34,1.56,.64,1)';
+      zone.appendChild(dot);
+
+      const tut=TUT.po, units=tut.a%10;
+      poSeparated++;
+      const lbl=document.getElementById('po-split-label');
+      if(lbl) lbl.textContent=Math.max(0, units-poSeparated);
+
+      if(poSeparated>=units){
+        setTimeout(()=>{
+          speak('太棒了！13分成了10和3，现在从10里点击拿走7个！');
+          tutStep++;
+          renderTutStep();
+        }, 600);
+      }
+    }
+  }
+  if(!dropped && _poDragBall) _poDragBall.style.opacity='1';
+  poSplitCleanup();
+}
+
+function poSplitCancel(e){
+  if(_poDragBall) _poDragBall.style.opacity='1';
+  poSplitCleanup();
+}
+
+function poSplitCleanup(){
+  if(_poDragGhost){ _poDragGhost.remove(); _poDragGhost=null; }
+  if(_poDragBall){
+    _poDragBall.removeEventListener('pointermove', poSplitMove);
+    _poDragBall.removeEventListener('pointerup',   poSplitEnd);
+    _poDragBall.removeEventListener('pointercancel', poSplitCancel);
+  }
+  _poDragBall=null; _poDragId=null;
+}
+
+// ─── Po Step 2: tap to REMOVE 7 balls from 10 ──────────────────────
+function poTapBall(idx){
+  const tut = TUT.po;
+  const b   = tut.b;   // 7
+  if(poTapped >= b) return;
+
+  const ball = document.getElementById('po-ball-'+idx);
+  if(!ball || ball.dataset.tapped==='1') return;
+  ball.dataset.tapped = '1';
+  ball.style.background  = 'rgba(255,71,87,.25)';
+  ball.style.boxShadow   = 'none';
+  ball.style.border      = '2px dashed rgba(255,71,87,.45)';
+  ball.style.cursor      = 'default';
+  ball.innerHTML         = '<div style="font-size:1rem;color:rgba(255,71,87,.7);line-height:1">✕</div>';
+
+  poTapped++;
+  const lbl = document.getElementById('po-need-label');
+  if(lbl) lbl.textContent = Math.max(0, b - poTapped);
+
+  if(poTapped >= b){
+    setTimeout(()=>{
+      speak('棒极了！10里拿走7个，还剩3个！现在把剩下的加起来！');
+      tutStep++;
+      renderTutStep();
+    }, 500);
+  }
+}
+
+// ─── Po Step 3: numpad input ────────────────────────────────────────
+function poNpKey(k){
+  if(k==='⌫'){
+    poInputAns = poInputAns.slice(0,-1);
+  } else if(k==='✓'){
+    poNpSubmit();
+    return;
+  } else {
+    if(poInputAns.length >= 2) return;
+    poInputAns += k;
+  }
+  const d = document.getElementById('po-ans-display');
+  if(d) d.textContent = poInputAns || '　';
+}
+
+function poNpSubmit(){
+  const tut     = TUT.po;
+  const fromTen = 10 - tut.b;   // 3
+  const units   = tut.a % 10;   // 3
+  const correct = fromTen + units; // 6
+  const ans     = parseInt(poInputAns);
+  const msg     = document.getElementById('po-input-msg');
+  if(ans === correct){
+    if(msg){ msg.textContent = '🎉 答对啦！'; msg.style.color = '#00d46a'; }
+    playChime();
+    spawnParticles();
+    const banner = document.getElementById('tut-question-banner');
+    if(banner){
+      banner.textContent  = `${tut.a} - ${tut.b} = ${tut.a - tut.b}`;
+      banner.style.color  = '#ffd700';
+      banner.style.textShadow = '0 0 20px rgba(255,215,0,.7), 0 0 40px rgba(255,215,0,.4)';
+    }
+    speak(`答对了！${tut.a}减${tut.b}等于${tut.a - tut.b}！太棒了！`);
+    completeTutorial('po');
+    setTimeout(()=>{
+      const goBtn = document.createElement('button');
+      goBtn.textContent = '🚀 去闯关！';
+      goBtn.style.cssText = 'margin-top:12px;padding:14px 32px;border-radius:16px;border:none;cursor:pointer;font-size:1.2rem;font-weight:900;color:#fff;background:linear-gradient(135deg,#1e90ff,#0066cc);box-shadow:0 4px 20px rgba(30,144,255,.5);display:block;width:100%;touch-action:manipulation';
+      goBtn.onclick = ()=>startLevel(3);
+      const np = document.getElementById('po-mini-np');
+      if(np){ np.style.display='none'; }
+      if(msg){ msg.after ? msg.after(goBtn) : msg.parentNode.appendChild(goBtn); }
+    }, 1200);
+  } else {
+    if(msg){ msg.textContent = '再想想～重新输！'; msg.style.color = '#ff8c96'; }
+    poInputAns = '';
+    const d = document.getElementById('po-ans-display');
+    if(d){ d.textContent='　'; d.style.animation='none'; void d.offsetWidth; d.style.animation=''; }
+    speak('哎呀，再试一次！');
+  }
+}
 
 function renderPoVisual(step, a, b){
-  const units    = a % 10;      // 13-7: units=3
-  const fromTen  = 10 - b;      // 13-7: fromTen=3
-  const vis = document.getElementById('tut-visual');
-
-  const BLUE='#1e90ff', GOLD='#ffd700', GREEN='#00d46a', RED='#ff4757', ORANGE='#ff7b00', DIM='rgba(255,255,255,.2)';
-
-  function bigEq(text, color){
-    return `<div style="font-size:2rem;font-weight:900;color:${color||'#fff'};text-align:center;text-shadow:0 0 15px rgba(255,255,255,.2)">${text}</div>`;
-  }
-  function label(text, color){
-    return `<div style="font-size:.88rem;color:${color||'rgba(255,255,255,.55)'};text-align:center;margin:2px 0">${text}</div>`;
-  }
-  function dotGroup(count, color){
-    let html = `<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center">`;
-    for(let i=0;i<count;i++)
-      html += `<div style="width:38px;height:38px;border-radius:50%;background:${color};box-shadow:0 2px 8px rgba(0,0,0,.35)"></div>`;
-    html += `</div>`;
-    return html;
-  }
-  function dotGroupStrike(count, strikeCount, color, strikeColor){
-    let html = `<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center">`;
-    for(let i=0;i<count;i++){
-      if(i < strikeCount)
-        html += `<div style="width:38px;height:38px;border-radius:50%;background:${strikeColor};opacity:.35;position:relative"></div>`;
-      else
-        html += `<div style="width:38px;height:38px;border-radius:50%;background:${color};box-shadow:0 2px 8px rgba(0,0,0,.35)"></div>`;
-    }
-    html += `</div>`;
-    return html;
-  }
-  function pile(labelText, count, color, extraStyle){
-    return `<div style="background:rgba(255,255,255,.05);border-radius:14px;padding:10px;text-align:center;flex:1;${extraStyle||''}">
-      <div style="font-size:1.1rem;font-weight:900;color:${color};margin-bottom:7px">${labelText}</div>
-      ${dotGroup(count, color)}
+  // ── STEP 0: po-rhyme — 口诀展示 ──────────────────────────────────
+  if(step==='po-rhyme'){
+    const vis = document.getElementById('tut-visual');
+    const GOLD='#ffd700', BLUE='#1e90ff';
+    const lines = [
+      { zh:'拆大数', en:'把大的那个数（被减数）拆开' },
+      { zh:'破出十', en:'分出10和剩余的数' },
+      { zh:'减小数', en:'用10减去减数' },
+      { zh:'加剩数', en:'再加上剩余的数' },
+    ];
+    vis.innerHTML = `<div style="display:flex;flex-direction:column;gap:12px">
+      <div style="background:rgba(30,144,255,.1);border:2px solid rgba(30,144,255,.3);border-radius:18px;padding:16px 14px;display:flex;flex-direction:column;gap:10px">
+        ${lines.map((l,i)=>`
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:28px;height:28px;border-radius:50%;background:rgba(30,144,255,.25);border:1.5px solid rgba(30,144,255,.5);
+              display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:900;color:${BLUE};flex-shrink:0">${i+1}</div>
+            <div>
+              <div style="font-size:1.3rem;font-weight:900;color:${BLUE};letter-spacing:2px">${l.zh}</div>
+              <div style="font-size:.8rem;color:rgba(255,255,255,.5);margin-top:1px">${l.en}</div>
+            </div>
+          </div>`).join('')}
+      </div>
     </div>`;
+    return;
+  }
+  const units   = a % 10;       // 13: units=3
+  const fromTen = 10 - b;       // 7:  fromTen=3
+  const ans     = a - b;        // 6
+  const vis     = document.getElementById('tut-visual');
+
+  const BLUE='#1e90ff', GOLD='#ffd700', GREEN='#00d46a', RED='#ff4757';
+
+  function dotRow(count, color, extraStyle){
+    let h=`<div style="display:flex;flex-wrap:wrap;gap:7px;justify-content:center${extraStyle?';'+extraStyle:''}">`;
+    for(let i=0;i<count;i++)
+      h+=`<div style="width:38px;height:38px;border-radius:50%;background:${color};box-shadow:0 2px 8px rgba(0,0,0,.35)"></div>`;
+    return h+'</div>';
+  }
+  function lbl(text, color){
+    return `<div style="font-size:.9rem;color:${color||'rgba(255,255,255,.6)'};text-align:center;margin:3px 0">${text}</div>`;
   }
 
-  let html = '';
-  switch(step){
-    case 'intro':
-      html += bigEq(`${a} - ${b} = ？`, '#fff');
-      html += `<div style="margin:8px 0">`;
-      html += label(`${a} 个蓝球`, BLUE);
-      html += dotGroup(a, BLUE);
-      html += `</div>`;
-      html += `<div style="background:rgba(255,71,87,.12);border:2px dashed rgba(255,71,87,.4);border-radius:14px;padding:10px;text-align:center">
-        <span style="font-size:1.2rem;color:${RED};font-weight:900">要拿走 ${b} 个</span>
-      </div>`;
-      break;
+  // ── STEP 1: po-split — drag units balls from left (13) to right zone ──
+  if(step==='po-split'){
+    poSeparated = 0;
+    const balls13 = Array(a).fill(0).map((_,i)=>
+      `<div class="po-drag-ball" id="po-s-ball-${i}" data-bi="${i}"
+        style="width:36px;height:36px;border-radius:50%;
+        background:${BLUE};box-shadow:0 2px 8px rgba(30,144,255,.5);
+        cursor:grab;display:flex;align-items:center;justify-content:center;
+        transition:transform .15s;user-select:none;
+        touch-action:none;-webkit-user-select:none"></div>`
+    ).join('');
 
-    case 'step1':
-      html += label(`把 ${a} 个分成两堆`, 'rgba(255,255,255,.7)');
-      html += `<div style="display:flex;gap:10px;margin:8px 0">`;
-      html += pile('10 个', 10, BLUE);
-      html += pile(`${units} 个`, units, GOLD);
-      html += `</div>`;
-      break;
-
-    case 'step2':
-      html += label(`从 10 里拿走 ${b} 个`, 'rgba(255,255,255,.7)');
-      html += `<div style="background:rgba(255,255,255,.05);border-radius:14px;padding:10px;margin:6px 0">`;
-      html += dotGroupStrike(10, b, BLUE, RED);
-      html += `</div>`;
-      html += `<div style="display:flex;gap:10px;margin:6px 0">`;
-      html += `<div style="flex:1;background:rgba(0,212,106,.12);border:2px solid rgba(0,212,106,.3);border-radius:14px;padding:10px;text-align:center">
-        <div style="font-size:1.1rem;font-weight:900;color:${GREEN}">剩 ${fromTen} 个</div>
-        ${dotGroup(fromTen, GREEN)}
-      </div>`;
-      html += `<div style="flex:1;background:rgba(255,215,0,.1);border:2px solid rgba(255,215,0,.3);border-radius:14px;padding:10px;text-align:center">
-        <div style="font-size:1.1rem;font-weight:900;color:${GOLD}">原来 ${units} 个</div>
-        ${dotGroup(units, GOLD)}
-      </div>`;
-      html += `</div>`;
-      break;
-
-    case 'final':
-      html += label('把剩下的两堆相加，就得到答案', 'rgba(255,255,255,.7)');
-      html += `<div style="display:flex;gap:10px;margin:6px 0">`;
-      html += `<div style="flex:1;text-align:center">${dotGroup(fromTen, GREEN)}</div>`;
-      html += `<div style="display:flex;align-items:center;font-size:1.8rem;color:rgba(255,255,255,.4)">+</div>`;
-      html += `<div style="flex:1;text-align:center">${dotGroup(units, GOLD)}</div>`;
-      html += `</div>`;
-      html += `<div style="background:rgba(0,212,106,.15);border:2.5px solid rgba(0,212,106,.5);border-radius:18px;padding:14px;text-align:center;margin-top:6px">        <div style="font-size:2.4rem;font-weight:900;color:${GREEN};text-shadow:0 0 20px rgba(0,212,106,.5)">          ${fromTen} + ${units} = ${a-b} ✅        </div>      </div>`;
-      break;
+    vis.innerHTML = `<div style="display:flex;flex-direction:column;gap:10px">
+      <div style="text-align:center;font-size:1rem;color:${GOLD};font-weight:900">拆大数破出十！把${a}拆成10和${units}</div>
+      <div style="display:flex;gap:12px;align-items:stretch;justify-content:center">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex:1">
+          <div style="font-size:.78rem;color:rgba(255,255,255,.5)">${a}个蓝球 → 拖出${units}个</div>
+          <div id="po-source-zone" style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;flex:1;
+            background:rgba(255,255,255,.06);border-radius:14px;border:2px solid rgba(255,255,255,.12)">
+            ${balls13}
+          </div>
+          <div style="font-size:.82rem;color:rgba(255,255,255,.7);font-weight:600">还差 <span id="po-split-label">${units}</span> 个</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex:1">
+          <div style="font-size:.78rem;color:${GOLD}">拖到这里</div>
+          <div id="po-split-zone" style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;
+            align-content:flex-start;padding:8px;width:100%;flex:1;align-self:stretch;
+            background:rgba(255,215,0,.08);border:2px dashed rgba(255,215,0,.5);border-radius:14px;
+            transition:background .2s,border-color .2s;min-height:0"></div>
+        </div>
+      </div>
+    </div>`;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>poInitSplitDrag()));
+    return;
   }
-  vis.innerHTML = `<div style="display:flex;flex-direction:column;gap:6px">${html}</div>`;
+
+  // ── STEP 2: po-tap — tap b out of 10 ──────────────────────────────
+  if(step==='po-tap'){
+    poTapped = 0;
+    const balls10 = Array(10).fill(0).map((_,i)=>
+      `<div id="po-ball-${i}" onclick="poTapBall(${i})"
+        style="width:36px;height:36px;border-radius:50%;
+        background:${BLUE};box-shadow:0 2px 6px rgba(30,144,255,.5);
+        cursor:pointer;display:flex;align-items:center;justify-content:center;
+        transition:all .2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent"></div>`
+    ).join('');
+
+    vis.innerHTML = `<div style="display:flex;flex-direction:column;gap:10px">
+      <div style="text-align:center;font-size:1rem;color:${RED};font-weight:900">减小数！从10里点掉${b}个</div>
+      <div style="display:flex;gap:12px;align-items:stretch;justify-content:center">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px">
+          <div style="font-size:.78rem;color:rgba(255,255,255,.5);text-align:center">10个蓝球 — 还要点掉 <span id="po-need-label">${b}</span> 个</div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;
+            background:rgba(255,255,255,.06);border-radius:14px;border:2px solid rgba(255,255,255,.12)">
+            ${balls10}
+          </div>
+        </div>
+        <div style="font-size:1.8rem;color:rgba(255,255,255,.3);font-weight:900;align-self:center">+</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px;align-self:stretch">
+          <div style="font-size:.78rem;color:${GOLD};text-align:center">分出的${units}个</div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;padding:8px;align-content:center;justify-content:center;
+            flex:1;background:rgba(255,215,0,.08);border-radius:14px;border:2px solid rgba(255,215,0,.2)">
+            ${Array(units).fill(0).map(()=>`<div style="width:36px;height:36px;border-radius:50%;background:${GOLD};box-shadow:0 2px 6px rgba(255,215,0,.4)"></div>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div style="font-size:.82rem;color:rgba(255,255,255,.45);text-align:center">👆 点击蓝球来拿走它！</div>
+    </div>`;
+    return;
+  }
+
+  // ── STEP 3: po-input — show both results, type fromTen+units ───────
+  if(step==='po-input'){
+    poInputAns = '';
+    vis.innerHTML = `<div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;gap:12px;align-items:center;justify-content:center">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px">
+          <div style="font-size:.78rem;color:${BLUE};text-align:center">10里剩${fromTen}个</div>
+          ${dotRow(fromTen, BLUE)}
+        </div>
+        <div style="font-size:1.8rem;color:rgba(255,255,255,.3);font-weight:900;align-self:center">+</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px">
+          <div style="font-size:.78rem;color:${GOLD};text-align:center">分出的${units}个</div>
+          ${dotRow(units, GOLD)}
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.06);border-radius:16px;padding:14px;text-align:center">
+        <div style="font-size:1.6rem;color:#fff;font-weight:900;letter-spacing:4px;margin-bottom:10px">
+          ${fromTen} + ${units} = <span id="po-ans-display" style="color:${GOLD};min-width:48px;display:inline-block;border-bottom:3px solid ${GOLD}">　</span>
+        </div>
+        <div id="po-mini-np" style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;max-width:240px;margin:0 auto">
+          ${[7,8,9,4,5,6,1,2,3,'⌫',0,'✓'].map(k=>`
+            <div onclick="poNpKey('${k}')"
+              style="padding:12px 4px;border-radius:12px;text-align:center;cursor:pointer;
+              font-size:1.3rem;font-weight:900;
+              background:${k==='✓'?'rgba(0,212,106,.3)':k==='⌫'?'rgba(255,71,87,.2)':'rgba(255,255,255,.08)'};
+              color:${k==='✓'?'#00d46a':k==='⌫'?'#ff8c96':'#fff'};
+              border:1.5px solid ${k==='✓'?'rgba(0,212,106,.4)':'rgba(255,255,255,.1)'};
+              transition:all .1s;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent"
+              ontouchstart="this.style.transform='scale(.9)'" ontouchend="this.style.transform=''">
+              ${k}
+            </div>
+          `).join('')}
+        </div>
+        <div id="po-input-msg" style="min-height:24px;margin-top:8px;font-size:.9rem"></div>
+      </div>
+    </div>`;
+    return;
+  }
 }
 
 // poNodeLayout kept for compatibility but no longer used by tutorials
@@ -2274,12 +2647,12 @@ function showHint(){
   badge.className = 'hm-badge hm-'+(hint.method);
 
   const qq=document.getElementById('hint-question');
-  if(qq) qq.textContent = curQObj.q.replace('= ?','') + '？';
+  if(qq) qq.textContent = curQObj.q.replace('?','') + '？';
 
   renderHintAnim(hint, curQObj);
 
   const stepsEl = document.getElementById('hint-steps');
-  stepsEl.innerHTML = hint.steps.slice(0,2).map((s,i)=>`
+  stepsEl.innerHTML = hint.steps.slice(0,3).map((s,i)=>`
     <div class="hint-step">
       <div class="hint-step-num" style="background:rgba(255,215,0,.18);border:1px solid rgba(255,215,0,.35);color:#fff">${i+1}</div>
       <div class="hint-step-body">
@@ -2371,14 +2744,13 @@ function renderHintAnim(hint, qObj){
     const fromTen = 10 - n2;
     box.innerHTML = `
       <div class="tf-wrap">
-        <div style="font-weight:900;color:#fff;margin-bottom:4px">先从 10 里拿走</div>
         <div style="display:flex;gap:10px;width:100%;align-items:flex-start">
           <div style="flex:1">
-            <div style="font-size:.85rem;color:rgba(255,255,255,.75);text-align:center;margin-bottom:6px">10 个</div>
-            <div id="hb-ten" class="ten-frame"></div>
+            <div style="font-size:.85rem;color:rgba(255,255,255,.75);text-align:center;margin-bottom:6px">先把${n1}分出10个</div>
+            <div id="hb-ten" class="extra-dots" style="justify-content:center"></div>
           </div>
           <div style="flex:1">
-            <div style="font-size:.85rem;color:rgba(255,255,255,.75);text-align:center;margin-bottom:6px">旁边还有 ${units} 个</div>
+            <div style="font-size:.85rem;color:rgba(255,255,255,.75);text-align:center;margin-bottom:6px">还剩 ${units} 个</div>
             <div class="extra-dots" id="hb-units"></div>
           </div>
         </div>
@@ -2386,15 +2758,15 @@ function renderHintAnim(hint, qObj){
       </div>`;
     const ten=document.getElementById('hb-ten');
     const u=document.getElementById('hb-units');
-    if(ten) ten.innerHTML = Array(10).fill(0).map(()=>`<div class="tf-dot a"></div>`).join('');
+    if(ten) ten.innerHTML = Array(10).fill(0).map(()=>`<div class="ed b"></div>`).join('');
     if(u) u.innerHTML = Array(units).fill(0).map(()=>`<div class="ed b"></div>`).join('');
     let step=0;
     _hintAnimTimer=setInterval(()=>{
       step++;
       const removed=Math.min(step, n2);
-      if(ten) ten.innerHTML = Array(10).fill(0).map((_,i)=> i<removed ? `<div class="tf-dot" style="background:rgba(255,71,87,.25);border-color:rgba(255,71,87,.35)"></div>` : `<div class="tf-dot moved"></div>`).join('');
+      if(ten) ten.innerHTML = Array(10).fill(0).map((_,i)=> i<removed ? `<div class="ed" style="background:rgba(255,71,87,.25);border:2px dashed rgba(255,71,87,.4);box-shadow:none"></div>` : `<div class="ed b"></div>`).join('');
       const cap=document.getElementById('hb-cap');
-      if(cap) cap.textContent = removed<n2 ? `已经拿走 ${removed} 个` : `10 里剩 ${fromTen} 个，再加上 ${units} 个 → ${fromTen}+${units}=${ans}`;
+      if(cap) cap.textContent = removed<n2 ? `已经拿走 ${removed} 个` : `10里剩${fromTen}个，再加剩下的${units}个`;
       if(step>=n2+2){ clearInterval(_hintAnimTimer); _hintAnimTimer=null; }
     }, 520);
   }
@@ -2417,9 +2789,9 @@ function computeHint(qObj){
     return { method:'po',
       openSpeak:`用破十法！把 ${n1} 分成 10 和 ${units}，先从 10 里减掉 ${n2}。`,
       steps:[
-        {title:`先分开：${n1} = 10 + ${units}`, explain:`先把数拆开。`},
-        {title:`先从10里拿走：${n2} 个`, explain:`从 10 里拿走 ${n2} 个。`},
-        {title:`再合起来`, explain:`10 里剩 ${fromTen} 个，再加旁边 ${units} 个。`},
+        {title:`先破十（把大数拆成10+？）`, explain:`${n1} - 10 = ${units}`},
+        {title:`再从10里减`,               explain:`10 - ${n2} = ${fromTen}`},
+        {title:`最后加一起`,               explain:`${fromTen} + ${units} = ${a}`},
       ]
     };
   }
@@ -2725,6 +3097,14 @@ document.addEventListener('keydown',e=>{
     if(e.key==='Backspace'){ couNpKey('⌫'); e.preventDefault(); }
     if(e.key==='Enter'){ couNpKey('✓'); e.preventDefault(); }
   }
+  // Support keyboard during tutorial po input step
+  if(document.getElementById('screen-tutorial') &&
+     document.getElementById('screen-tutorial').classList.contains('active') &&
+     document.getElementById('po-mini-np')){
+    if(e.key>='0'&&e.key<='9'){ poNpKey(e.key); e.preventDefault(); }
+    if(e.key==='Backspace'){ poNpKey('⌫'); e.preventDefault(); }
+    if(e.key==='Enter'){ poNpKey('✓'); e.preventDefault(); }
+  }
 });
 
 // ═══════════════════════════════════════
@@ -2758,6 +3138,33 @@ function startBgmOnInteraction(){
 }
 document.addEventListener('click', startBgmOnInteraction);
 document.addEventListener('touchstart', startBgmOnInteraction);
+
+// voiceLongPressInit
+let _voiceHoldT = null;
+function resetSpeechAndTest(){
+  try{ speechSynthesis.cancel(); }catch(e){}
+  showFb(true,'🛠️','语音已重置','如果刚才没声音，现在试试～','#00d46a');
+  // Force a short test phrase
+  setTimeout(()=>speak('语音已重置，我们继续加油！'), 80);
+}
+function bindVoiceLongPress(){
+  const vb=document.getElementById('voice-btn');
+  if(!vb) return;
+  const start=(ev)=>{
+    try{ ev.preventDefault(); }catch(e){}
+    if(_voiceHoldT) clearTimeout(_voiceHoldT);
+    _voiceHoldT=setTimeout(()=>{
+      _voiceHoldT=null;
+      resetSpeechAndTest();
+    }, 1200);
+  };
+  const end=()=>{ if(_voiceHoldT){ clearTimeout(_voiceHoldT); _voiceHoldT=null; } };
+  vb.addEventListener('pointerdown', start, {passive:false});
+  vb.addEventListener('pointerup', end, {passive:true});
+  vb.addEventListener('pointercancel', end, {passive:true});
+  vb.addEventListener('pointerleave', end, {passive:true});
+}
+
 </script>
 </body>
 </html>
