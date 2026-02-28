@@ -232,6 +232,11 @@ padding:16px;font-family:inherit;font-size:1.7rem;font-weight:900;color:#fff;
   animation:cfall var(--d) ease-in forwards}
 @keyframes cfall{0%{transform:translateY(-10px) rotate(0);opacity:1}
   100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+@keyframes prize-pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes cel-btn-pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.lottery-item{height:100px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px}
+.lottery-item .li-em{font-size:2.4rem}
+.lottery-item .li-name{font-size:.88rem;color:var(--gold);font-weight:900}
 /* ── Space Map ── */
 #screen-map{min-height:100vh;}
 #screen-map.active{display:flex; padding-bottom:80px;}
@@ -755,7 +760,22 @@ transform:scale(1.12) rotate(5deg);}
   <div class="cel-t" id="cel-t"></div>
   <div style="font-size:3rem" id="cel-s"></div>
   <div class="T2" id="cel-sub"></div>
-  <button class="btn btn-p" style="max-width:260px;margin-top:10px" onclick="endCel()">太厉害了！继续 🚀</button>
+  <button class="btn btn-p" style="max-width:300px;margin-top:18px;font-size:1.25rem;animation:cel-btn-pop .5s .4s cubic-bezier(.34,1.56,.64,1) both" onclick="openLottery()">🎰 领取通关大奖！</button>
+  <button class="btn btn-ghost" style="max-width:260px;margin-top:8px;font-size:.9rem;opacity:.65" onclick="endCel()">跳过 →</button>
+</div>
+
+<!-- Lottery Modal -->
+<div id="lottery-modal" style="position:fixed;inset:0;z-index:400;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.78);backdrop-filter:blur(8px)">
+  <div id="lottery-box" style="width:min(380px,90vw);background:radial-gradient(ellipse at 40% 30%,#1a1060,#0a0e2a);border:2px solid rgba(255,215,0,.45);border-radius:26px;padding:28px 20px 24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.65),0 0 50px rgba(255,215,0,.12)">
+    <div style="font-size:1.65rem;color:var(--gold);font-weight:900;margin-bottom:4px">🎰 通关大奖！</div>
+    <div style="font-size:.85rem;color:rgba(255,255,255,.55);margin-bottom:20px">为你的闯关成就领取专属称号</div>
+    <div id="lottery-slot" style="height:100px;overflow:hidden;border:2px solid rgba(255,215,0,.35);border-radius:16px;background:rgba(0,0,0,.35);position:relative;max-width:280px;margin:0 auto 18px">
+      <div id="lottery-reel" style="will-change:transform"></div>
+    </div>
+    <div id="lottery-prize-name" style="display:none;font-size:1.35rem;font-weight:900;color:var(--gold);text-shadow:0 0 24px rgba(255,215,0,.7);margin-bottom:18px;animation:prize-pop .5s cubic-bezier(.34,1.56,.64,1)"></div>
+    <button id="lottery-spin-btn" class="btn btn-p" style="max-width:240px;margin:0 auto" onclick="spinLottery()">✨ 开始抽奖！</button>
+    <button id="lottery-done-btn" class="btn btn-ghost" style="max-width:240px;margin:10px auto 0;display:none" onclick="closeLottery()">🚀 太棒了，继续冒险！</button>
+  </div>
 </div>
 
 <script>
@@ -1198,6 +1218,30 @@ function toggleBgm(){
   document.getElementById('bgm-btn').textContent = bgmPlaying ? '🎵' : '🔕';
 }
 
+function playVictory(){
+  if(!bgmCtx) return;
+  // 胜利号角：上行琶音 + 最高音延音，营造宏大仪式感
+  const notes = [
+    {f:523.25, t:0,   dur:0.18},
+    {f:659.25, t:160, dur:0.18},
+    {f:783.99, t:320, dur:0.18},
+    {f:1046.5, t:480, dur:0.45},
+    {f:880,    t:960, dur:0.14},
+    {f:1046.5, t:1100,dur:0.65},
+  ];
+  notes.forEach(({f, t, dur})=>{
+    setTimeout(()=>{
+      const o=bgmCtx.createOscillator(), g=bgmCtx.createGain();
+      o.type='sine'; o.frequency.value=f;
+      g.gain.setValueAtTime(0,bgmCtx.currentTime);
+      g.gain.linearRampToValueAtTime(0.38,bgmCtx.currentTime+0.012);
+      g.gain.exponentialRampToValueAtTime(0.001,bgmCtx.currentTime+dur);
+      o.connect(g); g.connect(bgmCtx.destination);
+      o.start(); o.stop(bgmCtx.currentTime+dur);
+    }, t);
+  });
+}
+
 function ensureBgmAlive(){
   if(!bgmCtx || !bgmPlaying) return;
   try{
@@ -1279,6 +1323,8 @@ let _prevScreen = 'home'; // screen to return to after parent panel
 function openParentGate(target){
   _pgTarget = target || 'parent';
   clearInterval(timerInt);  // 暂停倒计时，防止家长操作时题目自动超时
+  // 同时清除待执行的题目切换动作，防止进入家长面板后题目在后台自动跳题
+  clearTimeout(_fbPendingTimer); _fbPendingTimer = null; _fbPendingAction = null;
   // Remember where we came from
   const screens = ['home','map','game','errorbook'];
   for(const s of screens){
@@ -1363,8 +1409,9 @@ function showScreen(id){
       btn.onclick = ()=>showScreen(dest);
     });
   }
-  // 返回做题界面时，用最新设置重启倒计时
+  // 返回做题界面时，用最新设置重启倒计时，并恢复背景音乐
   if(id==='game' && curQObj && !submitting) startTimer();
+  if(id==='game') ensureBgmAlive();
 }
 
 // MAP_PATH defines the full journey sequence
@@ -1547,7 +1594,7 @@ function renderMap(){
       const animClass = accessible ? 'pulse-glow' : 'float-only';
       const glowBase  = cfg.glowBase + (accessible ? ', 0 0 28px '+cfg.glowColor : '');
       const em        = isCou ? '🔵' : '🟠';
-      const labelTxt  = tutDone ? '✅ 已学会' : accessible ? '⚡ 先学我！' : '🔒 未解锁';
+      const labelTxt  = tutDone ? '' : accessible ? '⚡ 先学我！' : '🔒 未解锁';
       const labelCls  = tutDone ? 'done' : accessible ? 'req' : 'lk';
 
       const el = document.createElement('div');
@@ -2448,6 +2495,7 @@ function saveTimerFromUI(){
   // 如果是从做题页面进来的，保存后直接返回做题
   if(_prevScreen === 'game'){
     showScreen('game');
+    ensureBgmAlive();
     return;
   }
   // Show confirmation
@@ -2989,6 +3037,7 @@ function showCelebration(lv, starsE, elapsed){
     setTimeout(()=>c.remove(),4000);
   },i*60);
   cel.classList.add('show');
+  playVictory();
   speak('太棒了！通关成功！');
 }
 
@@ -2999,6 +3048,76 @@ function endCel(){
 
 function nextLevel(){ if(curLvId+1<LVS.length) startLevel(curLvId+1); }
 function retryLevel(){ startLevel(curLvId); }
+
+// ═══════════════════════════════════════
+//  LOTTERY  (通关奖励 - 幸运抽奖)
+// ═══════════════════════════════════════
+const LOTTERY_PRIZES = [
+  {em:'🏆', name:'数学冠军'},
+  {em:'🌟', name:'宇宙超人'},
+  {em:'🦸', name:'数学英雄'},
+  {em:'🎯', name:'精准大师'},
+  {em:'💎', name:'智慧钻石'},
+  {em:'🚀', name:'星际旅行者'},
+  {em:'🌈', name:'彩虹勇士'},
+  {em:'👑', name:'数学之王'},
+];
+
+function openLottery(){
+  const modal = document.getElementById('lottery-modal');
+  modal.style.display = 'flex';
+  document.getElementById('lottery-spin-btn').style.display = '';
+  document.getElementById('lottery-done-btn').style.display = 'none';
+  document.getElementById('lottery-prize-name').style.display = 'none';
+  // 构建转轮内容：重复6遍以确保足够的滚动量
+  const reel = document.getElementById('lottery-reel');
+  let html = '';
+  for(let r=0;r<6;r++){
+    LOTTERY_PRIZES.forEach(p=>{
+      html += `<div class="lottery-item"><span class="li-em">${p.em}</span><span class="li-name">${p.name}</span></div>`;
+    });
+  }
+  reel.innerHTML = html;
+  reel.style.transition = 'none';
+  reel.style.transform = 'translateY(0)';
+}
+
+function spinLottery(){
+  document.getElementById('lottery-spin-btn').style.display = 'none';
+  const prizeIdx = Math.floor(Math.random() * LOTTERY_PRIZES.length);
+  const prize = LOTTERY_PRIZES[prizeIdx];
+  const reel = document.getElementById('lottery-reel');
+  const itemH = 100;
+  // 停在第4轮循环中的目标奖品
+  const stopAt = 4 * LOTTERY_PRIZES.length + prizeIdx;
+  reel.style.transition = 'transform 2.4s cubic-bezier(0.22, 0.8, 0.12, 1)';
+  reel.style.transform = `translateY(-${stopAt * itemH}px)`;
+  setTimeout(()=>{
+    // 显示奖品名称
+    const prizeEl = document.getElementById('lottery-prize-name');
+    prizeEl.textContent = `${prize.em} 获得称号：「${prize.name}」！`;
+    prizeEl.style.display = '';
+    prizeEl.style.animation = 'none';
+    void prizeEl.offsetWidth;
+    prizeEl.style.animation = 'prize-pop .5s cubic-bezier(.34,1.56,.64,1)';
+    // 彩带
+    const colors=['#ffd700','#ff7b00','#00d46a','#1e90ff','#c77dff','#ff4757'];
+    for(let i=0;i<35;i++) setTimeout(()=>{
+      const c=document.createElement('div');
+      c.className='confetti';
+      c.style.cssText=`left:${Math.random()*100}vw;top:-10px;background:${colors[i%colors.length]};--d:${1+Math.random()*1.5}s;transform:rotate(${Math.random()*360}deg);width:${5+Math.random()*7}px;height:${5+Math.random()*7}px;border-radius:${Math.random()>.5?'50%':'2px'}`;
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(),3000);
+    },i*35);
+    playChime();
+    document.getElementById('lottery-done-btn').style.display = '';
+  }, 2500);
+}
+
+function closeLottery(){
+  document.getElementById('lottery-modal').style.display = 'none';
+  endCel();
+}
 
 // ═══════════════════════════════════════
 //  PARTICLES
