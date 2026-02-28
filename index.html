@@ -109,6 +109,10 @@ display:flex;align-items:center;justify-content:center;gap:8px;padding:15px 28px
 .blink{display:inline-block;width:3px;height:2.8rem;background:var(--gold);
   animation:blink 1s step-end infinite;vertical-align:middle;margin-left:4px;border-radius:2px}
 @keyframes blink{50%{opacity:0}}
+@keyframes wrongFlash{0%,100%{border-color:var(--border);box-shadow:0 8px 32px rgba(0,0,0,.4)}40%{border-color:#ff4757;box-shadow:0 0 28px rgba(255,71,87,.6)}}
+.card-wrong{animation:wrongFlash 0.45s ease-out}
+@keyframes reviewGlow{0%,100%{border-color:var(--border)}50%{border-color:#ffd700;box-shadow:0 0 24px rgba(255,215,0,.45)}}
+.card-review{animation:reviewGlow 1.6s ease-in-out infinite}
 /* ── Numpad ── */
 #np{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;width:100%}
 .nb{
@@ -567,7 +571,8 @@ transform:scale(1.12) rotate(5deg);}
     <div class="hi">📝 <span id="h-q">1</span>/10</div>
   </div>
   <div class="pw"><div id="pb"></div></div>
-  <div class="card" style="padding:6px 20px">
+  <div class="card" id="game-card" style="padding:6px 20px">
+    <div id="review-hint" style="display:none;font-size:.88rem;color:#ffd700;text-align:center;padding:4px 0 2px;font-weight:900">✏️ 照着写一遍正确答案吧！</div>
     <div id="qd">?</div>
     <div class="divider"></div>
     <div id="ad"><span id="at"></span><span class="blink"></span></div>
@@ -846,6 +851,7 @@ let sCorrect = 0, sStars = 0, sStreak = 0, maxStreak = 0;
 let curStreak = 0, gStartTime = 0;
 let submitting = false;   // ← 防止重复提交
 let wrongTryCount = 0;
+let reviewMode = false; // after 3 wrong tries: child must type the answer once to proceed
 let _fbPendingAction = null, _fbPendingTimer = null;
 let sawHintThisQ = false; // per-question saw hint flag
 let voiceOn = true;
@@ -1093,6 +1099,11 @@ function sfxVictory(){
 function sfxWrong(){
   sfxTone(220,0.12,'sawtooth',0.03);
 }
+function playWrong(){
+  // Two descending sawtooth buzz tones for strong "wrong" audio feedback
+  sfxTone(260,0.14,'sawtooth',0.05);
+  setTimeout(()=>sfxTone(180,0.18,'sawtooth',0.04),130);
+}
 
 function playCorrect(){
   if(!bgmCtx) return;
@@ -1331,7 +1342,14 @@ function pgKey(k){
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
-  document.getElementById('hint-btn').className = ''; // hide hint btn
+  // Restore hint-btn to correct state; when returning to game keep the question's state
+  if(id !== 'game'){
+    document.getElementById('hint-btn').className = ''; // hide hint btn on non-game screens
+  } else if(curQObj){
+    const hb = document.getElementById('hint-btn');
+    const needsHint = (curQObj.op==='+'&&curQObj.n1+curQObj.n2>10)||(curQObj.op==='-'&&curQObj.n1>10);
+    hb.className = needsHint ? 'hint-inline show' : 'hint-inline';
+  }
   if(id==='map') renderMap();
   if(id==='errorbook') renderErrorBook();
   if(id==='parent'){
@@ -2491,7 +2509,13 @@ function loadQ(){
   curAns=''; updateAD();
   curQObj = qs[curQ];
   wrongTryCount = 0;
+  reviewMode = false;
   sawHintThisQ = false;
+  // Reset review-mode UI
+  const rh = document.getElementById('review-hint');
+  if(rh) rh.style.display = 'none';
+  const gc = document.getElementById('game-card');
+  if(gc) gc.classList.remove('card-review');
 
   // Determine method for hint
   const lv = LVS[curLvId];
@@ -2577,6 +2601,20 @@ function submit(){
   const ans=parseInt(curAns), correct=curQObj.a;
 
   if(ans===correct){
+    // ── Review mode: child typed the answer correctly after seeing it ──
+    if(reviewMode){
+      reviewMode = false;
+      const rh=document.getElementById('review-hint');
+      if(rh) rh.style.display='none';
+      const gc=document.getElementById('game-card');
+      if(gc) gc.classList.remove('card-review');
+      playCorrect();
+      showFb(true,'✅','写对了！','太棒了，进入下一题！','#00d46a');
+      scheduleFbAction(()=>{ nextQ(false,false); }, 1200);
+      return;
+    }
+
+    // ── Normal correct ──
     const limit=P.timerSec||15; const stars=limit===0?3:timerV>=limit*0.67?3:timerV>=limit*0.33?2:1;
     sStars+=stars; sCorrect++; curStreak++;
     if(curStreak>maxStreak) maxStreak=curStreak;
@@ -2600,37 +2638,63 @@ function submit(){
     showFb(true,em,msg,`+${stars}⭐ ${sub}`,'#00d46a');
     scheduleFbAction(()=>{ nextQ(true,false); }, 1300);
   } else {
+    // ── Review mode: child typed wrong again – just shake, no modal ──
+    if(reviewMode){
+      curAns=''; updateAD();
+      playWrong();
+      const qEl=document.getElementById('qd');
+      qEl.classList.add('shake'); setTimeout(()=>qEl.classList.remove('shake'),400);
+      const gc=document.getElementById('game-card');
+      if(gc){ gc.classList.remove('card-wrong'); void gc.offsetWidth; gc.classList.add('card-wrong'); }
+      submitting=false;
+      return;
+    }
+
+    // ── Normal wrong ──
     curStreak=0;
-    // Add to error book
     addError(curQObj.q, correct, ans, curLvId);
 
     const msgs=[
-      ['😅','差一点！','看看正确答案，下次一定行！'],
-      ['💪','再想想！','没关系，继续加油！'],
-      ['🤔','哎呀！','正确答案在下面～'],
+      ['😅','差一点！','再想想看！'],
+      ['💪','加油！','没关系，继续！'],
+      ['🤔','哎呀！','再试一次！'],
     ];
     const [em,msg,sub]=msgs[Math.floor(Math.random()*msgs.length)];
     wrongTryCount++;
-    curAns=''; updateAD();   // 立即清空错误答案，不让孩子看到错误残留
-    if(wrongTryCount>=3){
-      showFb(false,em,msg,`正确答案是 ${correct}`,'#ff4757');
-      speak(`正确答案是 ${correct}`);
-    } else {
-      showFb(false,'🚀',msg,'再试一次！','#ff4757');
-      speak('再试一次');
-    }
+    curAns=''; updateAD();
     const qEl=document.getElementById('qd');
     playWrong();
     qEl.classList.add('shake'); setTimeout(()=>qEl.classList.remove('shake'),400);
-    scheduleFbAction(()=>{
-      if(wrongTryCount>=3) {
-        nextQ(false,false);
-      } else {
-        // Let the child try again: unlock and restart timer
+    const gc=document.getElementById('game-card');
+    if(gc){ gc.classList.remove('card-wrong'); void gc.offsetWidth; gc.classList.add('card-wrong'); }
+
+    if(wrongTryCount>=3){
+      // Show correct answer, then enter review mode
+      showFb(false,'😢','老师告诉你答案',`正确答案是 ${correct}`,'#ff8800');
+      speak(`正确答案是 ${correct}`);
+      scheduleFbAction(()=>{
+        // Enter review mode: same question, child must type it once
+        reviewMode = true;
+        submitting = false;
+        curAns=''; updateAD();
+        const rh=document.getElementById('review-hint');
+        if(rh) rh.style.display='';
+        const gc2=document.getElementById('game-card');
+        if(gc2){ gc2.classList.remove('card-wrong'); gc2.classList.add('card-review'); }
+        // Show ∞ timer to indicate no time pressure
+        const tt=document.getElementById('tt');
+        const tc=document.getElementById('tc');
+        if(tt) tt.textContent='✏️';
+        if(tc){ tc.style.stroke='#ffd700'; tc.style.strokeDashoffset=0; }
+      }, 2200);
+    } else {
+      showFb(false,em,msg,`还有 ${3-wrongTryCount} 次机会`,'#ff4757');
+      speak('再试一次');
+      scheduleFbAction(()=>{
         submitting=false;
         startTimer();
-      }
-    }, 1900);
+      }, 1600);
+    }
   }
 }
 
