@@ -1491,16 +1491,16 @@ function renderMap(){
   canvas.style.height = CANVAS_H + 'px';
   wrap.appendChild(canvas);
 
-  // Positions: x=% of width, y=% of CANVAS_H — spread evenly bottom→top
-  // Bottom of canvas = start, top = finish. Leave 12% padding each end.
+  // Positions: x=% of width, y=% of CANVAS_H — spread evenly top→bottom
+  // Top of canvas = start (火星), bottom = finish (宇宙核心). Leave ~8% padding each end.
   const POSITIONS = [
-    {x:28, y:88},   // 0: 火星
-    {x:68, y:76},   // 1: 木星
-    {x:80, y:62},   // 2: 凑十法 (tut)
+    {x:28, y:8 },   // 0: 火星
+    {x:68, y:20},   // 1: 木星
+    {x:80, y:34},   // 2: 凑十法 (tut)
     {x:32, y:48},   // 3: 土星
-    {x:20, y:34},   // 4: 破十法 (tut)
-    {x:68, y:20},   // 5: 天王星
-    {x:40, y:8 },   // 6: 宇宙核心
+    {x:20, y:62},   // 4: 破十法 (tut)
+    {x:68, y:76},   // 5: 天王星
+    {x:40, y:88},   // 6: 宇宙核心
   ];
 
   const sz = n => Math.round(n * sScale);
@@ -1573,7 +1573,7 @@ function renderMap(){
   });
 
   // ── Planet / Tutorial nodes (appended to canvas)
-  let lastAccessibleY = CANVAS_H * 0.88; // default: 火星 (bottom)
+  let lastAccessibleY = CANVAS_H * 0.08; // default: 火星 (top)
   let lastDoneY       = -1;
   let firstUndoneIdx  = -1; // index of the first accessible-but-not-done node (next target)
 
