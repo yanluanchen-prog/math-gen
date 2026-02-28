@@ -760,8 +760,8 @@ transform:scale(1.12) rotate(5deg);}
   <div class="cel-t" id="cel-t"></div>
   <div style="font-size:3rem" id="cel-s"></div>
   <div class="T2" id="cel-sub"></div>
-  <button class="btn btn-p" style="max-width:300px;margin-top:18px;font-size:1.25rem;animation:cel-btn-pop .5s .4s cubic-bezier(.34,1.56,.64,1) both" onclick="openLottery()">🎰 领取通关大奖！</button>
-  <button class="btn btn-ghost" style="max-width:260px;margin-top:8px;font-size:.9rem;opacity:.65" onclick="endCel()">跳过 →</button>
+  <button id="cel-lottery-btn" class="btn btn-p" style="max-width:300px;margin-top:18px;font-size:1.25rem;animation:cel-btn-pop .5s .4s cubic-bezier(.34,1.56,.64,1) both" onclick="openLottery()">🎰 领取通关大奖！</button>
+  <button id="cel-skip-btn" class="btn btn-ghost" style="max-width:260px;margin-top:8px;font-size:.9rem;opacity:.65" onclick="endCel()">跳过 →</button>
 </div>
 
 <!-- Lottery Modal -->
@@ -3028,6 +3028,10 @@ function showCelebration(lv, starsE, elapsed){
   document.getElementById('cel-t').textContent=`${lv.em} ${lv.name}通关！`;
   document.getElementById('cel-s').textContent='⭐'.repeat(starsE)+'☆'.repeat(3-starsE);
   document.getElementById('cel-sub').textContent=`答对 ${sCorrect}/10 题，获得 ${sStars} 颗星星！`;
+  // 只有最后一关（宇宙核心）才显示通关大奖抽奖
+  const isFinal = curLvId === LVS.length - 1;
+  document.getElementById('cel-lottery-btn').style.display = isFinal ? '' : 'none';
+  document.getElementById('cel-skip-btn').textContent = isFinal ? '跳过 →' : '继续 →';
   const colors=['#ffd700','#ff7b00','#00d46a','#1e90ff','#c77dff','#ff4757'];
   for(let i=0;i<55;i++) setTimeout(()=>{
     const c=document.createElement('div');
