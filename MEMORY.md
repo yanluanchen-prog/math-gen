@@ -3,6 +3,9 @@
 ## Identity
 - Birthday (set by user): 2026-02-16.
 
+## Working style (user preference)
+- When user says they want to develop a webpage again, guide them step-by-step using a professional workflow to avoid previously encountered pitfalls (small iterations, locked versions, test checklist, backlog).
+
 ## Math adventure / kid math game (2026-02)
 - Project: single-file HTML kid math adventure game (space/planet map, tutorials like 凑十法/破十法), parent panel, localStorage, voice (SpeechSynthesis), music (WebAudio).
 - Recurring pitfalls: browser autoplay restrictions; JS syntax errors causing UI buttons to stop; scope issues with inline onclick; Feishu preview may block JS—validate in a real browser/served over HTTP.
