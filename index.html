@@ -846,6 +846,7 @@ let sCorrect = 0, sStars = 0, sStreak = 0, maxStreak = 0;
 let curStreak = 0, gStartTime = 0;
 let submitting = false;   // ← 防止重复提交
 let wrongTryCount = 0;
+let _fbPendingAction = null, _fbPendingTimer = null;
 let sawHintThisQ = false; // per-question saw hint flag
 let voiceOn = true;
 let parentUnlockedUntil = 0;
@@ -2425,6 +2426,12 @@ function saveTimerFromUI(){
   P.timerSec = isNaN(v)?15:v;
   TIME_LIMIT  = P.timerSec;
   save();
+  speak('保存成功');
+  // 如果是从做题页面进来的，保存后直接返回做题
+  if(_prevScreen === 'game'){
+    showScreen('game');
+    return;
+  }
   // Show confirmation
   const msg = document.getElementById('timer-save-msg');
   if(msg){
@@ -2432,7 +2439,6 @@ function saveTimerFromUI(){
     clearTimeout(msg._t);
     msg._t = setTimeout(()=>{ msg.textContent=''; }, 3000);
   }
-  speak('保存成功');
 }
 
 function setTimerFromUI(){ saveTimerFromUI(); } // keep compat
@@ -2550,7 +2556,7 @@ function timeUp(){
   curStreak=0;
   const q=curQObj;
   showFb(false,'⏰','时间到了！',`正确答案是 ${q.a}`,'#ff4757');
-  setTimeout(()=>{ dismissFb(); nextQ(false,true); },1900);
+  scheduleFbAction(()=>{ nextQ(false,true); }, 1900);
 }
 
 // ═══════════════════════════════════════
@@ -2592,7 +2598,7 @@ function submit(){
     spawnParticles();
     playCorrect();
     showFb(true,em,msg,`+${stars}⭐ ${sub}`,'#00d46a');
-    setTimeout(()=>{ dismissFb(); nextQ(true,false); },1300);
+    scheduleFbAction(()=>{ nextQ(true,false); }, 1300);
   } else {
     curStreak=0;
     // Add to error book
@@ -2616,8 +2622,7 @@ function submit(){
     const qEl=document.getElementById('qd');
     playWrong();
     qEl.classList.add('shake'); setTimeout(()=>qEl.classList.remove('shake'),400);
-    setTimeout(()=>{
-      dismissFb();
+    scheduleFbAction(()=>{
       if(wrongTryCount>=3) {
         nextQ(false,false);
       } else {
@@ -2625,7 +2630,7 @@ function submit(){
         submitting=false;
         startTimer();
       }
-    },1900);
+    }, 1900);
   }
 }
 
@@ -2642,7 +2647,24 @@ function showFb(ok, em, msg, sub, borderColor){
   document.getElementById('fb-card').style.borderColor=borderColor;
   el.classList.add('show');
 }
-function dismissFb(){ document.getElementById('fb').classList.remove('show'); }
+function dismissFb(){
+  document.getElementById('fb').classList.remove('show');
+  if(_fbPendingAction){
+    clearTimeout(_fbPendingTimer);
+    const action = _fbPendingAction;
+    _fbPendingAction = null; _fbPendingTimer = null;
+    action();
+  }
+}
+function scheduleFbAction(action, delay){
+  clearTimeout(_fbPendingTimer);
+  _fbPendingAction = action;
+  _fbPendingTimer = setTimeout(()=>{
+    _fbPendingAction = null; _fbPendingTimer = null;
+    dismissFb();
+    action();
+  }, delay);
+}
 
 // ═══════════════════════════════════════
 //  HINT
