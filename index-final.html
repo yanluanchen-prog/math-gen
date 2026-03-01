@@ -244,9 +244,9 @@ padding:16px;font-family:inherit;font-size:1.7rem;font-weight:900;color:#fff;
   position:relative;
   width:100%;
   flex:1;
-  height:calc(100vh - 180px);
-  min-height:300px;
-  max-height:calc(100vh - 180px);
+  height:calc(100vh - 140px);
+  min-height:280px;
+  max-height:calc(100vh - 140px);
   overflow:hidden;
   border-radius:0;
   background:transparent;
@@ -1516,8 +1516,8 @@ function renderMap(){
   wrap.innerHTML = '';
 
   // ── Inner tall canvas — height adapts to viewport width
-  const CANVAS_H = Math.min(window.innerHeight - 180, window.innerWidth >= 1024 ? 700 : window.innerWidth >= 768 ? 620 : 540);
-  const sScale   = window.innerWidth >= 1024 ? 1.0 : window.innerWidth >= 768 ? 0.9 : 0.8;
+  const CANVAS_H = window.innerHeight - 160;
+  const sScale   = window.innerWidth >= 1024 ? 0.85 : window.innerWidth >= 768 ? 0.78 : 0.72;
   const canvas = document.createElement('div');
   canvas.className = 'space-map-canvas';
   canvas.style.height = CANVAS_H + 'px';
@@ -1526,13 +1526,13 @@ function renderMap(){
   // Positions: x=% of width, y=% of CANVAS_H — spread evenly top→bottom
   // Top of canvas = start (火星), bottom = finish (宇宙核心). Leave ~8% padding each end.
   const POSITIONS = [
-    {x:28, y:6 },   // 0: 火星
-    {x:68, y:20},   // 1: 木星
-    {x:78, y:34},   // 2: 凑十法 (tut)
-    {x:32, y:48},   // 3: 土星
-    {x:20, y:62},   // 4: 破十法 (tut)
-    {x:68, y:76},   // 5: 天王星
-    {x:40, y:92},   // 6: 宇宙核心
+    {x:30, y:5 },   // 0: 火星
+    {x:65, y:18},   // 1: 木星
+    {x:75, y:31},   // 2: 凑十法 (tut)
+    {x:35, y:44},   // 3: 土星
+    {x:25, y:57},   // 4: 破十法 (tut)
+    {x:65, y:70},   // 5: 天王星
+    {x:45, y:84},   // 6: 宇宙核心
   ];
 
   const sz = n => Math.round(n * sScale);
@@ -1659,8 +1659,8 @@ function renderMap(){
       const isCou = node.id==='cou';
       // cou=凑十星 → Earth style (blue/green), po=破十星 → Sun style (fiery orange/yellow)
       const cfg = isCou
-        ? {size:sz(74), skinClass:'planet-skin-earth', bg:'radial-gradient(circle at 32% 28%,rgba(200,241,255,.25),transparent 48%),radial-gradient(135deg,#1a6fb0,#0d2f6b)', glowColor:'rgba(30,144,255,.55)', glowBase:'0 6px 22px rgba(30,100,200,.45)'}
-        : {size:sz(74), skinClass:'planet-skin-sun',   bg:'radial-gradient(circle at 32% 28%,rgba(255,240,160,.30),transparent 48%),radial-gradient(135deg,#ffb830,#e24b12)', glowColor:'rgba(255,180,0,.65)',  glowBase:'0 6px 26px rgba(255,140,0,.55)'};
+        ? {size:sz(58), skinClass:'planet-skin-earth', bg:'radial-gradient(circle at 32% 28%,rgba(200,241,255,.25),transparent 48%),radial-gradient(135deg,#1a6fb0,#0d2f6b)', glowColor:'rgba(30,144,255,.55)', glowBase:'0 6px 22px rgba(30,100,200,.45)'}
+        : {size:sz(58), skinClass:'planet-skin-sun',   bg:'radial-gradient(circle at 32% 28%,rgba(255,240,160,.30),transparent 48%),radial-gradient(135deg,#ffb830,#e24b12)', glowColor:'rgba(255,180,0,.65)',  glowBase:'0 6px 26px rgba(255,140,0,.55)'};
 
       const tutDone   = done;
       const animClass = accessible ? 'pulse-glow' : 'float-only';
