@@ -661,7 +661,7 @@ transform:scale(1.12) rotate(5deg);}
 <!-- MAP -->
 <div id="screen-map" class="screen">
   <div style="display:flex;justify-content:space-between;align-items:center;width:100%">
-    <div class="T1" style="font-size:1.7rem">🌌</div>
+    <div class="T1" style="font-size:1.2rem">星际地图</div>
     <div style="color:var(--gold);font-size:1.1rem;font-weight:900">⭐ <span id="map-total">0</span></div>
   </div>
   <div class="T2" style="font-size:.82rem;opacity:.55;align-self:flex-start"></div>
@@ -1526,13 +1526,13 @@ function renderMap(){
   // Positions: x=% of width, y=% of CANVAS_H — spread evenly top→bottom
   // Top of canvas = start (火星), bottom = finish (宇宙核心). Leave ~8% padding each end.
   const POSITIONS = [
-    {x:30, y:5 },   // 0: 火星
+    {x:30, y:10},   // 0: 火星
     {x:65, y:18},   // 1: 木星
     {x:75, y:31},   // 2: 凑十法 (tut)
     {x:35, y:44},   // 3: 土星
     {x:25, y:57},   // 4: 破十法 (tut)
     {x:65, y:70},   // 5: 天王星
-    {x:45, y:84},   // 6: 宇宙核心
+    {x:45, y:80},   // 6: 宇宙核心
   ];
 
   const sz = n => Math.round(n * sScale);
@@ -1653,7 +1653,7 @@ function renderMap(){
       `;
       if(accessible) el.onclick = ()=>startLevel(node.id);
       canvas.appendChild(el);
-      if(idx === firstUndoneIdx){ const h=document.createElement('div'); h.className='map-start-hint'; h.textContent='⬇ 点我！'; el.appendChild(h); }
+      // hint removed
 
     } else if(node.type==='tut'){
       const isCou = node.id==='cou';
@@ -1688,7 +1688,7 @@ function renderMap(){
       `;
       if(accessible) el.onclick = ()=>startTutorial(node.id);
       canvas.appendChild(el);
-      if(idx === firstUndoneIdx){ const h=document.createElement('div'); h.className='map-start-hint'; h.textContent='⬇ 点我！'; el.appendChild(h); }
+      // hint removed
     }
   });
 
