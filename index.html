@@ -244,8 +244,9 @@ padding:16px;font-family:inherit;font-size:1.7rem;font-weight:900;color:#fff;
   position:relative;
   width:100%;
   flex:1;
-  height:calc(100vh - 200px);
-  min-height:350px;
+  height:calc(100vh - 180px);
+  min-height:300px;
+  max-height:calc(100vh - 180px);
   overflow:hidden;
   border-radius:0;
   background:transparent;
@@ -653,7 +654,7 @@ transform:scale(1.12) rotate(5deg);}
   <div style="display:flex;gap:8px;width:100%">
     <button class="btn btn-ghost" style="flex:1" onclick="showScreen('errorbook')">📒 错题本</button>
     <button class="btn btn-ghost" style="flex:1" onclick="openParentGate()">👨‍👩‍👧 家长</button>
-    <button class="btn btn-ghost" style="flex:1;opacity:.5;font-size:.85rem" onclick="if(confirm('确定重新开始吗？所有星星和记录都会清空'))resetAll()">🔄 重置</button>
+    <button class="btn btn-ghost" style="flex:1" onclick="if(confirm('确定重新开始吗？所有星星和记录都会清空'))resetAll()">🔄 重置</button>
   </div>
 </div>
 
@@ -1515,8 +1516,8 @@ function renderMap(){
   wrap.innerHTML = '';
 
   // ── Inner tall canvas — height adapts to viewport width
-  const CANVAS_H = window.innerWidth >= 1024 ? 1150 : window.innerWidth >= 768 ? 1050 : 900;
-  const sScale   = window.innerWidth >= 1024 ? 1.28 : window.innerWidth >= 768 ? 1.14 : 1;
+  const CANVAS_H = Math.min(window.innerHeight - 180, window.innerWidth >= 1024 ? 700 : window.innerWidth >= 768 ? 620 : 540);
+  const sScale   = window.innerWidth >= 1024 ? 1.0 : window.innerWidth >= 768 ? 0.9 : 0.8;
   const canvas = document.createElement('div');
   canvas.className = 'space-map-canvas';
   canvas.style.height = CANVAS_H + 'px';
@@ -1691,11 +1692,7 @@ function renderMap(){
     }
   });
 
-  // ── Auto-scroll: instantly position the next target planet in view
-  // Use window.innerHeight as an immediate estimate; refine after layout resolves.
-  const _initH  = window.innerHeight - 230;
-  const _target = Math.max(0, lastAccessibleY - _initH * 0.55);
-  wrap.scrollTo({top: _target, behavior: 'instant'});
+  // Auto-scroll removed: map fits in one screen
   requestAnimationFrame(()=>{
     requestAnimationFrame(()=>{
       const viewH    = wrap.clientHeight || _initH;
