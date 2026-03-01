@@ -26,5 +26,9 @@
   - `openclaw cron rm <id>`
 - Doc: `docs/cli/cron.md` (notes: isolated jobs default announce; use `--no-deliver` to keep internal)
 
+### Feishu: known limitations
+- **Merged forwarded messages** (`merge_forward` msg_type) are NOT parsed by the current plugin. Bot receives placeholder text "Merged and Forwarded Message" with no actual content. User must send content via screenshot, individual forwards, or copy-paste.
+- Plugin `parseMessageContent()` in `bot.ts` only handles `text` and `post` types; other types fall through to raw JSON.
+
 ## When unsure
 - Ask for the exact file/link/screenshot and reproduce before proposing large refactors.
