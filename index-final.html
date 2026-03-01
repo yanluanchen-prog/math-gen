@@ -1646,7 +1646,7 @@ function renderMap(){
           <div class="planet-surface planet-skin-${lv.id}"></div>
           <div class="planet-ring"></div>
           ${!accessible ? '<div class="planet-lock-icon">🔒</div>' : ''}
-          ${done ? '<div class="planet-lock-icon" style="background:rgba(255,215,0,.15);border-color:rgba(255,215,0,.5)">✅</div>' : ''}
+          
         </div>
         <div class="planet-name">${lv.name}</div>
         ${done ? `<div class="planet-stars">${'⭐'.repeat(st)}${'☆'.repeat(3-st)}</div>` : ''}
