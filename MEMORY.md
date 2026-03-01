@@ -5,6 +5,9 @@
 
 ## Working style (user preference)
 - When user says they want to develop a webpage again, guide them step-by-step using a professional workflow to avoid previously encountered pitfalls (small iterations, locked versions, test checklist, backlog).
+- User prefers Tencent Cloud (COS) over Cloudflare for hosting — China accessibility is critical.
+- Every code change must be verified on 3 screens: iPhone, iPad, desktop browser.
+- Don't send internal thinking/debug text to user — only send final results.
 
 ## Math adventure / kid math game (2026-02)
 - Project: single-file HTML kid math adventure game (space/planet map, tutorials like 凑十法/破十法), parent panel, localStorage, voice (SpeechSynthesis), music (WebAudio).
