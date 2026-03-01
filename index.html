@@ -239,16 +239,14 @@ padding:16px;font-family:inherit;font-size:1.7rem;font-weight:900;color:#fff;
 .lottery-item .li-name{font-size:.88rem;color:var(--gold);font-weight:900}
 /* ── Space Map ── */
 #screen-map{min-height:100vh;}
-#screen-map.active{display:flex; padding-bottom:80px;}
+#screen-map.active{display:flex; padding-bottom:10px;}
 .space-map-wrap{
   position:relative;
   width:100%;
   flex:1;
-  height:calc(100vh - 230px);
-  min-height:400px;
-  overflow-x:hidden;
-  overflow-y:auto;
-  overflow:auto;
+  height:calc(100vh - 200px);
+  min-height:350px;
+  overflow:hidden;
   border-radius:0;
   background:transparent;
   border:none;
@@ -262,7 +260,8 @@ padding:16px;font-family:inherit;font-size:1.7rem;font-weight:900;color:#fff;
 .space-map-canvas{
   position:relative;
   width:100%;
-  height:900px;
+  height:calc(100vh - 220px);
+  min-height:350px;
 }
 /* mini stars inside map */
 .map-star{position:absolute;background:#fff;border-radius:50%;pointer-events:none;
@@ -652,10 +651,10 @@ transform:scale(1.12) rotate(5deg);}
   </div>
   <button class="btn btn-p" onclick="showScreen('map')">🚀 开始冒险！</button>
   <div style="display:flex;gap:8px;width:100%">
-    <button class="btn btn-ghost" onclick="showScreen('errorbook')">📒 错题本</button>
-    <button class="btn btn-ghost" onclick="openParentGate()">👨‍👩‍👧 家长</button>
+    <button class="btn btn-ghost" style="flex:1" onclick="showScreen('errorbook')">📒 错题本</button>
+    <button class="btn btn-ghost" style="flex:1" onclick="openParentGate()">👨‍👩‍👧 家长</button>
+    <button class="btn btn-ghost" style="flex:1;opacity:.5;font-size:.85rem" onclick="if(confirm('确定重新开始吗？所有星星和记录都会清空'))resetAll()">🔄 重置</button>
   </div>
-  <button class="btn btn-ghost" style="opacity:.5;font-size:.85rem" onclick="if(confirm('确定重新开始吗？所有星星和记录都会清空'))resetAll()">🔄 重置数据</button>
 </div>
 
 <!-- MAP -->
@@ -1526,22 +1525,22 @@ function renderMap(){
   // Positions: x=% of width, y=% of CANVAS_H — spread evenly top→bottom
   // Top of canvas = start (火星), bottom = finish (宇宙核心). Leave ~8% padding each end.
   const POSITIONS = [
-    {x:28, y:8 },   // 0: 火星
+    {x:28, y:6 },   // 0: 火星
     {x:68, y:20},   // 1: 木星
-    {x:80, y:34},   // 2: 凑十法 (tut)
+    {x:78, y:34},   // 2: 凑十法 (tut)
     {x:32, y:48},   // 3: 土星
     {x:20, y:62},   // 4: 破十法 (tut)
     {x:68, y:76},   // 5: 天王星
-    {x:40, y:88},   // 6: 宇宙核心
+    {x:40, y:92},   // 6: 宇宙核心
   ];
 
   const sz = n => Math.round(n * sScale);
   const LV_CFG = [
-    {size:sz(72), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.22),transparent 48%),radial-gradient(135deg,#ff6b7a,#c0392b)', glowColor:'rgba(255,107,122,.55)', glowBase:'0 6px 22px rgba(255,50,50,.4)'},
-    {size:sz(78), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#ffa040,#e67e22)', glowColor:'rgba(255,160,64,.55)',  glowBase:'0 6px 22px rgba(255,120,0,.4)'},
-    {size:sz(80), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#f7d060,#c9a227)', glowColor:'rgba(247,208,96,.55)',  glowBase:'0 6px 22px rgba(200,160,0,.4)'},
-    {size:sz(76), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#4fa3e3,#1a6fb0)', glowColor:'rgba(79,163,227,.55)',  glowBase:'0 6px 22px rgba(30,100,200,.4)'},
-    {size:sz(85), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#d4a8ff,#8a2be2)', glowColor:'rgba(180,130,255,.55)', glowBase:'0 6px 26px rgba(140,50,220,.5)'},
+    {size:sz(60), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.22),transparent 48%),radial-gradient(135deg,#ff6b7a,#c0392b)', glowColor:'rgba(255,107,122,.55)', glowBase:'0 6px 22px rgba(255,50,50,.4)'},
+    {size:sz(65), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#ffa040,#e67e22)', glowColor:'rgba(255,160,64,.55)',  glowBase:'0 6px 22px rgba(255,120,0,.4)'},
+    {size:sz(66), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#f7d060,#c9a227)', glowColor:'rgba(247,208,96,.55)',  glowBase:'0 6px 22px rgba(200,160,0,.4)'},
+    {size:sz(63), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#4fa3e3,#1a6fb0)', glowColor:'rgba(79,163,227,.55)',  glowBase:'0 6px 22px rgba(30,100,200,.4)'},
+    {size:sz(70), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#d4a8ff,#8a2be2)', glowColor:'rgba(180,130,255,.55)', glowBase:'0 6px 26px rgba(140,50,220,.5)'},
   ];
   const FLOAT_DUR = ['3.8s','4.4s','3.2s','4.9s','3.6s','4.2s','5s'];
 
