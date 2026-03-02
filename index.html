@@ -1070,6 +1070,20 @@ const TTS_WORKER = 'https://math-tts.daxingpai336.workers.dev';
 let _ttsAudio = null;
 const _ttsCache = new Map(); // 音频缓存，避免重复请求
 
+// ── iOS/Android 音频自动播放解锁 ──
+// 手机浏览器要求用户手势才能播放音频，第一次触摸时播放无声音频解锁
+let _audioUnlocked = false;
+const _SILENT = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+function _unlockAudio(){
+  if(_audioUnlocked) return;
+  _audioUnlocked = true;
+  const a = new Audio(_SILENT);
+  a.play().then(()=>{}).catch(()=>{});
+}
+['touchstart','touchend','click','mousedown'].forEach(ev=>
+  document.addEventListener(ev, _unlockAudio, {passive:true})
+);
+
 async function _fetchTTS(text){
   const key = String(text).slice(0, 150);
   if(_ttsCache.has(key)) return _ttsCache.get(key);
