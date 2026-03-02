@@ -1067,60 +1067,73 @@ function resetAll(){
 // ═══════════════════════════════════════
 // ── 腾讯云 TTS（智小虎 502007）──
 const TTS_WORKER = 'https://math-tts.daxingpai336.workers.dev';
-let _ttsAudio = null;
-const _ttsCache = new Map(); // 音频缓存，避免重复请求
+const _ttsCache = new Map(); // text → ArrayBuffer（已缓存的音频数据）
 
-// ── iOS/Android 音频自动播放解锁 ──
-// 手机浏览器要求用户手势才能播放音频，第一次触摸时播放无声音频解锁
+// ── Web Audio API（iOS/Android 兼容方案）──
+let _audioCtx = null;
+let _curSource = null;
+
+function _getCtx(){
+  if(!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return _audioCtx;
+}
+
+// 第一次用户手势时解锁 AudioContext
 let _audioUnlocked = false;
-const _SILENT = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
 function _unlockAudio(){
   if(_audioUnlocked) return;
-  _audioUnlocked = true;
-  const a = new Audio(_SILENT);
-  a.play().then(()=>{}).catch(()=>{});
+  try{
+    const ctx = _getCtx();
+    ctx.resume();
+    const buf = ctx.createBuffer(1,1,22050);
+    const src = ctx.createBufferSource();
+    src.buffer = buf; src.connect(ctx.destination); src.start();
+    _audioUnlocked = true;
+  }catch(e){}
 }
 ['touchstart','touchend','click','mousedown'].forEach(ev=>
   document.addEventListener(ev, _unlockAudio, {passive:true})
 );
 
-async function _fetchTTS(text){
-  const key = String(text).slice(0, 150);
+async function _fetchTTSBuffer(text){
+  const key = String(text).slice(0,150);
   if(_ttsCache.has(key)) return _ttsCache.get(key);
-  const res = await fetch(TTS_WORKER, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ text: key, voiceType: 502007 })
+  const res = await fetch(TTS_WORKER,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({text:key, voiceType:502007})
   });
   const data = await res.json();
   if(data.audio){
-    const url = URL.createObjectURL(new Blob([Uint8Array.from(atob(data.audio), c=>c.charCodeAt(0))], {type:'audio/mp3'}));
-    _ttsCache.set(key, url);
-    return url;
+    const bytes = Uint8Array.from(atob(data.audio), c=>c.charCodeAt(0)).buffer;
+    _ttsCache.set(key, bytes);
+    return bytes;
   }
   return null;
 }
 
-// 预加载文本（题目显示时提前请求，播放时已缓存）
 function preloadSpeak(text){
-  if(!voiceOn || !text) return;
-  _fetchTTS(text).catch(()=>{});
+  if(!voiceOn||!text) return;
+  _fetchTTSBuffer(text).catch(()=>{});
 }
 
 async function speak(text){
-  if(!voiceOn) return;
-  if(!text) return;
-  if(_ttsAudio){ _ttsAudio.pause(); _ttsAudio = null; }
-  try {
-    const url = await _fetchTTS(String(text));
-    if(url){
-      _ttsAudio = new Audio(url);
-      _ttsAudio.play().catch(()=>{});
-    }
-  } catch(e){
+  if(!voiceOn||!text) return;
+  try{
+    const buf = await _fetchTTSBuffer(String(text));
+    if(!buf) return;
+    const ctx = _getCtx();
+    await ctx.resume();
+    const decoded = await ctx.decodeAudioData(buf.slice(0));
+    if(_curSource){ try{_curSource.stop();}catch(e){} _curSource=null; }
+    _curSource = ctx.createBufferSource();
+    _curSource.buffer = decoded;
+    _curSource.connect(ctx.destination);
+    _curSource.start();
+  }catch(e){
     if(window.speechSynthesis){
       const u = new SpeechSynthesisUtterance(String(text));
-      u.lang = 'zh-CN'; u.rate = 1.1;
+      u.lang='zh-CN'; u.rate=1.1;
       speechSynthesis.cancel();
       speechSynthesis.speak(u);
     }
