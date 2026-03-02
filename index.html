@@ -2617,6 +2617,13 @@ function startLevel(id, errMode){
 
   showScreen('game');
   ensureBgmAlive();
+  // 预热常用短语音频（在后台静默加载，减少游戏中延迟）
+  setTimeout(()=>{
+    ['答对了！太棒了！','哎呀，再试一次！','太棒啦，通关成功！'].forEach(s=>preloadSpeak(s));
+    // 预热前2道题的音频
+    if(qs[0]) preloadSpeak(qToSpeech(qs[0].q));
+    if(qs[1]) preloadSpeak(qToSpeech(qs[1].q));
+  }, 300);
   loadQ();
 }
 
@@ -2648,10 +2655,15 @@ function loadQ(){
 
   const qEl = document.getElementById('qd');
   qEl.style.opacity='0'; qEl.style.transform='translateY(-8px)';
+  // 提前开始预取当前题目音频（减少 speak() 延迟）
+  const _curSpeakText = qToSpeech(curQObj.q);
+  preloadSpeak(_curSpeakText);
+  // 同时预取下一题音频
+  if(qs[curQ+1]) preloadSpeak(qToSpeech(qs[curQ+1].q));
   setTimeout(()=>{
     qEl.textContent = curQObj.q;
     qEl.style.transition='all .3s'; qEl.style.opacity='1'; qEl.style.transform='none';
-    speak(qToSpeech(curQObj.q));
+    speak(_curSpeakText);
   },100);
 
   document.getElementById('h-q').textContent = curQ+1;
@@ -3262,6 +3274,13 @@ function startErrorPractice(){
   document.getElementById('pb').style.width='0%';
   showScreen('game');
   ensureBgmAlive();
+  // 预热常用短语音频（在后台静默加载，减少游戏中延迟）
+  setTimeout(()=>{
+    ['答对了！太棒了！','哎呀，再试一次！','太棒啦，通关成功！'].forEach(s=>preloadSpeak(s));
+    // 预热前2道题的音频
+    if(qs[0]) preloadSpeak(qToSpeech(qs[0].q));
+    if(qs[1]) preloadSpeak(qToSpeech(qs[1].q));
+  }, 300);
   loadQ();
 }
 
