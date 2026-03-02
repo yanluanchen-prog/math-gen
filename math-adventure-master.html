@@ -901,42 +901,36 @@ function resetAll(){
 // ═══════════════════════════════════════
 //  VOICE  (cartoon-style: high pitch, bright tone)
 // ═══════════════════════════════════════
-let _voices = [], _voiceReady = false;
-function loadVoices(){
-  _voices = speechSynthesis.getVoices();
-  _voiceReady = true;
-}
-if(window.speechSynthesis){
-  loadVoices();
-  speechSynthesis.onvoiceschanged = loadVoices;
-}
-function pickVoice(){
-  // If user selected a specific voice on this device, use it.
-  if(voiceNamePref){
-    const exact = _voices.find(v=>v.name===voiceNamePref);
-    if(exact) return exact;
-  }
+// ── 腾讯云 TTS（智小虎 502007）──
+const TTS_WORKER = 'https://math-tts.daxingpai336.workers.dev';
+let _ttsAudio = null; // 当前播放的 Audio 对象
 
-  // Otherwise, try pleasant zh-CN voices first
-  const pref = ['Xiaoxiao','XiaoXiao','Xiaoyi','Xiaochen','Xiaohan','Xiaomeng','Tingting','Meijia','Sinji',
-                 'neural','natural','female','woman','girl','child','kids','Google 普通话','zh-CN'];
-  for(const kw of pref){
-    const v = _voices.find(v=>v.lang.startsWith('zh') && v.name.toLowerCase().includes(kw.toLowerCase()));
-    if(v) return v;
-  }
-  return _voices.find(v=>v.lang.startsWith('zh')) || null;
-}
-function speak(text){
+async function speak(text){
   if(!voiceOn) return;
-  if(!window.speechSynthesis) return;
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang  = 'zh-CN';
-  u.rate  = 1.12;     // lively
-  u.pitch = 1.55 + (Math.random()*0.06-0.03); // clearly cartoon, tiny variation
-  const v = pickVoice();
-  if(v) u.voice = v;
-  speechSynthesis.cancel();
-  speechSynthesis.speak(u);
+  if(!text) return;
+  // 停止当前播放
+  if(_ttsAudio){ _ttsAudio.pause(); _ttsAudio = null; }
+  try {
+    const res = await fetch(TTS_WORKER, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ text: String(text).slice(0, 150), voiceType: 502007 })
+    });
+    const data = await res.json();
+    if(data.audio){
+      const blob = new Blob([Uint8Array.from(atob(data.audio), c=>c.charCodeAt(0))], {type:'audio/mp3'});
+      _ttsAudio = new Audio(URL.createObjectURL(blob));
+      _ttsAudio.play().catch(()=>{});
+    }
+  } catch(e){
+    // 网络失败时静默降级到浏览器 TTS
+    if(window.speechSynthesis){
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'zh-CN'; u.rate = 1.1;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    }
+  }
 }
 function qToSpeech(q){
   // Convert math string into child-friendly Mandarin.
