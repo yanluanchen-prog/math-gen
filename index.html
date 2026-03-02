@@ -239,16 +239,15 @@ padding:16px;font-family:inherit;font-size:1.7rem;font-weight:900;color:#fff;
 .lottery-item .li-name{font-size:.88rem;color:var(--gold);font-weight:900}
 /* ── Space Map ── */
 #screen-map{min-height:100vh;}
-#screen-map.active{display:flex; padding-bottom:80px;}
+#screen-map.active{display:flex; padding-bottom:10px;}
 .space-map-wrap{
   position:relative;
   width:100%;
   flex:1;
-  height:calc(100vh - 230px);
-  min-height:400px;
-  overflow-x:hidden;
-  overflow-y:auto;
-  overflow:auto;
+  height:calc(100vh - 140px);
+  min-height:280px;
+  max-height:calc(100vh - 140px);
+  overflow:hidden;
   border-radius:0;
   background:transparent;
   border:none;
@@ -262,7 +261,8 @@ padding:16px;font-family:inherit;font-size:1.7rem;font-weight:900;color:#fff;
 .space-map-canvas{
   position:relative;
   width:100%;
-  height:900px;
+  height:calc(100vh - 220px);
+  min-height:350px;
 }
 /* mini stars inside map */
 .map-star{position:absolute;background:#fff;border-radius:50%;pointer-events:none;
@@ -629,6 +629,7 @@ transform:scale(1.12) rotate(5deg);}
   .map-start-hint{display:none;}
 }
 </style>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "15def59057b5447aa1d0600683793726"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
 <body>
 <div id="sf"></div>
@@ -651,16 +652,16 @@ transform:scale(1.12) rotate(5deg);}
   </div>
   <button class="btn btn-p" onclick="showScreen('map')">🚀 开始冒险！</button>
   <div style="display:flex;gap:8px;width:100%">
-    <button class="btn btn-ghost" onclick="showScreen('errorbook')">📒 错题本</button>
-    <button class="btn btn-ghost" onclick="openParentGate()">👨‍👩‍👧 家长</button>
+    <button class="btn btn-ghost" style="flex:1" onclick="showScreen('errorbook')">📒 错题本</button>
+    <button class="btn btn-ghost" style="flex:1" onclick="openParentGate()">👨‍👩‍👧 家长</button>
+    <button class="btn btn-ghost" style="flex:1" onclick="if(confirm('确定重新开始吗？所有星星和记录都会清空'))resetAll()">🔄 重置</button>
   </div>
-  <button class="btn btn-ghost" style="opacity:.5;font-size:.85rem" onclick="if(confirm('确定重新开始吗？所有星星和记录都会清空'))resetAll()">🔄 重置数据</button>
 </div>
 
 <!-- MAP -->
 <div id="screen-map" class="screen">
   <div style="display:flex;justify-content:space-between;align-items:center;width:100%">
-    <div class="T1" style="font-size:1.7rem">🌌</div>
+    <div class="T1" style="font-size:1.2rem">星际地图</div>
     <div style="color:var(--gold);font-size:1.1rem;font-weight:900">⭐ <span id="map-total">0</span></div>
   </div>
   <div class="T2" style="font-size:.82rem;opacity:.55;align-self:flex-start"></div>
@@ -839,25 +840,6 @@ transform:scale(1.12) rotate(5deg);}
   </div>
 </div>
 
-
-<!-- Parent Gate -->
-<div id="parent-gate" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:450;background:rgba(0,0,0,.55);backdrop-filter:blur(6px)">
-  <div style="width:min(520px,92vw);background:rgba(17,23,64,.92);border:2px solid rgba(255,255,255,.14);border-radius:22px;padding:14px 14px 16px;box-shadow:0 18px 60px rgba(0,0,0,.65)">
-    <div style="display:flex;justify-content:space-between;align-items:center;color:#fff;margin-bottom:8px">
-      <div style="font-weight:900">🛡️ 家长验证</div>
-      <button class="xbtn" onclick="closeParentGate()">✕</button>
-    </div>
-    <div style="font-size:.9rem;color:rgba(255,255,255,.65);margin-bottom:10px">为防止孩子修改设置，请完成一道小题。</div>
-
-    <div id="pg-q" style="font-size:1.7rem;font-weight:900;color:#fff;text-align:center;letter-spacing:2px;margin:8px 0 12px">3 × 4 = ?</div>
-
-    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-      <input id="pg-a" type="number" inputmode="numeric" style="flex:1;min-width:160px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:12px;padding:10px 12px;font-size:1.05rem" placeholder="请输入答案"/>
-      <button class="btn btn-p" onclick="submitParentGate()">进入家长面板</button>
-    </div>
-    <div id="pg-tip" style="margin-top:10px;font-size:.85rem;color:rgba(255,255,255,.6)"></div>
-  </div>
-</div>
 
 <!-- Feedback -->
 <div id="fb">
@@ -1083,81 +1065,35 @@ function resetAll(){
 // ═══════════════════════════════════════
 //  VOICE  (cartoon-style: high pitch, bright tone)
 // ═══════════════════════════════════════
-let _voices = [], _voiceReady = false;
-function loadVoices(){
-  _voices = speechSynthesis.getVoices();
-  _voiceReady = true;
-}
-if(window.speechSynthesis){
-  loadVoices();
-  speechSynthesis.onvoiceschanged = loadVoices;
-}
-function pickVoice(){
-  // If user selected a specific voice on this device, use it.
-  if(voiceNamePref){
-    const exact = _voices.find(v=>v.name===voiceNamePref);
-    if(exact) return exact;
-  }
+// ── 腾讯云 TTS（智小虎 502007）──
+const TTS_WORKER = 'https://math-tts.daxingpai336.workers.dev';
+let _ttsAudio = null;
 
-  // Otherwise, try pleasant zh-CN voices first
-  const pref = ['Xiaoxiao','XiaoXiao','Xiaoyi','Xiaochen','Xiaohan','Xiaomeng','Tingting','Meijia','Sinji',
-                 'neural','natural','female','woman','girl','child','kids','Google 普通话','zh-CN'];
-  for(const kw of pref){
-    const v = _voices.find(v=>v.lang.startsWith('zh') && v.name.toLowerCase().includes(kw.toLowerCase()));
-    if(v) return v;
-  }
-  return _voices.find(v=>v.lang.startsWith('zh')) || null;
-}
-function speak(text){
-  try{
-    if(!voiceOn) return;
-    if(!text) return;
-    if(!('speechSynthesis' in window)) return;
-
-    // Avoid stuck queue
-    try{ speechSynthesis.cancel(); }catch(e){}
-
-    const u = new SpeechSynthesisUtterance(String(text));
-    u.lang = 'zh-CN';
-
-    let started = false;
-    let retried = false;
-    const trySpeak = ()=>{
-      try{
-        // (Re)pick voice each time (some browsers populate voices late)
-        try{
-          const v = (typeof pickVoice==='function') ? pickVoice() : null;
-          if(v) u.voice = v;
-        }catch(e){}
-
-        u.rate  = 1.05;
-        u.pitch = 1.25;
-        u.volume= 1.0;
-
-        speechSynthesis.speak(u);
-      }catch(e){}
-    };
-
-    u.onstart = ()=>{ started = true; };
-    u.onerror = ()=>{ /* ignore */ };
-    u.onend   = ()=>{ /* ignore */ };
-
-    trySpeak();
-
-    // Watchdog: if not started shortly, retry once (Chrome occasionally gets stuck)
-    setTimeout(()=>{
-      if(!started && !retried){
-        retried = true;
-        try{ speechSynthesis.cancel(); }catch(e){}
-        trySpeak();
-      }
-    }, 900);
-
-  }catch(e){
-    // swallow
+async function speak(text){
+  if(!voiceOn) return;
+  if(!text) return;
+  if(_ttsAudio){ _ttsAudio.pause(); _ttsAudio = null; }
+  try {
+    const res = await fetch(TTS_WORKER, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ text: String(text).slice(0, 150), voiceType: 502007 })
+    });
+    const data = await res.json();
+    if(data.audio){
+      const blob = new Blob([Uint8Array.from(atob(data.audio), c=>c.charCodeAt(0))], {type:'audio/mp3'});
+      _ttsAudio = new Audio(URL.createObjectURL(blob));
+      _ttsAudio.play().catch(()=>{});
+    }
+  } catch(e){
+    if(window.speechSynthesis){
+      const u = new SpeechSynthesisUtterance(String(text));
+      u.lang = 'zh-CN'; u.rate = 1.1;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    }
   }
 }
-
 function qToSpeech(q){
   // Convert math string into child-friendly Mandarin.
   // Key requirement: 15 -> 十五 (not 一五).
@@ -1388,50 +1324,7 @@ function parentArrowScroll(e){
 }
 document.addEventListener('keydown', parentArrowScroll);
 
-let _pgAns = null;
-function askParentGate(){
-  // random multiply or divide with integer result
-  const useDiv = Math.random()<0.5;
-  let a,b,q,ans;
-  if(useDiv){
-    b = 2 + Math.floor(Math.random()*8);
-    ans = 2 + Math.floor(Math.random()*9);
-    a = b*ans;
-    q = `${a} ÷ ${b} = ?`;
-  } else {
-    a = 2 + Math.floor(Math.random()*9);
-    b = 2 + Math.floor(Math.random()*9);
-    ans = a*b;
-    q = `${a} × ${b} = ?`;
-  }
-  _pgAns = ans;
-  const box=document.getElementById('parent-gate');
-  const qe=document.getElementById('pg-q');
-  const ae=document.getElementById('pg-a');
-  const tip=document.getElementById('pg-tip');
-  if(qe) qe.textContent = q;
-  if(ae) ae.value = '';
-  if(tip) tip.textContent = '';
-  if(box) box.style.display='flex';
-  setTimeout(()=>{ try{ ae && ae.focus(); }catch(e){} }, 50);
-}
-function closeParentGate(){
-  const box=document.getElementById('parent-gate');
-  if(box) box.style.display='none';
-}
-function submitParentGate(){
-  const ae=document.getElementById('pg-a');
-  const tip=document.getElementById('pg-tip');
-  const v = ae ? parseInt(ae.value,10) : NaN;
-  if(v===_pgAns){
-    if(tip) tip.textContent='验证通过';
-    closeParentGate();
-    openParent();
-  } else {
-    if(tip) tip.textContent='答案不对，再试一次～';
-    sfxWrong && sfxWrong();
-  }
-}
+// (removed legacy parent-gate implementation: the app uses the keypad-based gate below)
 // ═══════════════════════════════════════
 //  PARENT GATE
 // ═══════════════════════════════════════
@@ -1577,8 +1470,8 @@ function renderMap(){
   wrap.innerHTML = '';
 
   // ── Inner tall canvas — height adapts to viewport width
-  const CANVAS_H = window.innerWidth >= 1024 ? 1150 : window.innerWidth >= 768 ? 1050 : 900;
-  const sScale   = window.innerWidth >= 1024 ? 1.28 : window.innerWidth >= 768 ? 1.14 : 1;
+  const CANVAS_H = window.innerHeight - 160;
+  const sScale   = window.innerWidth >= 1024 ? 0.85 : window.innerWidth >= 768 ? 0.78 : 0.72;
   const canvas = document.createElement('div');
   canvas.className = 'space-map-canvas';
   canvas.style.height = CANVAS_H + 'px';
@@ -1587,22 +1480,22 @@ function renderMap(){
   // Positions: x=% of width, y=% of CANVAS_H — spread evenly top→bottom
   // Top of canvas = start (火星), bottom = finish (宇宙核心). Leave ~8% padding each end.
   const POSITIONS = [
-    {x:28, y:8 },   // 0: 火星
-    {x:68, y:20},   // 1: 木星
-    {x:80, y:34},   // 2: 凑十法 (tut)
-    {x:32, y:48},   // 3: 土星
-    {x:20, y:62},   // 4: 破十法 (tut)
-    {x:68, y:76},   // 5: 天王星
-    {x:40, y:88},   // 6: 宇宙核心
+    {x:30, y:10},   // 0: 火星
+    {x:65, y:18},   // 1: 木星
+    {x:75, y:31},   // 2: 凑十法 (tut)
+    {x:35, y:44},   // 3: 土星
+    {x:25, y:57},   // 4: 破十法 (tut)
+    {x:65, y:70},   // 5: 天王星
+    {x:45, y:80},   // 6: 宇宙核心
   ];
 
   const sz = n => Math.round(n * sScale);
   const LV_CFG = [
-    {size:sz(72), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.22),transparent 48%),radial-gradient(135deg,#ff6b7a,#c0392b)', glowColor:'rgba(255,107,122,.55)', glowBase:'0 6px 22px rgba(255,50,50,.4)'},
-    {size:sz(78), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#ffa040,#e67e22)', glowColor:'rgba(255,160,64,.55)',  glowBase:'0 6px 22px rgba(255,120,0,.4)'},
-    {size:sz(80), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#f7d060,#c9a227)', glowColor:'rgba(247,208,96,.55)',  glowBase:'0 6px 22px rgba(200,160,0,.4)'},
-    {size:sz(76), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#4fa3e3,#1a6fb0)', glowColor:'rgba(79,163,227,.55)',  glowBase:'0 6px 22px rgba(30,100,200,.4)'},
-    {size:sz(85), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#d4a8ff,#8a2be2)', glowColor:'rgba(180,130,255,.55)', glowBase:'0 6px 26px rgba(140,50,220,.5)'},
+    {size:sz(60), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.22),transparent 48%),radial-gradient(135deg,#ff6b7a,#c0392b)', glowColor:'rgba(255,107,122,.55)', glowBase:'0 6px 22px rgba(255,50,50,.4)'},
+    {size:sz(65), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#ffa040,#e67e22)', glowColor:'rgba(255,160,64,.55)',  glowBase:'0 6px 22px rgba(255,120,0,.4)'},
+    {size:sz(66), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#f7d060,#c9a227)', glowColor:'rgba(247,208,96,.55)',  glowBase:'0 6px 22px rgba(200,160,0,.4)'},
+    {size:sz(63), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#4fa3e3,#1a6fb0)', glowColor:'rgba(79,163,227,.55)',  glowBase:'0 6px 22px rgba(30,100,200,.4)'},
+    {size:sz(70), bg:'radial-gradient(circle at 32% 28%,rgba(255,255,255,.20),transparent 46%),radial-gradient(135deg,#d4a8ff,#8a2be2)', glowColor:'rgba(180,130,255,.55)', glowBase:'0 6px 26px rgba(140,50,220,.5)'},
   ];
   const FLOAT_DUR = ['3.8s','4.4s','3.2s','4.9s','3.6s','4.2s','5s'];
 
@@ -1714,14 +1607,14 @@ function renderMap(){
       `;
       if(accessible) el.onclick = ()=>startLevel(node.id);
       canvas.appendChild(el);
-      if(idx === firstUndoneIdx){ const h=document.createElement('div'); h.className='map-start-hint'; h.textContent='⬇ 点我！'; el.appendChild(h); }
+      // hint removed
 
     } else if(node.type==='tut'){
       const isCou = node.id==='cou';
       // cou=凑十星 → Earth style (blue/green), po=破十星 → Sun style (fiery orange/yellow)
       const cfg = isCou
-        ? {size:sz(74), skinClass:'planet-skin-earth', bg:'radial-gradient(circle at 32% 28%,rgba(200,241,255,.25),transparent 48%),radial-gradient(135deg,#1a6fb0,#0d2f6b)', glowColor:'rgba(30,144,255,.55)', glowBase:'0 6px 22px rgba(30,100,200,.45)'}
-        : {size:sz(74), skinClass:'planet-skin-sun',   bg:'radial-gradient(circle at 32% 28%,rgba(255,240,160,.30),transparent 48%),radial-gradient(135deg,#ffb830,#e24b12)', glowColor:'rgba(255,180,0,.65)',  glowBase:'0 6px 26px rgba(255,140,0,.55)'};
+        ? {size:sz(58), skinClass:'planet-skin-earth', bg:'radial-gradient(circle at 32% 28%,rgba(200,241,255,.25),transparent 48%),radial-gradient(135deg,#1a6fb0,#0d2f6b)', glowColor:'rgba(30,144,255,.55)', glowBase:'0 6px 22px rgba(30,100,200,.45)'}
+        : {size:sz(58), skinClass:'planet-skin-sun',   bg:'radial-gradient(circle at 32% 28%,rgba(255,240,160,.30),transparent 48%),radial-gradient(135deg,#ffb830,#e24b12)', glowColor:'rgba(255,180,0,.65)',  glowBase:'0 6px 26px rgba(255,140,0,.55)'};
 
       const tutDone   = done;
       const animClass = accessible ? 'pulse-glow' : 'float-only';
@@ -1749,15 +1642,11 @@ function renderMap(){
       `;
       if(accessible) el.onclick = ()=>startTutorial(node.id);
       canvas.appendChild(el);
-      if(idx === firstUndoneIdx){ const h=document.createElement('div'); h.className='map-start-hint'; h.textContent='⬇ 点我！'; el.appendChild(h); }
+      // hint removed
     }
   });
 
-  // ── Auto-scroll: instantly position the next target planet in view
-  // Use window.innerHeight as an immediate estimate; refine after layout resolves.
-  const _initH  = window.innerHeight - 230;
-  const _target = Math.max(0, lastAccessibleY - _initH * 0.55);
-  wrap.scrollTo({top: _target, behavior: 'instant'});
+  // Auto-scroll removed: map fits in one screen
   requestAnimationFrame(()=>{
     requestAnimationFrame(()=>{
       const viewH    = wrap.clientHeight || _initH;
