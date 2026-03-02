@@ -1068,21 +1068,39 @@ function resetAll(){
 // ── 腾讯云 TTS（智小虎 502007）──
 const TTS_WORKER = 'https://math-tts.daxingpai336.workers.dev';
 let _ttsAudio = null;
+const _ttsCache = new Map(); // 音频缓存，避免重复请求
+
+async function _fetchTTS(text){
+  const key = String(text).slice(0, 150);
+  if(_ttsCache.has(key)) return _ttsCache.get(key);
+  const res = await fetch(TTS_WORKER, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ text: key, voiceType: 502007 })
+  });
+  const data = await res.json();
+  if(data.audio){
+    const url = URL.createObjectURL(new Blob([Uint8Array.from(atob(data.audio), c=>c.charCodeAt(0))], {type:'audio/mp3'}));
+    _ttsCache.set(key, url);
+    return url;
+  }
+  return null;
+}
+
+// 预加载文本（题目显示时提前请求，播放时已缓存）
+function preloadSpeak(text){
+  if(!voiceOn || !text) return;
+  _fetchTTS(text).catch(()=>{});
+}
 
 async function speak(text){
   if(!voiceOn) return;
   if(!text) return;
   if(_ttsAudio){ _ttsAudio.pause(); _ttsAudio = null; }
   try {
-    const res = await fetch(TTS_WORKER, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ text: String(text).slice(0, 150), voiceType: 502007 })
-    });
-    const data = await res.json();
-    if(data.audio){
-      const blob = new Blob([Uint8Array.from(atob(data.audio), c=>c.charCodeAt(0))], {type:'audio/mp3'});
-      _ttsAudio = new Audio(URL.createObjectURL(blob));
+    const url = await _fetchTTS(String(text));
+    if(url){
+      _ttsAudio = new Audio(url);
       _ttsAudio.play().catch(()=>{});
     }
   } catch(e){
