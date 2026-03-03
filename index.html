@@ -731,15 +731,15 @@ var _hmt = _hmt || [];
     <button id="hint-btn" class="hint-inline" onclick="showHint()" type="button">🚨 不会做？看这里！</button>
   </div>
   <div id="np">
-    <button class="nb" onclick="ni('7')">7</button>
-    <button class="nb" onclick="ni('8')">8</button>
-    <button class="nb" onclick="ni('9')">9</button>
-    <button class="nb" onclick="ni('4')">4</button>
-    <button class="nb" onclick="ni('5')">5</button>
-    <button class="nb" onclick="ni('6')">6</button>
     <button class="nb" onclick="ni('1')">1</button>
     <button class="nb" onclick="ni('2')">2</button>
     <button class="nb" onclick="ni('3')">3</button>
+    <button class="nb" onclick="ni('4')">4</button>
+    <button class="nb" onclick="ni('5')">5</button>
+    <button class="nb" onclick="ni('6')">6</button>
+    <button class="nb" onclick="ni('7')">7</button>
+    <button class="nb" onclick="ni('8')">8</button>
+    <button class="nb" onclick="ni('9')">9</button>
     <button class="nb nb-del" onclick="nd()">⌫</button>
     <button class="nb" onclick="ni('0')">0</button>
     <button class="nb nb-ok" onclick="submit()">✓</button>
@@ -1243,7 +1243,7 @@ function playWrong(){
 }
 
 function playCorrect(){
-  if(!bgmCtx) return;
+  if(!bgmCtx || !sfxOn) return;
   [[523.25,0],[659.25,100],[783.99,200]].forEach(([f,d])=>{
     setTimeout(()=>{
       const o=bgmCtx.createOscillator(), e=bgmCtx.createGain();
@@ -1258,7 +1258,7 @@ function playCorrect(){
 }
 
 function playChime(){
-  if(!bgmCtx) return;
+  if(!bgmCtx || !sfxOn) return;
   const freqs = [783.99, 1046.5, 1318.5, 1567.98];
   freqs.forEach((f,i)=>{
     setTimeout(()=>{
@@ -1321,7 +1321,7 @@ function playNextNote(){
   bgmTimer = setTimeout(playNextNote, dur * 1000);
 }
 function toggleBgm(){
-  if(!bgmCtx){ initBgm(); return; }
+  if(!bgmCtx){ initBgm(); }  // 初始化但不直接返回，继续执行下方的 toggle 逻辑
   bgmPlaying = !bgmPlaying;
   sfxOn = bgmPlaying;  // sound effects follow BGM toggle
   if(bgmTimer){ clearTimeout(bgmTimer); bgmTimer=null; }
@@ -2612,7 +2612,13 @@ function startLevel(id, errMode){
     while(qs.length<10) qs.push(...errs.map(e=>({q:e.q, a:e.correct, op:e.q.includes('+')?'+':'-', n1:0, n2:0})));
     qs = qs.slice(0,10);
   } else {
-    qs = Array.from({length:10}, ()=>lv.gen());
+    qs = [];
+    let _prevQStr = null;
+    for(let i=0; i<10; i++){
+      let q, tries=0;
+      do { q = lv.gen(); tries++; } while(_prevQStr && q.q===_prevQStr && tries<15);
+      qs.push(q); _prevQStr = q.q;
+    }
   }
 
   curQ=0; sCorrect=0; sStars=0; sStreak=0; maxStreak=0; curStreak=0;
