@@ -716,7 +716,8 @@ transform:scale(1.12) rotate(5deg);}
         <circle cx="34" cy="34" r="20" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="5"/>
         <circle id="tc" cx="34" cy="34" r="20" fill="none" stroke-width="5" stroke-linecap="round"/>
       </svg>
-      <div id="tt">15</div>
+      <div id="tt">30</div>
+      <div style="font-size:.58rem;color:rgba(255,255,255,.38);margin-top:2px;line-height:1.2">点击<br>改时间</div>
     </div>
 
     <button id="hint-btn" class="hint-inline" onclick="showHint()" type="button">🚨 不会做？看这里！</button>
@@ -975,7 +976,7 @@ let P = loadData();
 let G = {}; // game state
 let tutType = 'cou', tutStep = 0;
 let curLvId = 0, qs = [], curQ = 0;
-let curAns = '', timerV = 15, timerInt = null;
+let curAns = '', timerV = 30, timerInt = null;
 let sCorrect = 0, sStars = 0, sStreak = 0, maxStreak = 0;
 let curStreak = 0, gStartTime = 0;
 let submitting = false;   // ← 防止重复提交
@@ -1025,7 +1026,7 @@ let poTapped    = 0;   // balls tapped out of ten-frame (po step 2)
 let poInputAns  = '';  // answer typed on po input step
 
 function freshData(){
-  return {unlocked:[0], stars:{}, errors:[], sessions:[], tutsDone:[], timerSec:15, sfxOn:true, voiceNamePref:""};
+  return {unlocked:[0], stars:{}, errors:[], sessions:[], tutsDone:[], timerSec:30, sfxOn:true, voiceNamePref:""};
 }
 function loadData(){
   try{
@@ -1040,7 +1041,7 @@ function loadData(){
     if(!Array.isArray(p.tutsDone))   p.tutsDone   = [];
     if(!Array.isArray(p.errors))     p.errors     = [];
     if(!Array.isArray(p.sessions))   p.sessions   = [];
-    if(p.timerSec===undefined)       p.timerSec   = 15;
+    if(p.timerSec===undefined)       p.timerSec   = 30;
     if(p.sfxOn===undefined)          p.sfxOn      = true;
     if(!p.voiceNamePref)             p.voiceNamePref = "";
     if(p.unlocked.includes(2) && !p.tutsDone.includes('cou')) p.tutsDone.push('cou');
@@ -2574,7 +2575,7 @@ function saveTimerFromUI(){
   const sel=document.getElementById('timer-select');
   if(!sel) return;
   const v=parseInt(sel.value,10);
-  P.timerSec = isNaN(v)?15:v;
+  P.timerSec = isNaN(v)?30:v;
   TIME_LIMIT  = P.timerSec;
   save();
   speak('保存成功');
@@ -2598,7 +2599,7 @@ function setTimerFromUI(){ saveTimerFromUI(); } // keep compat
 function syncTimerUI(){
   const sel=document.getElementById('timer-select');
   if(!sel) return;
-  const v=(P.timerSec===undefined?15:P.timerSec);
+  const v=(P.timerSec===undefined?30:P.timerSec);
   sel.value=String(v);
 }
 
@@ -2684,7 +2685,7 @@ function startTimer(){
   // Only run timer when the game screen is actually visible
   const gs = document.getElementById('screen-game');
   if(!gs || !gs.classList.contains('active')) return;
-  const limit = (P.timerSec===0||P.timerSec===undefined) ? 0 : (P.timerSec||15);
+  const limit = (P.timerSec===0||P.timerSec===undefined) ? 0 : (P.timerSec||30);
   if(limit===0){
     // unlimited — hide circle, show ∞
     timerV=0;
@@ -2702,7 +2703,7 @@ function startTimer(){
   },1000);
 }
 function updateTimer(){
-  const limit = (P.timerSec===0||P.timerSec===undefined) ? 0 : (P.timerSec||15);
+  const limit = (P.timerSec===0||P.timerSec===undefined) ? 0 : (P.timerSec||30);
   if(limit===0) return;
   const c=document.getElementById('tc'), t=document.getElementById('tt');
   const pct=timerV/limit, circ=125.6;
@@ -2751,7 +2752,7 @@ function submit(){
     }
 
     // ── Normal correct ──
-    const limit=P.timerSec||15; const stars=limit===0?3:timerV>=limit*0.67?3:timerV>=limit*0.33?2:1;
+    const limit=P.timerSec||30; const stars=limit===0?3:timerV>=limit*0.67?3:timerV>=limit*0.33?2:1;
     sStars+=stars; sCorrect++; curStreak++;
     if(curStreak>maxStreak) maxStreak=curStreak;
     document.getElementById('h-st').textContent=sStars;
