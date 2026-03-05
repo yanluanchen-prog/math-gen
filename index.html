@@ -634,7 +634,7 @@ transform:scale(1.12) rotate(5deg);}
 </head>
 <body>
 <div id="sf"></div>
-<div id="voice-btn" onclick="toggleVoice()" title="朗读开关">🗣️</div>
+<div id="voice-btn" class="off" onclick="toggleVoice()" title="朗读开关">🗣️</div>
 <div id="bgm-btn" onclick="toggleBgm()" title="音乐/音效开关" style="position:fixed;top:14px;left:62px;z-index:50;background:rgba(255,255,255,.1);border:1.5px solid var(--border);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;transition:all .2s">🎵</div>
 <div id="streak">🔥 连击 <span id="sk-n">2</span>！</div>
 
@@ -983,7 +983,7 @@ let wrongTryCount = 0;
 let reviewMode = false; // after 3 wrong tries: child must type the answer once to proceed
 let _fbPendingAction = null, _fbPendingTimer = null;
 let sawHintThisQ = false; // per-question saw hint flag
-let voiceOn = true;
+let voiceOn = false; // 默认关闭，用户点击开启
 let parentUnlockedUntil = 0;
 let sfxOn = true;
 P.sfxOn = true;
@@ -1184,11 +1184,11 @@ function qToSpeech(q){
 
 function toggleVoice(){
   if(voiceOn){
-    speak('关闭朗读');
     voiceOn = false;
+    // 关闭时不调用 TTS，直接更新 UI
   } else {
     voiceOn = true;
-    speak('开启朗读');
+    speak('开启朗读'); // 开启时播报一声确认
   }
   document.getElementById('voice-btn').className = voiceOn ? '' : 'off';
   document.getElementById('voice-btn').textContent = '🗣️';
