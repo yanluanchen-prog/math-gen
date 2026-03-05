@@ -712,12 +712,14 @@ transform:scale(1.12) rotate(5deg);}
   </div>
   <div class="game-tools">
     <div class="tctr" title="点击可进入家长设置" style="cursor:pointer" onclick="openParentGate('timer')">
-      <svg id="tsv" width="68" height="68" viewBox="0 0 68 68">
-        <circle cx="34" cy="34" r="20" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="5"/>
-        <circle id="tc" cx="34" cy="34" r="20" fill="none" stroke-width="5" stroke-linecap="round"/>
-      </svg>
-      <div id="tt">30</div>
-      <div style="font-size:.58rem;color:rgba(255,255,255,.38);margin-top:2px;line-height:1.2">点击<br>改时间</div>
+      <div style="position:relative;display:inline-flex;align-items:center;justify-content:center">
+        <svg id="tsv" width="68" height="68" viewBox="0 0 68 68">
+          <circle cx="34" cy="34" r="20" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="5"/>
+          <circle id="tc" cx="34" cy="34" r="20" fill="none" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+        <div id="tt">30</div>
+      </div>
+      <div style="font-size:.6rem;color:rgba(255,255,255,.38);margin-top:2px">点击改时间</div>
     </div>
 
     <button id="hint-btn" class="hint-inline" onclick="showHint()" type="button">🚨 不会做？看这里！</button>
