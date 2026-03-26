@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>职业抽卡 · 2026职场生存档案</title>
+<style>
+:root {
+  /* 方案B：黒橡×白練×朱 */
+  --paper:      #F5F0E8;
+  --paper-dk:   #E8E0D0;
+  --paper-lt:   #FAF6EE;
+  --ink:        #1E1C18;
+  --ink-lt:     #5A5248;
+  --ink-faint:  #A09888;
+  --red:        #C23B22;
+  --green:      #1A6B3A;
+  --blue:       #1A3A6B;
+  --orange:     #B85A00;
+  --border:     #B8A878;
+  --N:          #888070;
+  --R:          #1A3A6B;
+  --SR:         #B85A00;
+  --SSR:        #C23B22;
+  --UR:         #1E1C18;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Songti SC','STSong','SimSun','NSimSun','Hiragino Mincho ProN',Georgia,serif;
+  min-height:100vh;
+  padding-bottom:calc(40px + env(safe-area-inset-bottom));
+}
+
+/* ── HEADER ─────────────────────────────────────────────── */
+.header{
+  background:var(--ink);
+  color:var(--paper);
+  padding:16px 20px 12px;
+  padding-top:calc(16px + env(safe-area-inset-top));
+  text-align:center;
+  position:relative;
+  border-bottom:4px solid var(--red);
+}
+.header-classify{
+  font-size:10px;letter-spacing:4px;
+  color:var(--red);font-family:monospace;
+  margin-bottom:6px;
+}
+.header h1{
+  font-size:24px;font-weight:900;letter-spacing:3px;
+  line-height:1.1;
+}
+.header p{
+  font-size:11px;color:#A09878;
+  margin-top:4px;letter-spacing:2px;
+}
+.header-stamp{
+  position:absolute;top:12px;right:16px;
+  width:52px;height:52px;
+  border:3px solid var(--red);border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:var(--red);font-size:8px;font-weight:700;letter-spacing:1px;text-align:center;
+  line-height:1.2;
+  transform:rotate(12deg);
+  opacity:0.8;
+}
+
+/* ── LAYOUT ─────────────────────────────────────────────── */
+.container{max-width:680px;margin:0 auto;padding:16px;}
+.section{
+  background:var(--paper-lt);
+  border:1px solid var(--border);
+  border-radius:0;
+  padding:16px;
+  margin-bottom:16px;
+  position:relative;
+}
+.section::before{
+  content:'';position:absolute;
+  top:4px;left:4px;right:4px;bottom:4px;
+  border:1px solid var(--border);
+  pointer-events:none;opacity:0.5;
+}
+.section-title{
+  font-size:10px;letter-spacing:4px;
+  color:var(--ink-lt);text-transform:uppercase;
+  border-bottom:1px solid var(--border);
+  padding-bottom:8px;margin-bottom:14px;
+  font-family:monospace;
+}
+
+/* ── PULLS COUNTER ──────────────────────────────────────── */
+.pulls-info{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0 14px;
+  font-size:12px;color:var(--ink-lt);
+  font-family:monospace;
+}
+.pulls-count{
+  font-size:22px;font-weight:900;color:var(--red);
+  font-family:monospace;
+}
+.pity-wrap{margin-top:6px;}
+.pity-track{
+  width:100%;height:5px;
+  background:var(--paper-dk);
+  border:1px solid var(--border);
+  border-radius:0;overflow:hidden;
+}
+.pity-bar{
+  height:100%;background:var(--red);
+  transition:width 0.3s;
+}
+.pity-label{
+  font-size:10px;color:var(--ink-faint);
+  margin-top:3px;font-family:monospace;
+  text-align:right;
+}
+
+/* ── CARD ───────────────────────────────────────────────── */
+.card{
+  width:100%;max-width:320px;
+  background:var(--paper-lt);
+  border:2px solid var(--border);
+  padding:18px 16px 14px;
+  position:relative;
+  margin:0 auto;
+}
+.card.N  {border-color:var(--N);}
+.card.R  {border-color:var(--R);box-shadow:0 2px 8px rgba(26,58,107,0.15);}
+.card.SR {border-color:var(--SR);box-shadow:0 2px 12px rgba(184,90,0,0.2);}
+.card.SSR{border-color:var(--SSR);box-shadow:0 4px 20px rgba(196,26,26,0.25);}
+.card.UR {border-color:var(--UR);box-shadow:0 4px 24px rgba(28,26,20,0.4);}
+
+.card-file-no{
+  font-size:9px;color:var(--ink-faint);
+  font-family:monospace;letter-spacing:2px;
+  margin-bottom:10px;
+}
+.card-rarity-stamp{
+  display:inline-block;
+  font-size:10px;font-weight:700;letter-spacing:2px;
+  padding:3px 10px;border:2px solid currentColor;
+  font-family:monospace;margin-bottom:10px;
+  transform:rotate(-1deg);
+}
+.N .card-rarity-stamp  {color:var(--N);}
+.R .card-rarity-stamp  {color:var(--R);}
+.SR .card-rarity-stamp {color:var(--SR);}
+.SSR .card-rarity-stamp{color:var(--SSR);}
+.UR .card-rarity-stamp {color:var(--UR);}
+
+.card-name{
+  font-size:38px;font-weight:900;
+  line-height:1;margin-bottom:6px;
+  letter-spacing:1px;
+}
+.card-tag{
+  font-size:11px;color:var(--ink-lt);
+  letter-spacing:2px;margin-bottom:12px;
+  font-family:monospace;
+}
+.card-type-badge{
+  display:inline-block;
+  font-size:9px;padding:2px 8px;
+  border:1px solid var(--ink-faint);
+  color:var(--ink-lt);
+  font-family:monospace;letter-spacing:1px;
+  margin-bottom:12px;
+}
+.card-desc{
+  font-size:12px;color:var(--ink-lt);
+  line-height:1.65;margin-bottom:16px;
+  min-height:36px;font-style:italic;
+}
+.stats{display:flex;flex-direction:column;gap:8px;}
+.stat-row{display:flex;align-items:center;gap:8px;}
+.stat-label{
+  font-size:10px;color:var(--ink-faint);
+  width:54px;font-family:monospace;letter-spacing:1px;
+}
+.stat-track{
+  flex:1;height:5px;
+  background:var(--paper-dk);
+  border:1px solid var(--border);
+}
+.stat-fill{height:100%;transition:width 0.3s;}
+.stat-atk .stat-fill{background:#C41A1A;}
+.stat-def .stat-fill{background:#1A3A6B;}
+.stat-hp  .stat-fill{background:#1A6B3A;}
+.stat-val{
+  font-size:11px;font-weight:700;
+  width:28px;text-align:right;
+  font-family:monospace;
+}
+.stat-atk .stat-val{color:#C41A1A;}
+.stat-def .stat-val{color:#1A3A6B;}
+.stat-hp  .stat-val{color:#1A6B3A;}
+.card-footer{
+  display:flex;justify-content:space-between;
+  margin-top:12px;padding-top:10px;
+  border-top:1px solid var(--border);
+  font-size:9px;color:var(--ink-faint);
+  font-family:monospace;
+}
+.card-extinct{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%) rotate(-15deg);
+  font-size:28px;font-weight:900;
+  color:var(--red);border:4px solid var(--red);
+  padding:4px 12px;opacity:0.6;
+  pointer-events:none;letter-spacing:4px;
+}
+
+/* ── CARD BACK ──────────────────────────────────────────── */
+.card-back-placeholder{
+  width:100%;max-width:320px;height:220px;
+  border:2px dashed var(--border);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:8px;color:var(--ink-faint);
+  margin:0 auto;
+  font-family:monospace;
+  background:repeating-linear-gradient(
+    45deg,
+    transparent,transparent 10px,
+    rgba(0,0,0,0.02) 10px,rgba(0,0,0,0.02) 20px
+  );
+}
+.card-back-placeholder .icon{font-size:40px;opacity:0.4;}
+.card-back-placeholder .hint{font-size:11px;letter-spacing:2px;opacity:0.6;}
+
+/* ── BUTTONS ────────────────────────────────────────────── */
+.btn{
+  padding:13px 24px;border:2px solid var(--ink);
+  background:var(--ink);color:var(--paper);
+  font-size:14px;font-weight:700;letter-spacing:3px;
+  cursor:pointer;font-family:monospace;
+  transition:all 0.15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn:hover{background:transparent;color:var(--ink);}
+.btn:active{transform:scale(0.97);}
+.btn-red{border-color:var(--red);background:var(--red);}
+.btn-red:hover{background:transparent;color:var(--red);}
+.btn-outline{background:transparent;color:var(--ink);}
+.btn-outline:hover{background:var(--ink);color:var(--paper);}
+.btn-sm{padding:8px 16px;font-size:11px;letter-spacing:2px;}
+.btn-row{
+  display:flex;gap:10px;
+  justify-content:center;flex-wrap:wrap;
+  margin-top:16px;
+}
+.btn:disabled{opacity:0.35;cursor:not-allowed;transform:none;}
+
+/* ── DRAW ZONE ──────────────────────────────────────────── */
+#drawZone{text-align:center;}
+#cardDisplay{margin-bottom:16px;}
+
+/* ── TEAM ZONE ──────────────────────────────────────────── */
+.team-slots{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;margin-bottom:14px;
+}
+.team-slot{
+  border:2px dashed var(--border);
+  min-height:80px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:8px 4px;
+  cursor:pointer;
+  transition:border-color 0.15s;
+  position:relative;
+}
+.team-slot.filled{border-style:solid;border-color:var(--ink);}
+.team-slot .slot-name{
+  font-size:15px;font-weight:900;
+  text-align:center;line-height:1.1;
+}
+.team-slot .slot-rarity{
+  font-size:9px;font-family:monospace;
+  letter-spacing:2px;margin-top:3px;
+}
+.team-slot .slot-remove{
+  position:absolute;top:3px;right:5px;
+  font-size:14px;color:var(--red);
+  cursor:pointer;line-height:1;
+}
+.team-slot.empty .slot-no{
+  font-size:10px;color:var(--ink-faint);
+  letter-spacing:2px;font-family:monospace;
+}
+.team-slot.N  .slot-rarity{color:var(--N);}
+.team-slot.R  .slot-rarity{color:var(--R);}
+.team-slot.SR .slot-rarity{color:var(--SR);}
+.team-slot.SSR.slot-rarity{color:var(--SSR);}
+.team-slot.UR .slot-rarity{color:var(--UR);}
+
+/* ── BOSS ZONE ──────────────────────────────────────────── */
+#bossZone{display:none;}
+#bossZone.active{display:block;}
+.boss-arena{
+  background:#0D0B08;
+  color:#F4EED8;
+  padding:20px 16px;
+  margin:-16px -16px 16px;
+  border-bottom:3px solid var(--red);
+}
+.boss-chapter{
+  font-size:10px;color:#666;
+  letter-spacing:4px;font-family:monospace;
+  margin-bottom:8px;
+}
+.boss-name{
+  font-size:28px;font-weight:900;
+  letter-spacing:2px;margin-bottom:6px;
+}
+.boss-desc{
+  font-size:12px;color:#A09878;
+  line-height:1.65;font-style:italic;
+  margin-bottom:14px;
+}
+.boss-quote{
+  font-size:11px;color:var(--red);
+  font-family:monospace;letter-spacing:1px;
+  border-left:3px solid var(--red);
+  padding-left:10px;
+  margin-bottom:14px;
+}
+.hp-section{margin-bottom:16px;}
+.hp-row{margin-bottom:10px;}
+.hp-label{
+  display:flex;justify-content:space-between;
+  font-size:11px;font-family:monospace;
+  margin-bottom:4px;
+}
+.hp-track{
+  height:10px;
+  background:#1C1A14;
+  border:1px solid #333;
+  overflow:hidden;
+}
+.hp-fill{
+  height:100%;transition:width 0.4s,background 0.4s;
+}
+.hp-player .hp-fill{background:#1A6B3A;}
+.hp-boss   .hp-fill{background:#C41A1A;}
+.round-label{
+  text-align:center;font-size:11px;
+  color:var(--ink-faint);font-family:monospace;
+  margin-bottom:12px;
+}
+.clash-tag{
+  display:inline-block;
+  font-size:10px;font-family:monospace;
+  letter-spacing:2px;padding:2px 10px;
+  margin-bottom:8px;font-weight:700;
+}
+.clash-tag.weakness{background:var(--green);color:#fff;}
+.clash-tag.resist  {background:var(--red);color:#fff;}
+.clash-tag.immune  {background:#1C1A14;color:var(--paper);}
+
+.battle-result{
+  padding:16px;text-align:center;
+  border:2px solid;margin-top:16px;
+  display:none;
+}
+.battle-result.win {border-color:var(--green);background:rgba(26,107,58,0.08);}
+.battle-result.lose{border-color:var(--red);background:rgba(196,26,26,0.08);}
+.battle-result .res-title{font-size:22px;font-weight:900;letter-spacing:2px;margin-bottom:6px;}
+.battle-result .res-detail{font-size:12px;color:var(--ink-lt);line-height:1.65;}
+
+/* ── COLLECTION ─────────────────────────────────────────── */
+.collection-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(76px,1fr));
+  gap:8px;
+}
+.mini-card{
+  border:1.5px solid;
+  padding:8px 4px;text-align:center;
+  cursor:pointer;
+  transition:transform 0.15s,box-shadow 0.15s;
+  position:relative;background:var(--paper-lt);
+}
+.mini-card:hover{transform:translateY(-3px);box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+.mini-card.N  {border-color:var(--N);}
+.mini-card.R  {border-color:var(--R);}
+.mini-card.SR {border-color:var(--SR);}
+.mini-card.SSR{border-color:var(--SSR);}
+.mini-card.UR {border-color:var(--UR);}
+.mini-name{font-size:13px;font-weight:900;margin-bottom:2px;}
+.mini-rarity{font-size:9px;font-family:monospace;letter-spacing:1px;}
+.mini-card.N   .mini-rarity{color:var(--N);}
+.mini-card.R   .mini-rarity{color:var(--R);}
+.mini-card.SR  .mini-rarity{color:var(--SR);}
+.mini-card.SSR .mini-rarity{color:var(--SSR);}
+.mini-card.UR  .mini-rarity{color:var(--UR);}
+.mini-count{
+  position:absolute;top:2px;right:4px;
+  font-size:9px;font-weight:700;
+  color:var(--red);font-family:monospace;
+}
+.mini-card.in-team::after{
+  content:'出战';
+  position:absolute;bottom:0;left:0;right:0;
+  background:rgba(28,26,20,0.75);color:var(--paper);
+  font-size:9px;letter-spacing:1px;padding:2px 0;
+  font-family:monospace;
+}
+.mini-card.duplicate-glow{
+  animation:dupGlow 1s ease-out;
+}
+@keyframes dupGlow{
+  0%{box-shadow:0 0 0 3px var(--red);}
+  100%{box-shadow:none;}
+}
+
+/* ── COLLECTION EMPTY ────────────────────────────────────── */
+.collection-empty{
+  text-align:center;padding:20px;
+  color:var(--ink-faint);font-size:12px;
+  font-family:monospace;letter-spacing:2px;
+}
+
+/* ── PROGRESS MAP ───────────────────────────────────────── */
+.boss-progress{
+  display:flex;gap:6px;
+  justify-content:center;
+  margin-bottom:16px;
+}
+.boss-dot{
+  width:32px;height:32px;
+  border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;
+  font-family:monospace;
+  position:relative;
+}
+.boss-dot.cleared{
+  border-color:var(--green);
+  background:rgba(26,107,58,0.1);
+}
+.boss-dot.cleared::after{
+  content:'✓';
+  position:absolute;
+  font-size:10px;color:var(--green);
+  bottom:-14px;left:50%;transform:translateX(-50%);
+}
+.boss-dot.current{
+  border-color:var(--red);
+  animation:dotPulse 1.5s infinite;
+}
+@keyframes dotPulse{
+  50%{box-shadow:0 0 8px var(--red);}
+}
+
+/* ── SHARE ZONE ─────────────────────────────────────────── */
+.share-info{
+  font-size:11px;color:var(--ink-lt);
+  font-family:monospace;letter-spacing:1px;
+  text-align:center;margin-top:8px;
+}
+
+/* ── MODAL ──────────────────────────────────────────────── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(28,26,20,0.75);
+  z-index:100;
+  align-items:center;justify-content:center;
+  padding:16px;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--paper-lt);
+  border:2px solid var(--ink);
+  padding:24px;
+  width:100%;max-width:380px;
+  position:relative;
+}
+.modal-title{
+  font-size:16px;font-weight:900;
+  letter-spacing:2px;margin-bottom:12px;
+  border-bottom:1px solid var(--border);
+  padding-bottom:10px;
+}
+.modal-close{
+  position:absolute;top:12px;right:14px;
+  font-size:18px;cursor:pointer;
+  color:var(--ink-lt);
+  background:none;border:none;
+  font-family:serif;
+}
+.modal input{
+  width:100%;padding:10px;
+  border:2px solid var(--border);
+  background:var(--paper);
+  font-size:13px;font-family:monospace;
+  letter-spacing:1px;
+  margin:8px 0;
+  outline:none;
+}
+.modal input:focus{border-color:var(--ink);}
+.exchange-code-box{
+  background:var(--paper-dk);
+  border:1px solid var(--border);
+  padding:10px;
+  font-size:11px;font-family:monospace;
+  word-break:break-all;
+  line-height:1.5;
+  color:var(--ink-lt);
+  margin:8px 0;
+  min-height:60px;
+}
+
+/* ── CLEAR SCREEN ───────────────────────────────────────── */
+#clearScreen{
+  display:none;
+  background:var(--ink);
+  color:var(--paper);
+  text-align:center;
+  padding:40px 20px;
+  position:fixed;inset:0;z-index:200;
+  overflow-y:auto;
+}
+#clearScreen.show{display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.clear-title{
+  font-size:11px;letter-spacing:6px;color:var(--red);
+  margin-bottom:16px;font-family:monospace;
+}
+.clear-main{font-size:28px;font-weight:900;letter-spacing:2px;margin-bottom:12px;line-height:1.3;}
+.clear-sub{font-size:13px;color:#A09878;line-height:1.65;margin-bottom:24px;max-width:300px;}
+.cert-box{
+  border:3px solid var(--red);
+  padding:20px 24px;
+  text-align:center;
+  margin:0 auto 24px;
+  max-width:280px;
+  position:relative;
+}
+.cert-box::before{
+  content:'';position:absolute;
+  inset:6px;border:1px solid rgba(196,26,26,0.3);
+}
+.cert-label{font-size:10px;letter-spacing:4px;color:var(--red);font-family:monospace;margin-bottom:8px;}
+.cert-name{font-size:18px;font-weight:900;margin-bottom:6px;}
+.cert-date{font-size:10px;color:#666;font-family:monospace;}
+
+/* ── TOAST ──────────────────────────────────────────────── */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:var(--ink);color:var(--paper);
+  padding:10px 20px;font-size:12px;
+  font-family:monospace;letter-spacing:1px;
+  z-index:300;pointer-events:none;
+  opacity:0;transition:opacity 0.3s;
+}
+.toast.show{opacity:1;}
+
+/* ── RESPONSIVE ─────────────────────────────────────────── */
+@media(min-width:768px){
+  .container{padding:24px;}
+  .header h1{font-size:30px;}
+  .card{max-width:360px;}
+  .collection-grid{grid-template-columns:repeat(auto-fill,minmax(86px,1fr));}
+  .team-slots{gap:12px;}
+  .team-slot{min-height:90px;}
+}
+@media(min-width:1024px){
+  .boss-battle-layout{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+  }
+  .collection-grid{grid-template-columns:repeat(auto-fill,minmax:96px,1fr));}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-classify">〔绝密档案〕</div>
+  <h1>职业抽卡</h1>
+  <p>2026 · AI时代职场生存档案局</p>
+  <div class="header-stamp">档案局<br>认证</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- CLEAR SCREEN -->
+<div id="clearScreen">
+  <div class="clear-title">恭喜通过最终审核</div>
+  <div class="clear-main">你在AI时代活下来了</div>
+  <div class="clear-sub">5个系统的优化流程，你的团队全部幸存。这在2026年已经很罕见了。</div>
+  <div class="cert-box">
+    <div class="cert-label">2026职场生存认证</div>
+    <div class="cert-name">你的职业团队</div>
+    <div id="certTeam" style="font-size:13px;color:#A09878;margin:8px 0;line-height:1.8;"></div>
+    <div class="cert-date" id="certDate"></div>
+  </div>
+  <button class="btn btn-red" onclick="shareResult()" style="margin-bottom:12px;letter-spacing:2px;">复制认证文案</button>
+  <button class="btn btn-outline" onclick="restartGame()" style="color:var(--paper);border-color:var(--paper);">重新挑战</button>
+</div>
+
+<!-- MODAL: EXCHANGE -->
+<div class="modal-overlay" id="exchangeModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('exchangeModal')">✕</button>
+    <div class="modal-title">卡片交换</div>
+    <div id="exchangeContent"></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- BOSS PROGRESS -->
+  <div class="section" id="progressSection" style="display:none">
+    <div class="section-title">关卡进度</div>
+    <div class="boss-progress" id="bossProgress"></div>
+    <div style="height:16px"></div>
+  </div>
+
+  <!-- DRAW ZONE -->
+  <div class="section" id="drawSection">
+    <div class="section-title">档案抽取</div>
+    <div id="drawZone">
+      <div id="cardDisplay">
+        <div class="card-back-placeholder">
+          <div class="icon">📁</div>
+          <div class="hint">点击抽取档案</div>
+        </div>
+      </div>
+      <div class="pulls-info">
+        <div>
+          <div style="font-size:10px;letter-spacing:2px;margin-bottom:2px;">剩余次数</div>
+          <div class="pulls-count" id="pullsLeft">10</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:10px;letter-spacing:2px;margin-bottom:2px;">已抽 <span id="totalPulls">0</span> 次</div>
+          <div style="font-size:10px;color:var(--ink-faint);">保底 <span id="pityLeft">10</span> 次后必出SSR+</div>
+        </div>
+      </div>
+      <div class="pity-wrap">
+        <div class="pity-track">
+          <div class="pity-bar" id="pityBar" style="width:0%"></div>
+        </div>
+        <div class="pity-label">保底进度</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-red" onclick="draw()" id="drawBtn">抽 取</button>
+        <button class="btn btn-outline" onclick="draw10()" id="draw10Btn">十连抽</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-outline btn-sm" onclick="doShare()">📤 分享 +3次机会</button>
+        <button class="btn btn-outline btn-sm" onclick="openExchangeImport()">🔄 输入交换码</button>
+      </div>
+      <div class="share-info" id="shareInfo"></div>
+    </div>
+  </div>
+
+  <!-- TEAM ZONE -->
+  <div class="section" id="teamSection">
+    <div class="section-title">出战阵容（选3人）</div>
+    <div class="team-slots" id="teamSlots">
+      <div class="team-slot empty" id="slot0"><div class="slot-no">第1位</div></div>
+      <div class="team-slot empty" id="slot1"><div class="slot-no">第2位</div></div>
+      <div class="team-slot empty" id="slot2"><div class="slot-no">第3位</div></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-red" id="challengeBtn" onclick="startChallenge()" disabled>挑战BOSS</button>
+    </div>
+    <div id="teamHint" style="text-align:center;font-size:11px;color:var(--ink-faint);font-family:monospace;margin-top:8px;">从图鉴中选择3张卡组成队伍</div>
+  </div>
+
+  <!-- BOSS ZONE -->
+  <div class="section" id="bossSection" style="display:none">
+    <div class="section-title" id="bossSectionTitle">BOSS战</div>
+    <div id="bossZone"></div>
+  </div>
+
+  <!-- COLLECTION -->
+  <div class="section" id="collectionSection" style="display:none">
+    <div class="section-title">
+      我的图鉴
+      <span id="collectionCount" style="float:right;color:var(--red);font-family:monospace;">0/25</span>
+    </div>
+    <div class="collection-grid" id="collectionGrid">
+      <div class="collection-empty">尚无档案记录</div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ════════════════════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════════════════════
+
+const TYPE_LABEL = {
+  '服务类':'服务类','文字类':'文字类','创意类':'创意类',
+  '执行类':'执行类','专业类':'专业类','技术类':'技术类',
+  '体制类':'体制类','绝版类':'绝版类'
+};
+
+const CAREERS = [
+  // ── N 普通 ──────────────────────────────────────────
+  {name:'客服',    type:'服务类',atk:42,def:8, hp:72,rarity:'N',tag:'承压专业户',
+   desc:'AI已经能处理80%的问题，剩下20%还在挣扎。你是那20%里最后的防线。'},
+  {name:'收银员',  type:'服务类',atk:38,def:12,hp:55,rarity:'N',tag:'正在消失',
+   desc:'自助收银台已经接管了大半个超市。你负责处理「刷不出来」的尴尬。'},
+  {name:'翻译',    type:'文字类',atk:50,def:15,hp:40,rarity:'N',tag:'语言桥',
+   desc:'同声传译还撑着，其余的已经快了。你还有多少时间？'},
+  {name:'文字校对',type:'文字类',atk:40,def:10,hp:30,rarity:'N',tag:'即将退出',
+   desc:'大模型的语言能力已超过大多数人类校对。这个岗位的倒计时已经开始。'},
+  {name:'会计',    type:'文字类',atk:55,def:18,hp:62,rarity:'N',tag:'数字人',
+   desc:'财务软件+AI，这个职位的防御值还在下降中。资产负债表里没有你的一席之地。'},
+  // ── R 稀有 ──────────────────────────────────────────
+  {name:'内容运营',type:'文字类',atk:60,def:38,hp:68,rarity:'R',tag:'数据驱动',
+   desc:'创意还在，但写稿的部分AI抢得越来越快了。你在赛跑，对手不会累。'},
+  {name:'销售',    type:'技术类',atk:65,def:52,hp:80,rarity:'R',tag:'百变话术',
+   desc:'关系是护城河，但话术AI学得挺快。你的优势在情感，不在逻辑。'},
+  {name:'记者',    type:'文字类',atk:58,def:35,hp:45,rarity:'R',tag:'真相猎手',
+   desc:'财报类新闻已经自动化，深度调查还撑着。说故事的人暂时安全。'},
+  {name:'UI设计师',type:'创意类',atk:65,def:30,hp:55,rarity:'R',tag:'像素审美',
+   desc:'Figma插件AI化，出图越来越快，但品味还要人。目前还要人。'},
+  {name:'编导',    type:'创意类',atk:68,def:45,hp:50,rarity:'R',tag:'叙事',
+   desc:'结构与节奏是核心，AI还没摸透叙事直觉。你的直觉是你的护盾。'},
+  {name:'建筑师',  type:'创意类',atk:72,def:55,hp:48,rarity:'R',tag:'空间诗人',
+   desc:'方案生成AI能做，但跟甲方谈判是另一回事。空间感暂时无法压缩。'},
+  // ── SR 超稀有 ────────────────────────────────────────
+  {name:'厨师',    type:'专业类',atk:55,def:82,hp:75,rarity:'SR',tag:'烟火气',
+   desc:'机器手臂炒菜挺好，但人们还是想吃人做的饭。情感比卡路里更难复制。'},
+  {name:'心理咨询师',type:'专业类',atk:68,def:86,hp:45,rarity:'SR',tag:'共情',
+   desc:'GPT能陪聊，但真正的共情还需要人。眼泪不认识算法。'},
+  {name:'律师',    type:'专业类',atk:88,def:70,hp:52,rarity:'SR',tag:'辩护',
+   desc:'文书AI在写，庭审的对抗性还需要人类出战。法庭上没有重来键。'},
+  {name:'游戏策划',type:'创意类',atk:70,def:50,hp:42,rarity:'SR',tag:'造梦者',
+   desc:'关卡生成AI能做，但核心体验设计还是人的活。梦境不能外包。'},
+  {name:'数据分析师',type:'技术类',atk:75,def:42,hp:65,rarity:'SR',tag:'洞察',
+   desc:'分析框架还在，但取数和报表AI已经接管。你的价值在解读，不在计算。'},
+  {name:'快递员',  type:'执行类',atk:48,def:78,hp:92,rarity:'SR',tag:'最后一公里',
+   desc:'无人机还没全面商用，这个职位还有几年安全期。抓紧时间。'},
+  {name:'外卖骑手',type:'执行类',atk:45,def:80,hp:98,rarity:'SR',tag:'风雨无阻',
+   desc:'机器人外卖正在测试，但真正大规模替代还早。爬楼机器人还在调试。'},
+  // ── SSR 史诗 ─────────────────────────────────────────
+  {name:'医生',    type:'专业类',atk:85,def:88,hp:80,rarity:'SSR',tag:'生命守护',
+   desc:'AI辅助诊断很强，但最终拍板还得人类医生。生死之间不接受beta测试。'},
+  {name:'护士',    type:'专业类',atk:60,def:90,hp:85,rarity:'SSR',tag:'生命温度',
+   desc:'护理的核心是人的温度，机器替代慢得多。有些工作不能用token来结算。'},
+  {name:'公务员',  type:'体制类',atk:65,def:95,hp:90,rarity:'SSR',tag:'铁饭碗',
+   desc:'体制内防御力拉满，外部冲击基本绝缘。编制是国家发的，不是订阅制。'},
+  {name:'AI工程师',type:'技术类',atk:95,def:75,hp:72,rarity:'SSR',tag:'新物种',
+   desc:'驯化模型的人，短期内是被需求的，但要跑得快。这条赛道只有第一名。'},
+  {name:'提示词工程师',type:'技术类',atk:78,def:60,hp:35,rarity:'SSR',tag:'风口站位',
+   desc:'2023年的热门，2026年开始被质疑是否需要专职。风口是有保质期的。'},
+  // ── UR 传奇绝版 ─────────────────────────────────────
+  {name:'马车夫',    type:'绝版类',atk:22,def:5,hp:0,rarity:'UR',tag:'时代遗迹',
+   desc:'汽车普及后消失。历史总是重演，只是主角换了。下一个是谁？'},
+  {name:'柯达冲洗员',type:'绝版类',atk:30,def:8,hp:0,rarity:'UR',tag:'时代记忆',
+   desc:'数码相机来了，整个行业三年内蒸发。他们当时也觉得「不会那么快」。'},
+  {name:'BB机维修工',type:'绝版类',atk:25,def:6,hp:0,rarity:'UR',tag:'绝版传说',
+   desc:'手机普及之后，连BB机本身都找不到了。工具消失了，你也随之消失。'},
+];
+
+const RARITY_WEIGHT = {N:45,R:30,SR:17,SSR:7,UR:1};
+const RARITY_LABEL  = {N:'普通档案',R:'机密',SR:'绝密',SSR:'顶级机密',UR:'已注销·绝版'};
+const RARITY_ORDER  = ['N','R','SR','SSR','UR'];
+
+const BOSSES = [
+  {
+    id:1, emoji:'⭐',
+    name:'职业评分局',
+    chapter:'BOSS 01 / 05',
+    desc:'您今天的工作效率比AI低了17%。系统已记录。连续3天低于AI，将触发人员优化流程。今天是第2天。',
+    quote:'「检测到效率异常，已进入观察期。今天是第2天。」',
+    atk:55, def:25, hp:600,
+    crushTypes:['服务类'],   // 被克制 ×1.5
+    weakTypes: ['体制类'],   // 弱点   ×0.5
+    immuneTypes:[]
+  },
+  {
+    id:2, emoji:'🌀',
+    name:'同事蒸馏厂',
+    chapter:'BOSS 02 / 05',
+    desc:'你离职的同事并没有消失。他们的邮件、周报、代码、会议记录，被静默地喂进了模型。现在他们以Token的形式，永远陪伴着你的替代者。',
+    quote:'「感谢您的贡献，蒸馏完成，请放心离开。」',
+    atk:68, def:40, hp:750,
+    crushTypes:['文字类'],
+    weakTypes: ['专业类'],
+    immuneTypes:[]
+  },
+  {
+    id:3, emoji:'🚁',
+    name:'无人配送集团',
+    chapter:'BOSS 03 / 05',
+    desc:'深圳已有200个小区接入无人配送。骑手说：没事，楼梯还要人爬。然后他们发明了爬楼机器人。',
+    quote:'「ETA 3分钟，无需小费，永不投诉，差评率0%。」',
+    atk:75, def:50, hp:850,
+    crushTypes:['执行类'],
+    weakTypes: ['技术类'],
+    immuneTypes:[]
+  },
+  {
+    id:4, emoji:'💳',
+    name:'技能订阅中心',
+    chapter:'BOSS 04 / 05',
+    desc:'AI进化的速度是每6个月换一代。你学了5年的技能，它用6个月就追上了。现在它推出订阅服务：不续费，你的技能就停留在上一个版本。',
+    quote:'「检测到您的技能版本过期，建议升级至最新版，月付298元。」',
+    atk:82, def:60, hp:950,
+    crushTypes:['专业类','技术类'],
+    weakTypes: ['体制类'],
+    immuneTypes:[]
+  },
+  {
+    id:5, emoji:'🎬',
+    name:'创意回收公司',
+    chapter:'BOSS 05 / 05（最终关卡）',
+    desc:'您在小红书发的笔记、写的文案、设计的每张图——感谢您多年来无偿提供高质量训练数据。基于您的贡献，我们推出了新产品。定价：免费。',
+    quote:'「数据收集完毕。感谢您十年来的无偿贡献。」',
+    atk:90, def:70, hp:1200,
+    crushTypes:['创意类','文字类'],
+    weakTypes: [],
+    immuneTypes:['绝版类']
+  },
+];
+
+// ════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════
+
+const DEFAULT_STATE = {
+  pullsLeft: 10,
+  totalPulls: 0,
+  pityCount: 0,
+  shareCount: 0,
+  collection: {},      // {name: count}
+  team: [],            // [careerName, ...]
+  bossProgress: 0,     // 0..5 (0=no boss started)
+};
+
+let G = loadState();
+let lastDrawn = null;
+let battleState = null;
+
+function loadState() {
+  try {
+    const s = localStorage.getItem('career_gacha_v2');
+    if (s) return {...DEFAULT_STATE, ...JSON.parse(s)};
+  } catch(e){}
+  return {...DEFAULT_STATE};
+}
+function saveState() {
+  localStorage.setItem('career_gacha_v2', JSON.stringify(G));
+}
+
+// ════════════════════════════════════════════════════════
+// AUDIO
+// ════════════════════════════════════════════════════════
+
+const AC = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSound(type) {
+  try {
+    const o = AC.createOscillator();
+    const g = AC.createGain();
+    o.connect(g); g.connect(AC.destination);
+    if (type === 'draw') {
+      o.frequency.setValueAtTime(440, AC.currentTime);
+      o.frequency.linearRampToValueAtTime(880, AC.currentTime + 0.12);
+      g.gain.setValueAtTime(0.18, AC.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, AC.currentTime + 0.25);
+      o.start(); o.stop(AC.currentTime + 0.25);
+    } else if (type === 'hit') {
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(120, AC.currentTime);
+      o.frequency.linearRampToValueAtTime(60, AC.currentTime + 0.1);
+      g.gain.setValueAtTime(0.2, AC.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, AC.currentTime + 0.15);
+      o.start(); o.stop(AC.currentTime + 0.15);
+    } else if (type === 'win') {
+      [523, 659, 784, 1047].forEach((f, i) => {
+        const oo = AC.createOscillator();
+        const gg = AC.createGain();
+        oo.connect(gg); gg.connect(AC.destination);
+        oo.frequency.value = f;
+        gg.gain.setValueAtTime(0.15, AC.currentTime + i*0.1);
+        gg.gain.exponentialRampToValueAtTime(0.001, AC.currentTime + i*0.1 + 0.3);
+        oo.start(AC.currentTime + i*0.1);
+        oo.stop(AC.currentTime + i*0.1 + 0.3);
+      });
+    } else if (type === 'lose') {
+      o.type = 'sawtooth';
+      [200, 150, 100].forEach((f, i) => {
+        o.frequency.setValueAtTime(f, AC.currentTime + i*0.15);
+      });
+      g.gain.setValueAtTime(0.15, AC.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, AC.currentTime + 0.5);
+      o.start(); o.stop(AC.currentTime + 0.5);
+    }
+  } catch(e) {}
+}
+
+// ════════════════════════════════════════════════════════
+// DRAW
+// ════════════════════════════════════════════════════════
+
+function weightedRandom() {
+  if (G.pityCount >= 10) {
+    const pool = CAREERS.filter(c => c.rarity === 'SSR' || c.rarity === 'UR');
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+  const total = Object.values(RARITY_WEIGHT).reduce((a,b)=>a+b,0);
+  let r = Math.random() * total;
+  let tier = 'N';
+  for (const [k,v] of Object.entries(RARITY_WEIGHT)) {
+    r -= v;
+    if (r <= 0) { tier = k; break; }
+  }
+  const pool = CAREERS.filter(c => c.rarity === tier);
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function applyDraw(career) {
+  G.totalPulls++;
+  G.pullsLeft--;
+  G.pityCount++;
+  if (career.rarity === 'SSR' || career.rarity === 'UR') G.pityCount = 0;
+
+  const isDup = !!G.collection[career.name];
+  G.collection[career.name] = (G.collection[career.name] || 0) + 1;
+  saveState();
+  return isDup;
+}
+
+function draw() {
+  if (G.pullsLeft <= 0) { showToast('没有抽取次数了，分享可获得更多！'); return; }
+  const career = weightedRandom();
+  const isDup = applyDraw(career);
+  lastDrawn = career;
+  playSound('draw');
+  if (isDup) showToast(`✦ 已有 ${career.name}，卡量+1`);
+  renderAll();
+  document.getElementById('cardDisplay').innerHTML = buildCard(career, true);
+}
+
+function draw10() {
+  if (G.pullsLeft < 10) {
+    showToast(`次数不足，还剩 ${G.pullsLeft} 次`);
+    return;
+  }
+  let lastCard = null;
+  for (let i = 0; i < 10; i++) {
+    const career = weightedRandom();
+    applyDraw(career);
+    lastCard = career;
+  }
+  lastDrawn = lastCard;
+  playSound('draw');
+  renderAll();
+  document.getElementById('cardDisplay').innerHTML = buildCard(lastCard, true);
+  showToast('十连抽完成！图鉴已更新');
+}
+
+// ════════════════════════════════════════════════════════
+// CARD HTML
+// ════════════════════════════════════════════════════════
+
+function buildCard(career, animate) {
+  const extinct = career.hp === 0;
+  const fileNo = `FILE-${career.rarity}-${String(CAREERS.indexOf(career)+1).padStart(3,'0')}`;
+  return `
+  <div class="card ${career.rarity}" ${animate ? 'style="animation:fadeIn .3s ease"' : ''}>
+    <div class="card-file-no">${fileNo} · 2026档</div>
+    <div class="card-rarity-stamp">${RARITY_LABEL[career.rarity]}</div>
+    <div class="card-name">${career.name}</div>
+    <div class="card-type-badge">[ ${career.type} ]</div>
+    <div class="card-tag">${career.tag}</div>
+    <div class="card-desc">${career.desc}</div>
+    <div class="stats">
+      <div class="stat-row stat-atk">
+        <div class="stat-label">⚔ 薪资力</div>
+        <div class="stat-track"><div class="stat-fill" style="width:${career.atk}%"></div></div>
+        <div class="stat-val">${career.atk}</div>
+      </div>
+      <div class="stat-row stat-def">
+        <div class="stat-label">🛡 抗AI值</div>
+        <div class="stat-track"><div class="stat-fill" style="width:${career.def}%"></div></div>
+        <div class="stat-val">${career.def}</div>
+      </div>
+      <div class="stat-row stat-hp">
+        <div class="stat-label">❤ 需求度</div>
+        <div class="stat-track"><div class="stat-fill" style="width:${extinct?0:career.hp}%"></div></div>
+        <div class="stat-val">${extinct ? '—' : career.hp}</div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span>职业抽卡 · 2026</span>
+      <span>${extinct ? '🪦 已绝版' : ''}</span>
+    </div>
+    ${extinct ? '<div class="card-extinct">已注销</div>' : ''}
+  </div>`;
+}
+
+function buildMiniCard(career, count, inTeam) {
+  return `
+  <div class="mini-card ${career.rarity} ${inTeam ? 'in-team' : ''}"
+       onclick="toggleTeam('${career.name}')"
+       title="${career.desc}">
+    ${count > 1 ? `<div class="mini-count">×${count}</div>` : ''}
+    <div class="mini-name">${career.name}</div>
+    <div class="mini-rarity">${career.rarity}</div>
+  </div>`;
+}
+
+// ════════════════════════════════════════════════════════
+// TEAM
+// ════════════════════════════════════════════════════════
+
+function toggleTeam(name) {
+  if (G.team.includes(name)) {
+    G.team = G.team.filter(n => n !== name);
+  } else {
+    if (G.team.length >= 3) {
+      showToast('队伍已满3人，先移除一位'); return;
+    }
+    G.team.push(name);
+  }
+  saveState();
+  renderTeam();
+  renderCollection();
+}
+
+function renderTeam() {
+  const slots = ['slot0','slot1','slot2'];
+  slots.forEach((id, i) => {
+    const el = document.getElementById(id);
+    const name = G.team[i];
+    if (name) {
+      const c = CAREERS.find(x => x.name === name);
+      el.className = `team-slot filled ${c.rarity}`;
+      el.innerHTML = `
+        <div class="slot-remove" onclick="event.stopPropagation();toggleTeam('${name}')">×</div>
+        <div class="slot-name">${c.name}</div>
+        <div class="slot-rarity">${c.rarity} · ${c.type}</div>`;
+    } else {
+      el.className = 'team-slot empty';
+      el.innerHTML = `<div class="slot-no">第${i+1}位</div>`;
+    }
+  });
+  const btn = document.getElementById('challengeBtn');
+  const hint = document.getElementById('teamHint');
+  if (G.team.length === 3) {
+    btn.disabled = false;
+    hint.textContent = '队伍已就绪，可以挑战BOSS';
+  } else {
+    btn.disabled = true;
+    hint.textContent = `还需选 ${3-G.team.length} 位成员`;
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// BOSS BATTLE
+// ════════════════════════════════════════════════════════
+
+function startChallenge() {
+  if (G.team.length < 3) return;
+  if (G.bossProgress >= 5) {
+    showClearScreen(); return;
+  }
+  renderBoss();
+}
+
+function getBossMultiplier(boss, career) {
+  if (boss.immuneTypes.includes(career.type)) return 0;
+  if (boss.crushTypes.includes(career.type)) return 1.5;
+  if (boss.weakTypes.includes(career.type)) return 0.5;
+  return 1.0;
+}
+
+function getClashLabel(boss, career) {
+  if (boss.immuneTypes.includes(career.type)) return {cls:'immune', text:'🛡 完全免疫！此类职业无视该BOSS伤害'};
+  if (boss.crushTypes.includes(career.type)) return {cls:'resist', text:'⚠️ 被克制！BOSS伤害×1.5'};
+  if (boss.weakTypes.includes(career.type)) return {cls:'weakness', text:'✦ 克制！BOSS伤害减半'};
+  return null;
+}
+
+function calcHP(c) { return Math.max(50, (c.atk + c.def) * 5); }
+function calcDmg(atk, defVal) { return Math.max(1, Math.round(atk * (1 - defVal/200))); }
+
+function renderBoss() {
+  const boss = BOSSES[G.bossProgress];
+  const bossSection = document.getElementById('bossSection');
+  bossSection.style.display = 'block';
+  document.getElementById('bossSectionTitle').textContent = `${boss.emoji} ${boss.name}`;
+
+  const team = G.team.map(n => CAREERS.find(c => c.name === n));
+  let cardIdx = 0;
+  let bossHPRemain = boss.hp;
+
+  function renderBossUI() {
+    const career = team[cardIdx];
+    const multi = getBossMultiplier(boss, career);
+    const clash = getClashLabel(boss, career);
+    const pHP = calcHP(career);
+    const pDmgPerRound = calcDmg(career.atk, boss.def);
+    const bDmgPerRound = Math.round(calcDmg(boss.atk, career.def) * multi);
+
+    document.getElementById('bossZone').innerHTML = `
+      <div class="boss-arena">
+        <div class="boss-chapter">${boss.chapter}</div>
+        <div class="boss-name">${boss.emoji} ${boss.name}</div>
+        <div class="boss-desc">${boss.desc}</div>
+        <div class="boss-quote">${boss.quote}</div>
+        <div class="hp-section">
+          <div class="hp-row hp-player">
+            <div class="hp-label">
+              <span>🧑 ${career.name}（${career.type}）</span>
+              <span id="pHpLabel">HP ${pHP} / ${pHP}</span>
+            </div>
+            <div class="hp-track"><div class="hp-fill" id="pHpFill" style="width:100%"></div></div>
+          </div>
+          <div class="hp-row hp-boss">
+            <div class="hp-label" style="color:#F4EED8">
+              <span>${boss.emoji} ${boss.name}</span>
+              <span id="bHpLabel">HP ${bossHPRemain} / ${boss.hp}</span>
+            </div>
+            <div class="hp-track"><div class="hp-fill" id="bHpFill" style="width:${(bossHPRemain/boss.hp*100).toFixed(1)}%"></div></div>
+          </div>
+          <div class="round-label" id="roundLabel">准备战斗</div>
+        </div>
+        ${clash ? `<div class="clash-tag ${clash.cls}">${clash.text}</div>` : ''}
+        <div style="font-size:11px;color:#888;font-family:monospace;margin-bottom:8px;">
+          每回合：你造成 ${pDmgPerRound} 伤害 · BOSS造成 ${bDmgPerRound} 伤害${multi!==1?' (×'+multi+')':''}
+        </div>
+      </div>
+      <div id="currentCard" style="margin-bottom:16px;margin-top:0">${buildCard(career)}</div>
+      <div class="battle-result" id="battleResult"></div>
+      <div class="btn-row">
+        <button class="btn btn-red" id="fightBtn" onclick="runBattle()">开始战斗</button>
+      </div>`;
+
+    // Update progress bar for boss
+    renderProgressMap();
+  }
+
+  battleState = {
+    boss, team, cardIdx,
+    bossHPRemain,
+    running: false,
+    renderBossUI,
+  };
+
+  renderBossUI();
+  document.getElementById('bossZone').classList.add('active');
+  bossSection.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+async function runBattle() {
+  if (!battleState || battleState.running) return;
+  battleState.running = true;
+  document.getElementById('fightBtn').disabled = true;
+
+  const {boss, team, cardIdx} = battleState;
+  const career = team[cardIdx];
+  const multi = getBossMultiplier(boss, career);
+
+  let pHP = calcHP(career);
+  const pMaxHP = pHP;
+  const pDmg = calcDmg(career.atk, boss.def);
+  const bDmg = Math.round(calcDmg(boss.atk, career.def) * multi);
+
+  function updateBars() {
+    const pPct = Math.max(0, pHP / pMaxHP * 100);
+    const bPct = Math.max(0, battleState.bossHPRemain / boss.hp * 100);
+    const pFill = document.getElementById('pHpFill');
+    const bFill = document.getElementById('bHpFill');
+    if (!pFill) return;
+    pFill.style.width = pPct + '%';
+    bFill.style.width = bPct + '%';
+    pFill.style.background = pPct < 25 ? '#C41A1A' : pPct < 50 ? '#B85A00' : '#1A6B3A';
+    bFill.style.background = bPct < 25 ? '#1A6B3A' : bPct < 50 ? '#B85A00' : '#C41A1A';
+    const pl = document.getElementById('pHpLabel');
+    const bl = document.getElementById('bHpLabel');
+    if (pl) pl.textContent = `HP ${Math.max(0,pHP)} / ${pMaxHP}`;
+    if (bl) bl.textContent = `HP ${Math.max(0,battleState.bossHPRemain)} / ${boss.hp}`;
+  }
+
+  for (let r = 1; r <= 16; r++) {
+    pHP -= bDmg;
+    battleState.bossHPRemain -= pDmg;
+    updateBars();
+    const rl = document.getElementById('roundLabel');
+    if (rl) rl.textContent = `第 ${r} / 16 回合`;
+    playSound('hit');
+    if (pHP <= 0 || battleState.bossHPRemain <= 0) break;
+    await new Promise(r => setTimeout(r, 250));
+  }
+
+  battleState.running = false;
+
+  // Outcome
+  if (battleState.bossHPRemain <= 0) {
+    // BOSS dead → this card wins
+    battleState.bossHPRemain = 0;
+    playSound('win');
+    bossCleared();
+  } else if (pHP <= 0) {
+    // This card died
+    const nextIdx = cardIdx + 1;
+    if (nextIdx >= team.length) {
+      // All dead
+      playSound('lose');
+      showBattleResult('lose',
+        `❌ 全队阵亡`,
+        `你的3人团队被「${boss.name}」全部优化了。\n重新组队，再来一次。`,
+        true
+      );
+    } else {
+      // Next card
+      playSound('lose');
+      battleState.cardIdx = nextIdx;
+      showBattleResult('lose',
+        `💀 ${career.name} 已被系统优化`,
+        `剩余 BOSS HP：${battleState.bossHPRemain}\n下一位出战：${team[nextIdx].name}`,
+        false,
+        () => {
+          battleState.renderBossUI = () => reRenderCurrentCard(nextIdx);
+          reRenderCurrentCard(nextIdx);
+        }
+      );
+    }
+  } else {
+    // 16 rounds, check HP
+    if (pHP > 0 && battleState.bossHPRemain > 0) {
+      const txt = pHP > 0 ? `你方剩余 ${Math.max(0,pHP)} HP，BOSS剩余 ${battleState.bossHPRemain} HP` : '';
+      if (pHP > battleState.bossHPRemain * 0.1) {
+        // Ahead — keep fighting next round (allow re-fight)
+        showBattleResult('win',
+          `⏱ 16回合结束`,
+          `BOSS仍有 ${battleState.bossHPRemain} HP。继续出战！`,
+          false, () => reRenderCurrentCard(cardIdx)
+        );
+      } else {
+        showBattleResult('lose',
+          `⏱ 16回合结束`,
+          `双方均未倒下。BOSS剩余 ${battleState.bossHPRemain} HP。继续！`,
+          false, () => reRenderCurrentCard(cardIdx)
+        );
+      }
+    }
+  }
+}
+
+function reRenderCurrentCard(nextIdx) {
+  const {boss, team} = battleState;
+  const career = team[nextIdx];
+  const multi = getBossMultiplier(boss, career);
+  const clash = getClashLabel(boss, career);
+  const pDmgPerRound = calcDmg(career.atk, boss.def);
+  const bDmgPerRound = Math.round(calcDmg(boss.atk, career.def) * multi);
+  const bossArena = document.querySelector('.boss-arena');
+  if (bossArena) {
+    const hpSection = bossArena.querySelector('.hp-section');
+    const pHP = calcHP(career);
+    if (hpSection) {
+      hpSection.querySelector('#pHpFill').style.width = '100%';
+      hpSection.querySelector('#pHpLabel').textContent = `HP ${pHP} / ${pHP}`;
+      hpSection.querySelector('#bHpFill').style.width =
+        (battleState.bossHPRemain / boss.hp * 100).toFixed(1) + '%';
+      hpSection.querySelector('#bHpLabel').textContent =
+        `HP ${battleState.bossHPRemain} / ${boss.hp}`;
+      hpSection.querySelector('#roundLabel').textContent = '准备战斗';
+      hpSection.querySelector('.hp-row.hp-player .hp-label span').textContent =
+        `🧑 ${career.name}（${career.type}）`;
+    }
+  }
+  const clashEl = document.querySelector('.clash-tag');
+  if (clashEl && clash) {
+    clashEl.className = `clash-tag ${clash.cls}`;
+    clashEl.textContent = clash.text;
+  } else if (!clashEl && clash) {
+    const arena = document.querySelector('.boss-arena');
+    if (arena) {
+      const tag = document.createElement('div');
+      tag.className = `clash-tag ${clash.cls}`;
+      tag.textContent = clash.text;
+      arena.appendChild(tag);
+    }
+  }
+  document.getElementById('currentCard').innerHTML = buildCard(career);
+  document.getElementById('fightBtn').textContent = '开始战斗';
+  document.getElementById('fightBtn').disabled = false;
+  document.getElementById('fightBtn').onclick = runBattle;
+  battleState.cardIdx = nextIdx;
+  battleState.running = false;
+}
+
+function showBattleResult(type, title, detail, showBack, onContinue) {
+  const el = document.getElementById('battleResult');
+  el.className = `battle-result ${type}`;
+  el.style.display = 'block';
+  el.innerHTML = `
+    <div class="res-title">${title}</div>
+    <div class="res-detail" style="white-space:pre-line">${detail}</div>
+    <div class="btn-row">
+      ${showBack ? `<button class="btn btn-outline btn-sm" onclick="resetBoss()">← 重新组队</button>` : ''}
+      ${!showBack && onContinue ? `<button class="btn btn-red btn-sm" id="continueBtn">继续战斗</button>` : ''}
+    </div>`;
+  if (!showBack && onContinue) {
+    document.getElementById('continueBtn').onclick = () => {
+      el.style.display = 'none';
+      onContinue();
+    };
+  }
+}
+
+function bossCleared() {
+  const boss = BOSSES[G.bossProgress];
+  G.bossProgress++;
+  saveState();
+  playSound('win');
+  if (G.bossProgress >= 5) {
+    setTimeout(showClearScreen, 800);
+    return;
+  }
+  const next = BOSSES[G.bossProgress];
+  const el = document.getElementById('battleResult');
+  el.className = 'battle-result win';
+  el.style.display = 'block';
+  el.innerHTML = `
+    <div class="res-title">✅ ${boss.name} 已清除！</div>
+    <div class="res-detail">你的团队成功通过了第${boss.id}关。\n下一关：${next.emoji} ${next.name}</div>
+    <div class="btn-row">
+      <button class="btn btn-red btn-sm" onclick="nextBoss()">进入下一关 →</button>
+    </div>`;
+  renderProgressMap();
+}
+
+function nextBoss() {
+  G.team = [];
+  saveState();
+  renderAll();
+  document.getElementById('bossSection').style.display = 'none';
+  showToast(`进入第${G.bossProgress+1}关，重新组队！`);
+  document.getElementById('teamSection').scrollIntoView({behavior:'smooth'});
+}
+
+function resetBoss() {
+  G.team = [];
+  saveState();
+  renderAll();
+  document.getElementById('bossSection').style.display = 'none';
+  document.getElementById('bossZone').classList.remove('active');
+  showToast('已重置队伍，请重新选择');
+}
+
+// ════════════════════════════════════════════════════════
+// CLEAR
+// ════════════════════════════════════════════════════════
+
+function showClearScreen() {
+  const team = G.team.map(n => CAREERS.find(c => c.name === n));
+  document.getElementById('certTeam').textContent =
+    team.map(c => `${c.name}（${c.rarity}）`).join('\n');
+  document.getElementById('certDate').textContent =
+    new Date().toLocaleDateString('zh-CN') + ' 认证通过';
+  document.getElementById('clearScreen').classList.add('show');
+}
+
+function shareResult() {
+  const team = G.team.map(n => CAREERS.find(c => c.name === n));
+  const text = `【职业抽卡 · 2026职场生存档案】\n\n我的团队通关了AI时代5大BOSS ✅\n\n出战成员：${team.map(c=>c.name+'('+c.rarity+')').join(' · ')}\n\n「恭喜你在AI时代活下来了」\n\n你的职业能抵挡AI时代吗？来测测 →`;
+  navigator.clipboard.writeText(text).then(() => showToast('已复制！快去分享'));
+}
+
+function restartGame() {
+  G.team = [];
+  G.bossProgress = 0;
+  saveState();
+  document.getElementById('clearScreen').classList.remove('show');
+  renderAll();
+}
+
+// ════════════════════════════════════════════════════════
+// SHARE & EXCHANGE
+// ════════════════════════════════════════════════════════
+
+function doShare() {
+  if (G.shareCount >= 10) {
+    showToast('分享次数已达上限（10次）');
+    return;
+  }
+  const text = `【职业抽卡 · 2026职场生存档案】\n你的职业能抵挡AI时代吗？\n快来抽卡测测看！\n\n我今天抽到了「${lastDrawn ? lastDrawn.name : '???'}」（${lastDrawn ? RARITY_LABEL[lastDrawn.rarity] : ''}）\n${lastDrawn ? lastDrawn.desc : ''}`;
+  navigator.clipboard.writeText(text).then(() => {
+    G.shareCount++;
+    G.pullsLeft += 3;
+    saveState();
+    renderAll();
+    showToast(`已复制！获得 +3 次抽取机会 🎉`);
+  });
+}
+
+function openExchangeImport() {
+  document.getElementById('exchangeContent').innerHTML = `
+    <p style="font-size:12px;color:var(--ink-lt);margin-bottom:12px;line-height:1.6;">
+      粘贴朋友发来的卡片交换码，获得对应职业卡。<br>（重复卡可在图鉴中长按生成交换码）
+    </p>
+    <input type="text" id="exchangeInput" placeholder="粘贴交换码到这里...">
+    <div class="btn-row">
+      <button class="btn btn-red btn-sm" onclick="importExchange()">导入卡片</button>
+    </div>`;
+  document.getElementById('exchangeModal').classList.add('open');
+}
+
+function importExchange() {
+  const code = document.getElementById('exchangeInput').value.trim();
+  try {
+    const data = JSON.parse(atob(code));
+    if (!data.name) throw new Error('invalid');
+    G.collection[data.name] = (G.collection[data.name] || 0) + 1;
+    saveState();
+    renderAll();
+    closeModal('exchangeModal');
+    showToast(`获得 ${data.name}（${data.rarity}）！`);
+  } catch(e) {
+    showToast('无效的交换码，请检查');
+  }
+}
+
+function generateExchangeCode(careerName) {
+  const c = CAREERS.find(x => x.name === careerName);
+  if (!c) return '';
+  return btoa(JSON.stringify({name:c.name, rarity:c.rarity, type:c.type}));
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// ════════════════════════════════════════════════════════
+// RENDER
+// ════════════════════════════════════════════════════════
+
+function renderAll() {
+  renderHeader();
+  renderTeam();
+  renderCollection();
+  renderProgressMap();
+  updateDrawButtons();
+  updateShareInfo();
+}
+
+function renderHeader() {
+  document.getElementById('pullsLeft').textContent = G.pullsLeft;
+  document.getElementById('totalPulls').textContent = G.totalPulls;
+  document.getElementById('pityLeft').textContent = Math.max(0, 10 - G.pityCount);
+  document.getElementById('pityBar').style.width = Math.min(100, (G.pityCount/10)*100) + '%';
+}
+
+function renderCollection() {
+  const grid = document.getElementById('collectionGrid');
+  const section = document.getElementById('collectionSection');
+  const keys = Object.keys(G.collection);
+
+  if (keys.length === 0) {
+    grid.innerHTML = '<div class="collection-empty">[ 档案室空空如也 ]</div>';
+    section.style.display = 'none';
+    return;
+  }
+
+  section.style.display = 'block';
+
+  // Sort by rarity desc, then name
+  const rarityRank = {UR:0,SSR:1,SR:2,R:3,N:4};
+  const sorted = keys.map(n => CAREERS.find(c => c.name === n)).filter(Boolean)
+    .sort((a,b) => rarityRank[a.rarity] - rarityRank[b.rarity]);
+
+  grid.innerHTML = sorted.map(career => {
+    const count = G.collection[career.name] || 0;
+    const inTeam = G.team.includes(career.name);
+    return buildMiniCard(career, count, inTeam);
+  }).join('');
+
+  const unique = keys.filter(n => CAREERS.find(c => c.name === n)).length;
+  document.getElementById('collectionCount').textContent = `${unique}/25`;
+
+  // Long-press for exchange code
+  grid.querySelectorAll('.mini-card').forEach(el => {
+    el.addEventListener('contextmenu', e => {
+      e.preventDefault();
+      const name = el.querySelector('.mini-name').textContent;
+      const count = G.collection[name] || 0;
+      if (count > 1) {
+        showExchangeCode(name, count);
+      } else {
+        showToast('需要有重复卡才能生成交换码');
+      }
+    });
+  });
+}
+
+function showExchangeCode(name, count) {
+  const code = generateExchangeCode(name);
+  const c = CAREERS.find(x => x.name === name);
+  document.getElementById('exchangeContent').innerHTML = `
+    <p style="font-size:12px;color:var(--ink-lt);margin-bottom:8px;">
+      你有 ${count} 张「${name}」，发给朋友一张：
+    </p>
+    <div class="exchange-code-box">${code}</div>
+    <div class="btn-row">
+      <button class="btn btn-red btn-sm" onclick="copyExchangeCode('${code}')">复制交换码</button>
+    </div>
+    <p style="font-size:10px;color:var(--ink-faint);margin-top:8px;font-family:monospace;">
+      注意：复制后你的这张卡数量-1
+    </p>`;
+  document.getElementById('exchangeModal').classList.add('open');
+}
+
+function copyExchangeCode(code) {
+  // Find name from code and reduce count
+  try {
+    const data = JSON.parse(atob(code));
+    if (G.collection[data.name] > 0) {
+      G.collection[data.name]--;
+      if (G.collection[data.name] === 0) delete G.collection[data.name];
+      saveState();
+      renderAll();
+    }
+  } catch(e) {}
+  navigator.clipboard.writeText(code).then(() => {
+    closeModal('exchangeModal');
+    showToast('交换码已复制！发给朋友吧');
+  });
+}
+
+function renderProgressMap() {
+  const section = document.getElementById('progressSection');
+  if (G.bossProgress > 0 || G.team.length === 3) {
+    section.style.display = 'block';
+  }
+  const wrap = document.getElementById('bossProgress');
+  wrap.innerHTML = BOSSES.map((b, i) => {
+    let cls = '';
+    if (i < G.bossProgress) cls = 'cleared';
+    else if (i === G.bossProgress) cls = 'current';
+    return `<div class="boss-dot ${cls}" title="${b.name}">${b.emoji}</div>`;
+  }).join('');
+}
+
+function updateDrawButtons() {
+  const has = G.pullsLeft > 0;
+  document.getElementById('drawBtn').disabled = !has;
+  document.getElementById('draw10Btn').disabled = G.pullsLeft < 10;
+}
+
+function updateShareInfo() {
+  const el = document.getElementById('shareInfo');
+  const remaining = 10 - G.shareCount;
+  if (remaining > 0) {
+    el.textContent = `分享可额外获得次数（还可分享 ${remaining} 次）`;
+  } else {
+    el.textContent = '分享次数已用完';
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════════════════
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════
+
+// CSS fadeIn
+const style = document.createElement('style');
+style.textContent = '@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}';
+document.head.appendChild(style);
+
+// Resume boss if in progress
+if (G.bossProgress > 0 && G.bossProgress < 5) {
+  document.getElementById('progressSection').style.display = 'block';
+  renderProgressMap();
+}
+if (G.bossProgress >= 5) {
+  // already cleared
+}
+
+renderAll();
+
+// Unlock AudioContext on first interaction
+document.addEventListener('click', () => {
+  if (AC.state === 'suspended') AC.resume();
+}, {once:true});
+</script>
+</body>
+</html>
